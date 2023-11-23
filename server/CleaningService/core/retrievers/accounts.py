@@ -2,9 +2,9 @@ from core.models import CleaningServiceUser, VerificationToken, PasswordToken
 from core.serializers import CleaningServiceSerializer, VerificationTokenSerializer, PasswordTokenSerializer
 
 
-def get_user_information(email):
+def get_user_information(user):
     """Get user information"""
-    user = get_user_by_email(email)
+    # user = get_user_by_email(email)
     serializer = CleaningServiceSerializer(user)
     return serializer.data
 
@@ -29,4 +29,10 @@ def get_all_users():
     serializer = CleaningServiceSerializer(queryset, many=True)
     return serializer.data
 
+def get_verification_token(email):
+    """Get verification token"""
+    try:
+        return VerificationToken.objects.get(email=email)
+    except VerificationToken.DoesNotExist:
+        return None
 

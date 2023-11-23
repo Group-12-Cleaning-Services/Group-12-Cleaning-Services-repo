@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+
+# Django media files
+media/
+
+# Django database
+db.sqlite3
+
+# Static files (usually collected by Django's collectstatic)
+static/
+
+# Virtual environment
+venv/
+venv3/
+.env/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Compiled Python bytecode
+*.pyc
+__pycache__/
+
+# Logs and databases
+*.log
+*.sql
+
+# Test database
+test_db.sqlite3
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# Python runtime files
+*.pyc
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg

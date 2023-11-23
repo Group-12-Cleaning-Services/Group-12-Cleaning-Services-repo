@@ -1,4 +1,4 @@
-from core.models import CleaningServiceUser, VerificationToken, PasswordToken
+from core.models import *
 from rest_framework import serializers
 
 class CleaningServiceSerializer(serializers.ModelSerializer):
@@ -17,3 +17,17 @@ class VerificationTokenSerializer(serializers.ModelSerializer):
 class PasswordTokenSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
+        
+
+class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CleaningServiceUserProfile
+        fields = "__all__"
+        extra_kwargs = {'user': {'read_only': True}}
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = "__all__"
+        extra_kwargs = {'service_id': {'read_only': True}}
