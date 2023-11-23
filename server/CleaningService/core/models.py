@@ -16,6 +16,17 @@ USER_TYPE = [
     ("service_provider", "Service Provider")
 ]
 
+class CleaningServiceUserProfile(models.Model):
+    """Cleaning Service User Profile Model"""
+    profile_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    contact = models.PhoneNumberField()
+    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    
+    def __str__(self):
+        return self.first_name if self.first_name  else self.user.email
+
 
 class CleaningServiceBaseUser(BaseUserManager):
     """Cleaning Service Base User Model"""
@@ -44,6 +55,7 @@ class CleaningServiceBaseUser(BaseUserManager):
 
 class CleaningServiceUser(AbstractBaseUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    profile = models.OneToOneField(CleaningServiceUserProfile, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
     email = models.EmailField(unique=True)
     user_type = models.CharField(choices=USER_TYPE, max_length=50, default=None, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -63,16 +75,6 @@ class CleaningServiceUser(AbstractBaseUser):
         return self.email
     
 
-class CleaningServiceUserProfile(models.Model):
-    profile_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(CleaningServiceUser, on_delete=models.CASCADE, related_name='profile')
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    contact = models.PhoneNumberField()
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
-    
-    def __str__(self):
-        return self.first_name if self.first_name  else self.user.email
     
     
 class VerificationToken(models.Model):

@@ -1,4 +1,4 @@
-from core.models import CleaningServiceUser, VerificationToken, PasswordToken
+from core.models import *
 from core.serializers import CleaningServiceSerializer, VerificationTokenSerializer, PasswordTokenSerializer
 
 
@@ -36,3 +36,19 @@ def get_verification_token(email):
     except VerificationToken.DoesNotExist:
         return None
 
+
+def get_profile_by_user(email):
+    """Get profile by user"""
+    try:
+        user = get_user_by_email(email)
+        return CleaningServiceUserProfile.objects.get(user=user)
+    except CleaningServiceUser.DoesNotExist:
+        return None
+    
+def get_profile_by_user_id(user_id):
+    """Get profile by user id"""
+    try:
+        user = get_user_by_id(user_id)
+        return CleaningServiceUserProfile.objects.get(user=user)
+    except CleaningServiceUser.DoesNotExist:
+        return None
