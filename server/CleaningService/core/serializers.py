@@ -27,7 +27,10 @@ class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+    
+    user = CleaningServiceSerializer
     class Meta:
         model = Service
         fields = "__all__"
-        extra_kwargs = {'service_id': {'read_only': True}}
+        extra_kwargs = {'service_id': {'read_only': True},
+        'user': {'read_only': True}}

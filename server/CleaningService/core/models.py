@@ -108,4 +108,4 @@ class Service(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=10)
     
     def __str__(self):
-        return f"{self.title} - {self.service} || {self.user.email} at {self.price}"
+        return f"{self.title} - {self.category} || {self.user.email} at {self.price}"
