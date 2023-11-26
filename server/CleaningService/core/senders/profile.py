@@ -11,8 +11,8 @@ def create_profile(data):
         return None
 
 
-def update_profile(data):
-    serializer = CleaningServiceUserProfileSerializer(data=data, partial=True, many=False)
+def update_profile(data, profile):
+    serializer = CleaningServiceUserProfileSerializer(data=data, instance=profile, partial=True)
     if serializer.is_valid():
         serializer.save()
         return serializer.data

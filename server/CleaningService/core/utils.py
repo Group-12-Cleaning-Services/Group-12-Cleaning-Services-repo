@@ -6,6 +6,9 @@ from core.senders.accounts import *
 from core.retrievers.accounts import *
 from core.models import *
 from datetime import datetime
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.http import HttpRequest
+
 
 def generate_otp(otp_length):
     """
@@ -94,3 +97,13 @@ def password_cofirmation_email(email, otp_length):
             print(f"pin created: {pin_created}")
         return True
     return False
+
+
+
+def get_user_from_jwttoken(request: HttpRequest):
+    "Return a user object when a valid jwt token is set in the request header"
+    jwt = JWTAuthentication()
+    user = jwt.get_user(
+        jwt.get_validated_token((jwt.get_raw_token(jwt.get_header(request))))
+    )
+    return user

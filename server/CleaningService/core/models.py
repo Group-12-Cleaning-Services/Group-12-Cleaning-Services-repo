@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import uuid
+from phone_field import PhoneField
 
 
 
 
-SERVICES = [
+
+CATEGORY = [
     ("car_wash", "Car Wash"),
     ("laundary", "Laundary"),
     ("home_cleaning", "Home Cleanin")
@@ -21,11 +23,12 @@ class CleaningServiceUserProfile(models.Model):
     profile_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    contact = models.PhoneNumberField()
+    contact = PhoneField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    time_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     
     def __str__(self):
-        return self.first_name if self.first_name  else self.user.email
+        return self.first_name + " " + self.last_name
 
 
 class CleaningServiceBaseUser(BaseUserManager):
@@ -100,10 +103,9 @@ class Service(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    service = models.CharField(choices=SERVICES, max_length=50)
+    category = models.CharField(choices=CATEGORY, max_length=50)
     thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
-    is_available = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.title} - {self.service} || {self.user.email} at {self.price}"

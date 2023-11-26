@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 from pathlib import Path
 import os
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'core',
     'rest_framework',
     'rest_framework_simplejwt',
+    "phone_field",
+
 ]
 
 MIDDLEWARE = [
@@ -106,6 +108,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=3),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+    "USER_ID_FIELD": "email",
+}
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

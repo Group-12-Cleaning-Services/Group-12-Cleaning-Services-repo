@@ -1,6 +1,5 @@
 from core.models import *
-from core.serializers import CleaningServiceSerializer, VerificationTokenSerializer, PasswordTokenSerializer
-
+from core.serializers import *
 
 def get_user_information(user):
     """Get user information"""
@@ -52,3 +51,16 @@ def get_profile_by_user_id(user_id):
         return CleaningServiceUserProfile.objects.get(user=user)
     except CleaningServiceUser.DoesNotExist:
         return None
+    
+def get_profile_by_id(profile_id):
+    """Get profile by id"""
+    try:
+        return CleaningServiceUserProfile.objects.get(profile_id=profile_id)
+    except CleaningServiceUserProfile.DoesNotExist:
+        return None
+
+def all_profiles():
+    """Get all profiles"""
+    queryset = CleaningServiceUserProfile.objects.all()
+    serializer = CleaningServiceUserProfileSerializer(queryset, many=True)
+    return serializer.data

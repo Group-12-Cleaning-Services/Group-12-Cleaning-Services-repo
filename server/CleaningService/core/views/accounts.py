@@ -62,6 +62,7 @@ class AccountViewset(viewsets.ViewSet):
         """
         email = request.data.get("email")
         otp = request.data.get("otp")
+        print(f"email: {email}, otp: {otp}")
 
         account = get_user_by_email(email)
         if not account:
@@ -72,6 +73,7 @@ class AccountViewset(viewsets.ViewSet):
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
 
         otp_detail = VerificationToken.objects.get(email=email)
+        print(f"otp_detail: {otp_detail.token == otp}")
         if otp == otp_detail.token:
             if UTC.localize(datetime.now()) < otp_detail.time + timedelta(
                 minutes=10
