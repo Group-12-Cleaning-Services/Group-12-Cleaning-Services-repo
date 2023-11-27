@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput , StatusBar, TouchableOpacity, Dimensions, useWindowDimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../Components/Button';
 
@@ -13,6 +13,7 @@ const OrgRegister = ({navigation}) => {
     welcomeText,
     inputContainer,
     input,
+    inputField,
     buttonText,
     buttonContainer,
     haveAccountText,
@@ -34,23 +35,23 @@ const OrgRegister = ({navigation}) => {
       <View style={inputContainer}>
         <View style={input}>
           <Feather name={'user'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Username" />
+          <TextInput style={inputField} placeholder="Username" />
         </View>
         <View style={input}>
           <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Password" secureTextEntry />
+          <TextInput style={inputField} placeholder="Password" secureTextEntry />
         </View>
         <View style={input}>
           <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Email" />
+          <TextInput style={inputField} placeholder="Email" />
         </View>
         <View style={input}>
           <Feather name={'phone'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Phone" />
+          <TextInput style={inputField} placeholder="Phone" />
         </View>
         <View style={input}>
           <Feather name={'map-pin'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Location" />
+          <TextInput style={inputField} placeholder="Location" />
         </View>
       </View>
       <Button title={'Create Account'}
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     alignItems: 'center',
+    paddingBottom:10
   },
   welcomeTitle: {
     fontWeight: 'bold',
@@ -116,6 +118,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     color: 'black',
     marginVertical:10
+  },
+  inputField:{
+    width:500
   },
   buttonText: {
     color: 'black',

@@ -12,6 +12,7 @@ const Register = ({navigation}) => {
     welcomeTitle,
     welcomeText,
     inputContainer,
+    inputField,
     input,
     buttonText,
     buttonContainer,
@@ -34,15 +35,15 @@ const Register = ({navigation}) => {
       <View style={inputContainer}>
         <View style={input}>
           <Feather name={'user'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Username" />
+          <TextInput style={inputField} placeholder="Username" />
         </View>
         <View style={input}>
           <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Password" secureTextEntry />
+          <TextInput style={inputField} placeholder="Password" secureTextEntry />
         </View>
         <View style={input}>
           <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Email" />
+          <TextInput style={inputField} placeholder="Email" />
         </View>
       </View>
       <Button title={'Create Account'} 
@@ -97,6 +98,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
     paddingTop: 10,
+  },
+  inputField:{
+    width:500
   },
   input: {
     flexDirection: 'row',
