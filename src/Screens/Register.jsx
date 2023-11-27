@@ -22,8 +22,8 @@ const Register = ({navigation}) => {
   } = styles;
 
   return (
-    <ScrollView style={scrollContainer}> 
     <SafeAreaView style={container}>
+      <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../assets/logo.png")} style={image} />
       </View>
@@ -55,8 +55,8 @@ const Register = ({navigation}) => {
        buttonText={haveAccountText}
        press={()=>navigation.navigate("Login")}
        />
+       </ScrollView> 
     </SafeAreaView>
-   </ScrollView> 
   );
 };
  

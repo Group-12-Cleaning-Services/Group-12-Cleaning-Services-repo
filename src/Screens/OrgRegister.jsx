@@ -22,8 +22,8 @@ const OrgRegister = ({navigation}) => {
   } = styles;
 
   return (
-    <ScrollView style={scrollContainer}>
     <SafeAreaView style={container}>
+       <ScrollView style={scrollContainer}>
       <View style={imageContainer}>
         <Image source={require("../../assets/logo.png")} style={image} />
       </View>
@@ -63,8 +63,9 @@ const OrgRegister = ({navigation}) => {
        buttonText={haveAccountText}
        press={()=>navigation.navigate("Login")}
        />
+      </ScrollView>
     </SafeAreaView>
-    </ScrollView>
+    
   );
 };
  
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#B3CDE0",
     width: '100%',
-    // marginTop: StatusBar.currentHeight || 0,
+    marginTop: StatusBar.currentHeight || 0,
   },
   imageContainer: {
     alignItems: 'center',
