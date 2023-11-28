@@ -25,6 +25,59 @@ class ServiceViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_200_OK)
     
     
+    def list_booked_service_by_customer(self, request, id):
+        """View for getting all booked service by a customer
+
+        Args:
+            request (http): get request
+        """
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "customer":
+            context = {
+                "detail": "You are not a customer"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        context = {
+            "detail": "All booked service by a customer",
+            "serices": send_booked_service_by_customer(user)
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    def list_booked_service_by_provider(self, request, id):
+        """View for getting all booked service by a provider
+
+        Args:
+            request (http): get request
+        """
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a service provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        context = {
+            "detail": "All booked service by a provider",
+            "serices": send_booked_service_by_provider(user)
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    
+    def list_all_service_by_category(self, request):
+        """View for getting all service by category
+
+        Args:
+            request (http): get request
+            category (str): category of the service
+        """
+        context = {
+            "detail": "All Services",
+            "serices": send_service_by_category(category)
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    
+    
+    
     def create_service(self, request):
         """Create Service
 
@@ -122,6 +175,33 @@ class ServiceViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
         
+        
+    def book_service(self, request, id):
+        """Book Service
+
+        Args:
+            request (http): post request
+            id (uuid): service id
+        """
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "customer":
+            context = {
+                "detail": "You are not a customer"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        service = get_service_by_id(id)
+        if not service:
+            context = {
+                "detail": "Service not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        schedule_service = book_service(service, user, request.data)
+        context = {
+            "detail": "Service booked successfully",
+            "schedule_service": schedule_service
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
     
     def get_permission(self):
         """Get permission for the viewset
@@ -129,8 +209,9 @@ class ServiceViewset(viewsets.ViewSet):
         Returns:
             list: list of permissions
         """
-        if self.action in ["create_service", "update_service", "delete_service"]:
+        if self.action in ["create_service", "update_service", "delete_service", "book_service"]:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = []
         return [permission() for permission in permission_classes]
+    

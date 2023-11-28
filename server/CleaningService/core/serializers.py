@@ -34,3 +34,34 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = "__all__"
         extra_kwargs = {'service_id': {'read_only': True},
         'user': {'read_only': True}}
+        
+class ScheduleServiceSerializer(serializers.ModelSerializer):
+    """Schedule Service Serializer
+
+    Args:
+        serializers (dict): model serializer for schedule service
+    """
+    service = ServiceSerializer(many=False, read_only=True)
+    customer = CleaningServiceSerializer(many=False, read_only=True)
+    class Meta:
+        model = ScheduleService
+        fields = "service", "customer", "time", "status"
+
+
+class ServiceFeedbackSerializer(serializers.ModelSerializer):
+    """Service Feedback Serializer"""
+
+    service_id = serializers.PrimaryKeyRelatedField(queryset=Service.objects.all(), write_only=True, source='service')
+
+    service = ServiceSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ServiceFeedback
+        fields = "service", "rating", "review", "customer"
+
+    def create(self, validated_data):
+        service_instance = validated_data.pop('service')
+
+        feedback_instance = ServiceFeedback.objects.create(service=service_instance, **validated_data)
+
+        return feedback_instance
