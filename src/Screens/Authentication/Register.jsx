@@ -1,9 +1,9 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons'
-import Button from '../Components/Button';
+import Button from '../../Components/Button';
 
-const ResetPassword = ({navigation}) => {
+const Register = ({navigation}) => {
   const {
     container,
     imageContainer,
@@ -12,63 +12,67 @@ const ResetPassword = ({navigation}) => {
     welcomeTitle,
     welcomeText,
     inputContainer,
+    inputField,
     input,
     buttonText,
-    saveCancelBtn,
-    cancelText,
+    buttonContainer,
+    haveAccountText,
+    haveAccount,
     iconUser,
-    scrollContainer,
-    btnsContainer
+    scrollContainer
   } = styles;
 
   return (
-    <ScrollView style={scrollContainer}> 
     <SafeAreaView style={container}>
+      <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
-        <Image source={require("../../assets/logo.png")} style={image} />
+        <Image source={require("../../../assets/logo.png")} style={image} />
       </View>
       <View style={welcomeContainer}>
-        <Text style={welcomeTitle}>Reset Pasword</Text>
-        <Text style={welcomeText}>Ready to create new password? Please type something you can remember</Text>
+        <Text style={welcomeTitle}>Create Account</Text>
+        <Text style={welcomeText}>Go ahead and sign up, we can't wait to serve you</Text>
       </View>
       <View style={inputContainer}>
         <View style={input}>
-          <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="New Password" secureTextEntry />
+          <Feather name={'user'} size={20} color={'black'} style={iconUser} />
+          <TextInput style={inputField} placeholder="Username" />
         </View>
         <View style={input}>
           <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Confirm Password" secureTextEntry />
+          <TextInput style={inputField} placeholder="Password" secureTextEntry />
+        </View>
+        <View style={input}>
+          <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
+          <TextInput style={inputField} placeholder="Email" />
         </View>
       </View>
-      <View style={btnsContainer}>
-        <Button title={'Save'} 
-        buttonContainer={saveCancelBtn} 
-        buttonText={buttonText}
-        press={()=>navigation.navigate("Login")}
-        />
-        <Button title={'Cancel'} 
-        buttonContainer={saveCancelBtn} 
-        buttonText={cancelText}
-        />
-      </View>
+      <Button title={'Create Account'} 
+       buttonContainer={buttonContainer}
+       buttonText={buttonText}
+       press={()=>navigation.navigate("OTP")}
+       />
+      <Button title={'Already have an account?'}
+       buttonContainer={haveAccount}
+       buttonText={haveAccountText}
+       press={()=>navigation.navigate("Login")}
+       />
+       </ScrollView> 
     </SafeAreaView>
-   </ScrollView> 
   );
 };
  
 const window = Dimensions.get('window')
 const height = window.height
 const width = window.width
-const buttonWidth = width * 0.3
-const buttonWidth2 = width*0.3
+const buttonWidth = width * 0.4
+const buttonWidth2 = width*0.6
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#B3CDE0",
     width: '100%',
-    // marginTop: StatusBar.currentHeight || 0,
+    marginTop: StatusBar.currentHeight || 0,
   },
   imageContainer: {
     alignItems: 'center',
@@ -95,6 +99,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
+  inputField:{
+    width:500
+  },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -106,17 +113,6 @@ const styles = StyleSheet.create({
     color: 'black',
     marginVertical:10
   },
-  btnsContainer:{
-    alignItems:'center',
-    flexDirection:'row',
-    justifyContent:'center',
-    paddingTop:20
-  },
-  saveCancelBtn: {
-    alignItems: 'center',
-    paddingTop: 10,
-    margin:20
-  },
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
@@ -126,9 +122,17 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: 'hidden',
   },
-  cancelText: {
+  buttonContainer: {
+    alignItems: 'center',
+    paddingTop: 10
+  },
+  haveAccount: {
+    alignItems: 'center',
+    paddingTop: 20
+  },
+  haveAccountText: {
     color: 'white',
-    backgroundColor: ' rgba(3, 57, 108, 1)',
+    backgroundColor: '#6497B1',
     width: buttonWidth2,
     padding: 10,
     textAlign: 'center',
@@ -151,4 +155,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ResetPassword;
+export default Register;

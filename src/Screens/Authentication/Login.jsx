@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Button from '../Components/Button';
+import Button from '../../Components/Button';
 
 
 
@@ -31,7 +31,7 @@ const Login = ({navigation}) => {
     >
       <SafeAreaView style={container}>
         <View style={imageContainer}>
-          <Image source={require("../../assets/logo.png")} style={image} />
+          <Image source={require("../../../assets/logo.png")} style={image} />
         </View>
         <View style={welcomeContainer}>
           <Text style={welcomeTitle}>Welcome Back!</Text>
@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
          />
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>
-          <Text style={clickHere}>Click Here</Text>
+          <Text style={clickHere} onPress={()=>navigation.navigate("ResetPassword")}>Click Here</Text>
         </View>
       </SafeAreaView>
     </LinearGradient>

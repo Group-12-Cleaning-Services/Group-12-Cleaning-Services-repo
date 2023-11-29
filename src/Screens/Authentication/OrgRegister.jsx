@@ -1,9 +1,9 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput , StatusBar, Dimensions, } from 'react-native';
 import { Feather } from '@expo/vector-icons'
-import Button from '../Components/Button';
+import Button from '../../Components/Button';
 
-const Register = ({navigation}) => {
+const OrgRegister = ({navigation}) => {
   const {
     container,
     imageContainer,
@@ -12,8 +12,8 @@ const Register = ({navigation}) => {
     welcomeTitle,
     welcomeText,
     inputContainer,
-    inputField,
     input,
+    inputField,
     buttonText,
     buttonContainer,
     haveAccountText,
@@ -24,13 +24,13 @@ const Register = ({navigation}) => {
 
   return (
     <SafeAreaView style={container}>
-      <ScrollView style={scrollContainer}> 
+       <ScrollView style={scrollContainer}>
       <View style={imageContainer}>
-        <Image source={require("../../assets/logo.png")} style={image} />
+        <Image source={require("../../../assets/logo.png")} style={image} />
       </View>
       <View style={welcomeContainer}>
         <Text style={welcomeTitle}>Create Account</Text>
-        <Text style={welcomeText}>Go ahead and sign up, we can't wait to serve you</Text>
+        <Text style={welcomeText}>Sign up as an organization to post your services</Text>
       </View>
       <View style={inputContainer}>
         <View style={input}>
@@ -45,24 +45,32 @@ const Register = ({navigation}) => {
           <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
           <TextInput style={inputField} placeholder="Email" />
         </View>
+        <View style={input}>
+          <Feather name={'phone'} size={20} color={'black'} style={iconUser} />
+          <TextInput style={inputField} placeholder="Phone" />
+        </View>
+        <View style={input}>
+          <Feather name={'map-pin'} size={20} color={'black'} style={iconUser} />
+          <TextInput style={inputField} placeholder="Location" />
+        </View>
       </View>
-      <Button title={'Create Account'} 
+      <Button title={'Create Account'}
        buttonContainer={buttonContainer}
        buttonText={buttonText}
        press={()=>navigation.navigate("Login")}
-       />
-      <Button title={'Already have an account?'}
-       buttonContainer={haveAccount}
+      />
+      <Button title={'Already have an account'}
+       buttonContainer={haveAccount} 
        buttonText={haveAccountText}
        press={()=>navigation.navigate("Login")}
        />
-       </ScrollView> 
+      </ScrollView>
     </SafeAreaView>
+    
   );
 };
  
 const window = Dimensions.get('window')
-const height = window.height
 const width = window.width
 const buttonWidth = width * 0.4
 const buttonWidth2 = width*0.6
@@ -78,11 +86,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 160,
+    height: 160,
   },
   welcomeContainer: {
     alignItems: 'center',
+    paddingBottom:10
   },
   welcomeTitle: {
     fontWeight: 'bold',
@@ -99,9 +108,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
-  inputField:{
-    width:500
-  },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -112,6 +118,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     color: 'black',
     marginVertical:10
+  },
+  inputField:{
+    width:500
   },
   buttonText: {
     color: 'black',
@@ -138,7 +147,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 15,
     paddingTop: 10,
-    overflow:'hidden'
+    overflow:'hidden',
+    bottom:5,
   },
   iconUser: {
     margin:2,
@@ -148,11 +158,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   scrollContainer: {
-    flex: 1,
-    backgroundColor: "#B3CDE0",
     flexGrow: 1,
-    paddingBottom:50
+    paddingBottom: 100,
   }
 });
 
-export default Register;
+export default OrgRegister;

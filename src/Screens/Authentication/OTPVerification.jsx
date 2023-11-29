@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar } from 'react-native';
 
-const OTPVerification = () => {
+const OTPVerification = ({navigation}) => {
     const {headerContainer, headerTitle, headerMessage, resendContainer, resendText} = styles
   const [verificationCode, setVerificationCode] = useState('');
 
@@ -40,10 +40,12 @@ const OTPVerification = () => {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleVerificationSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
       <View style={resendContainer}>
-        <Text style={resendText}>Resend code</Text>
+        <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
+        Resend code
+        </Text>
       </View>
     </SafeAreaView>
   );

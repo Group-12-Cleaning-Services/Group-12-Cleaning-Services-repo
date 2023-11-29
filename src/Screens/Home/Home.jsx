@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, Dimensions,TextInput, StatusBar, TouchableOpacity, ImageBackground } from 'react-native';
-import Button from '../Components/Button';
+import Button from '../../Components/Button';
 import {useNavigation} from '@react-navigation/native'
 
 
@@ -27,11 +27,11 @@ const Home = ({navigation}) => {
       <SafeAreaView style={container}>
         <ImageBackground
         style={backgroundImage}
-        source={require("../../assets/landing.png")}
+        source={require("../../../assets/landing.png")}
         >
         <View style={logoContainer}>
           <Image
-          source={require("../../assets/logo.png")}
+          source={require("../../../assets/logo.png")}
           style={logo}
           />
         </View>
@@ -69,12 +69,12 @@ const buttonWidth = width*0.6
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"rgba(9, 10, 10, 1)",
     marginTop: StatusBar.currentHeight || 0,
   },
   backgroundImage: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor:"rgba(9, 10, 10, 1)",
     alignItems: 'center',
   },
   logoContainer: {
