@@ -69,6 +69,7 @@ const buttonWidth = width*0.6
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"rgba(9, 10, 10, 1)",
     marginTop: StatusBar.currentHeight || 0,
   },
   backgroundImage: {

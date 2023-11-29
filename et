@@ -1,0 +1,65 @@
+[33mcommit 20a00a2f7980384596fbc28a1d3aceffd261a0a7[m[33m ([m[1;36mHEAD -> [m[1;32mFront-end[m[33m)[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Tue Nov 28 20:51:12 2023 +0000
+
+    front-end
+
+[33mcommit b4efdc9c870d606d8ebf0cc8a9256758f64250a4[m[33m ([m[1;31morigin/Front-end[m[33m)[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Mon Nov 27 22:01:43 2023 +0000
+
+    fornt-end
+
+[33mcommit 67181afa6615e1e4d5a79aafbc70749bca4a4cf0[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Mon Nov 27 21:48:36 2023 +0000
+
+    front-end
+
+[33mcommit 90334f6e52657c629befbc741a54ef3424642576[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Mon Nov 27 21:40:39 2023 +0000
+
+    enable dependencies
+
+[33mcommit 2e4a423787574ea802a9b23b77e490e5b680825b[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Mon Nov 27 14:07:14 2023 +0000
+
+    front-end
+
+[33mcommit 4152f8b9f9bfcffa7f6af692b7af68093aa7c21b[m
+Author: Emmanuel Yidana <100804353+Emmanuelitgit@users.noreply.github.com>
+Date:   Mon Nov 27 13:55:57 2023 +0000
+
+    frontiend
+
+[33mcommit 6814677c2c966e0db9aa6b5dae0453dd1e955e00[m
+Author: lord <konadulordkweku@gmai.com>
+Date:   Sun Nov 26 22:27:41 2023 +0000
+
+    add views for services
+
+[33mcommit 6aebdc0cb374a5b9aa0a7786ed3d73c7643496d8[m
+Author: lord <konadulordkweku@gmai.com>
+Date:   Sun Nov 26 20:19:09 2023 +0000
+
+    add implementation for getting services
+
+[33mcommit 974fb9dbf7c84930475eb2bc14cb1937ad206cfd[m
+Author: lord <konadulordkweku@gmai.com>
+Date:   Thu Nov 23 17:18:28 2023 +0000
+
+    add viewset for profile
+
+[33mcommit af0b457023691a9466759d922622a95639040ad4[m
+Author: lord <konadulordkweku@gmai.com>
+Date:   Thu Nov 23 16:42:30 2023 +0000
+
+    create service models
+
+[33mcommit 7e9917b26d71c79ffcc824b85dcf640b20221dbb[m
+Author: lord <konadulordkweku@gmai.com>
+Date:   Sun Nov 12 20:42:07 2023 +0000
+
+    initial commit
