@@ -11,10 +11,7 @@ import ErrorPage from './src/Screens/Profile/ErrorPage';
 
 export default function App() {
   return (
-   <Navigation/>
+    <Navigation/>
   );
 }
 
-const styles = StyleSheet.create({
-
-});

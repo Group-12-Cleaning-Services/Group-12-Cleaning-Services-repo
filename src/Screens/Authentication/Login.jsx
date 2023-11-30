@@ -1,11 +1,26 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, } from 'react-native';
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  Text,
+  View,
+  TextInput,
+  StatusBar,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../../Components/Button';
 
 
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleChange = (e) =>{
+    setUsername(e.target.value)
+    setPassword(e.target.value)
+  }
   const {
     container,
     linearGradientBackground,
@@ -31,24 +46,43 @@ const Login = ({navigation}) => {
     >
       <SafeAreaView style={container}>
         <View style={imageContainer}>
-          <Image source={require("../../../assets/logo.png")} style={image} />
+          <Image source={require('../../../assets/logo.png')} style={image} />
         </View>
         <View style={welcomeContainer}>
           <Text style={welcomeTitle}>Welcome Back!</Text>
           <Text style={welcomeText}>Please Log into your existing account</Text>
         </View>
         <View style={inputContainer}>
-          <TextInput style={input} placeholder="Username" placeholderTextColor="#fff" />
-          <TextInput style={input} placeholder="Password" placeholderTextColor="#fff" secureTextEntry />
+          <TextInput
+            style={input}
+            placeholder="Username"
+            placeholderTextColor="#fff"
+            onChangeText={handleChange}
+            value={username}
+          />
+          <TextInput
+            style={input}
+            placeholder="Password"
+            placeholderTextColor="#fff"
+            secureTextEntry
+            onChangeText={handleChange}
+            value={password}
+          />
         </View>
-        <Button title={'Login'}
-         buttonContainer={buttonContainer}
-         buttonText={buttonText}
-         press={() => navigation.navigate('Home')}
-         />
+        <Button
+          title={'Login'}
+          buttonContainer={buttonContainer}
+          buttonText={buttonText}
+          press={() => navigation.navigate('Home')}
+        />
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>
-          <Text style={clickHere} onPress={()=>navigation.navigate("ResetPassword")}>Click Here</Text>
+          <Text
+            style={clickHere}
+            onPress={() => navigation.navigate('ResetPassword')}
+          >
+            Click Here
+          </Text>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -62,7 +96,6 @@ const styles = StyleSheet.create({
   linearGradientBackground: {
     flex: 1,
     width: '100%',
-    marginTop: StatusBar.currentHeight || 0,
   },
   imageContainer: {
     alignItems: 'center',

@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#B3CDE0",
     width: '100%',
-    marginTop: StatusBar.currentHeight || 0,
   },
   imageContainer: {
     alignItems: 'center',

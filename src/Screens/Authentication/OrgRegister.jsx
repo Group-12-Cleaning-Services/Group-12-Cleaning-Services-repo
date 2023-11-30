@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput , StatusBar, Dimensions, } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Dimensions, } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#B3CDE0",
     width: '100%',
-    marginTop: StatusBar.currentHeight || 0,
   },
   imageContainer: {
     alignItems: 'center',

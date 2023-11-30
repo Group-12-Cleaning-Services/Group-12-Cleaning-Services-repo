@@ -30,10 +30,10 @@ const OTPVerification = ({navigation}) => {
             maxLength={1}
             value={verificationCode[index - 1]}
             onChangeText={(text) => {
-              let updatedCode = verificationCode;
-              updatedCode = updatedCode.split('');
-              updatedCode[index - 1] = text;
-              setVerificationCode(updatedCode.join(''));
+            let updatedCode = verificationCode;
+            updatedCode = updatedCode.split('');
+            updatedCode[index - 1] = text;
+            setVerificationCode(updatedCode.join(''));
             }}
           />
         ))}
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(9, 10, 10, 1)',
-    marginTop: StatusBar.currentHeight || 0,
   },
   headerTitle: {
     fontSize: 20,

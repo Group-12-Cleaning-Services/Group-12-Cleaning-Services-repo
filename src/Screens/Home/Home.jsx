@@ -5,7 +5,6 @@ import {useNavigation} from '@react-navigation/native'
 
 
 const Home = ({navigation}) => {
-  // const {navigate} = useNavigation()
   const {
     container,
     logoContainer,
@@ -69,7 +68,6 @@ const buttonWidth = width*0.6
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
   },
   backgroundImage: {
     flex: 1,
