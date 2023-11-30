@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BookingsScreen from '../Screens/Profile/SeeBookings';
 import OTPVerification from "../Screens/Authentication/OTPVerification"
 import { StatusBar } from 'expo-status-bar';
+import Laundry from '../Screens/Home/Laundry';
 
 
 const Tabs = () => {
@@ -21,6 +22,7 @@ const Tabs = () => {
         }}
         >
             <Stack.Screen name='Home' component={Home} options={{statusBarColor:"#42322E"}}/>
+            <Stack.Screen name='Laundry' component={Laundry} options={{ statusBarColor: '#171717', statusBarStyle:"white" }}/>
             <Stack.Screen name='Register' component={Register} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Login' component={Login} options={{statusBarColor:"#040268" }}/>
             <Stack.Screen name='OrgRegister' component={OrgRegister} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>

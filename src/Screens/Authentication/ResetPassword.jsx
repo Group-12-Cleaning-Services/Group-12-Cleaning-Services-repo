@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 
@@ -22,8 +22,8 @@ const ResetPassword = ({navigation}) => {
   } = styles;
 
   return (
-    <ScrollView style={scrollContainer}> 
     <SafeAreaView style={container}>
+      <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../../assets/logo.png")} style={image} />
       </View>
@@ -52,8 +52,8 @@ const ResetPassword = ({navigation}) => {
         buttonText={cancelText}
         />
       </View>
+      </ScrollView> 
     </SafeAreaView>
-   </ScrollView> 
   );
 };
  
@@ -104,7 +104,9 @@ const styles = StyleSheet.create({
     margin: 7,
     backgroundColor: 'white',
     color: 'black',
-    marginVertical:10
+    marginVertical:10,
+    width: Platform.OS === "ios"? 300 : 240,
+    padding: Platform.OS === "ios"? 10 : 7,
   },
   btnsContainer:{
     alignItems:'center',
@@ -146,7 +148,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#B3CDE0",
     flexGrow: 1,
-    paddingBottom:50
+    paddingBottom:50,
+    paddingTop:Platform.OS === "ios"? 100:0
   }
 });
 

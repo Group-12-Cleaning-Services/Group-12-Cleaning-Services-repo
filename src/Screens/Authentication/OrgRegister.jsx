@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Dimensions, } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Dimensions, Platform, } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 240,
-    padding: 7,
+    width: Platform.OS === "ios"? 300 : 240,
+    padding: Platform.OS === "ios"? 10 : 7,
     borderRadius: 10,
     margin: 7,
     backgroundColor: 'white',
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
   },
   haveAccount: {
     alignItems: 'center',
-    paddingTop: 20
+    paddingTop: 20,
   },
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
     width: buttonWidth2,
-    padding: 10,
+    padding: Platform.OS === "ios"? 15 : 10,
     textAlign: 'center',
     borderRadius: 15,
     paddingTop: 10,
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 100,
+    paddingTop: Platform.OS ==="ios" ? 25 : 0
   }
 });
 

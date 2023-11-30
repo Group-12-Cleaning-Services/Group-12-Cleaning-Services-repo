@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   linearGradientBackground: {
     flex: 1,
     width: '100%',
+    paddingTop: Platform.OS ==="ios" ? 120 : 0
   },
   imageContainer: {
     alignItems: 'center',
@@ -125,8 +126,8 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 2,
     borderColor: '#fff',
-    width: 230,
-    padding: 7,
+    width: Platform.OS === "ios"? 300 : 240,
+    padding: Platform.OS === "ios"? 15 : 7,
     borderRadius: 10,
     margin: 10,
     color: 'white',
