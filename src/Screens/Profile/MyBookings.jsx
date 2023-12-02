@@ -9,7 +9,7 @@ export default function BookingsScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={"#B3CDE0"} barStyle={"dark-content"}/>
       <View style={styles.header}>
-        <Feather name="arrow-left" size={24} color="black" onPress={()=>navigation.navigate("profile")} />
+        <Feather name="arrow-left" size={24} color="black" onPress={()=>navigation.navigate("Profile")} />
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity style={styles.activeButtonContainer}>

@@ -5,12 +5,14 @@ import OrgRegister from '../Screens/Authentication/OrgRegister';
 import ResetPassword from "../Screens/Authentication/ResetPassword"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import BookingsScreen from '../Screens/Profile/SeeBookings';
+import BookingsScreen from '../Screens/Profile/MyBookings';
 import OTPVerification from "../Screens/Authentication/OTPVerification"
 import { StatusBar } from 'expo-status-bar';
 import WelcomeScreen from '../Screens/Home/WelcomeScreen';
 import OnBoarding from '../Screens/Home/OnBoarding';
 import Home from '../Screens/Home/Home';
+import MyBookings from "../Screens/Profile/MyBookings";
+import ProfileScreen from '../Screens/Profile/Profile';
 
 
 const Tabs = () => {
@@ -31,6 +33,8 @@ const Tabs = () => {
             <Stack.Screen name='ResetPassword' component={ResetPassword} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Bookings' component={BookingsScreen} options={{ statusBarColor: '#FF5733' }}/>
             <Stack.Screen name='OTP' component={OTPVerification} options={{ statusBarColor: 'black', statusBarStyle:"white" }}/>
+            <Stack.Screen name='Profile' component={ProfileScreen}/>
+            <Stack.Screen name='MyBookings' component={MyBookings}/>
         </Stack.Navigator>
     </NavigationContainer>
   )
