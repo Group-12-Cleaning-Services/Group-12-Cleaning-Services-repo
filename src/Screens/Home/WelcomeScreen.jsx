@@ -1,6 +1,5 @@
 import React from 'react';
 import { ImageBackground, View, SafeAreaView, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
-import Button from '../../Components/Button';
 import { COLORS, SIZES } from '../../Constants/Theme';
 import { Feather } from '@expo/vector-icons';
 
