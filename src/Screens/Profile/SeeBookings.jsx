@@ -7,8 +7,9 @@ export default function BookingsScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={"#B3CDE0"} barStyle={"dark-content"}/>
       <View style={styles.header}>
-        <Feather name="arrow-left" size={24} color="black" />
+        <Feather name="arrow-left" size={24} color="black" onPress={()=>navigation.navigate("profile")} />
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity style={styles.activeButtonContainer}>
@@ -47,13 +48,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#B3CDE0",
-    marginTop: StatusBar.currentHeight || 0,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   headerTitle: {
     fontSize: 20,
