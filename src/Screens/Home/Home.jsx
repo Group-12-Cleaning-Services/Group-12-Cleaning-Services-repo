@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, Dimensions,TextInput, StatusBar, TouchableOpacity, ImageBackground } from 'react-native';
 import Button from '../../Components/Button';
 import {useNavigation} from '@react-navigation/native'
+import { SIZES } from '../../Constants/Theme';
 
 
 const Home = ({navigation}) => {
@@ -61,9 +62,7 @@ const Home = ({navigation}) => {
   );
 };
 
-const window = Dimensions.get('window')
-const width = window.width
-const buttonWidth = width*0.6
+
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
-    top: 20,
+    top: SIZES.height*0.000,
     alignItems: 'center',
   },
   logo: {
@@ -105,7 +104,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    width: buttonWidth,
+    width: SIZES.width*0.6,
+    height: SIZES.height*0.07,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,
@@ -128,10 +128,11 @@ const styles = StyleSheet.create({
   },
   haveAccountText: {
     color: 'white',
-    paddingTop:15
+    paddingTop:15,
+    fontSize:17
   },
   clickHereText: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
     paddingBottom:20
