@@ -30,3 +30,26 @@ export const bookings = [
       color:"rgba(182, 164, 2, 1)"
     },
   ];
+
+  export const Organizations =[
+    {
+      id:1,
+      image:"",
+      desc: "Pacific Cleaners"
+    },
+    {
+      id:2,
+      image:"",
+      desc: "Pacific Cleaners"
+    },
+    {
+      id:3,
+      image:"",
+      desc: "Pacific Cleaners"
+    },
+    {
+      id:4,
+      image:"",
+      desc: "Pacific Cleaners"
+    }
+  ]
