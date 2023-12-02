@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{flex:1}}>
@@ -30,7 +30,7 @@ export default function ProfileScreen() {
         </View>
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />
-          <Text style={styles.optionText}>My Bookings</Text>
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("myBookings")}>My Bookings</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.option}>
