@@ -65,12 +65,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
-    fontSize: SIZES.h2, // Adjust font size if needed
+    fontSize: 35, 
     fontWeight: "bold",
   },
   desc: {
     color: "white",
-    fontSize: SIZES.body3, // Adjust font size if needed
+    fontSize: SIZES.h2, 
   },
   buttonContainer: {
     alignItems: 'center',
