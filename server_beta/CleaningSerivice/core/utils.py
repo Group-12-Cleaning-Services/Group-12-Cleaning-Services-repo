@@ -1,19 +1,22 @@
-from core.senders.accounts import *
+from base64 import urlsafe_b64encode
+import pytz
+from datetime import datetime, timedelta
+import string, random
+from rest_framework.response import Response
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from typing import List, Tuple, Dict
+from django.http import HttpRequest
 from core.retrievers.accounts import *
 from core.models import *
-from datetime import datetime
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.http import HttpRequest
+from core.senders.accounts import *
 
 
-def generate_otp(otp_length):
-    """
-    Generate a one time pin with specified length
-    """
 
 def generate_token(otp_length):
     """Generate token"""
-    return ''.join([random.choice(string.ascii_uppercase + string.digits)] for _ in range(otp_length))
     return "".join([random.choice(string.digits) for i in range(otp_length)])
 
 
@@ -23,7 +26,7 @@ def email_verification(email: str, otp_length: int):
     """
 
     subject = "Clean Email Verification Code"
-    pin = generate_otp(otp_length)
+    pin = generate_token(otp_length)
     print(f"{pin}")
 
     sender = ""
@@ -65,9 +68,16 @@ def verification_confirmation_email(email):
     email = EmailMultiAlternatives(subject, text_content, sender, receiver)
     email.attach_alternative(html_content, "text/html")
 
-    if email.send():
-        return True
-    return False
+    # if email.send():
+    #     token = get_verification_token(receiver)
+    #     if token:
+    #         update_verification_token(token, pin)
+    #     else:
+    #         print(f"receiver: {receiver}")
+    #         pin_created = create_verification_token(receiver[0], pin)
+    #         print(f"pin created: {pin_created}")
+    #     return True
+    # return False
 
 
 def password_cofirmation_email(email, otp_length):

@@ -3,6 +3,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import uuid
 from django.core.validators import MaxValueValidator, MinValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
+from phone_field import PhoneField
+
 
 
 
@@ -28,7 +30,7 @@ class CleaningServiceUserProfile(models.Model):
     profile_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    contact = PhoneNumberField(null=True, blank=True)
+    contact = PhoneField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     time_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     

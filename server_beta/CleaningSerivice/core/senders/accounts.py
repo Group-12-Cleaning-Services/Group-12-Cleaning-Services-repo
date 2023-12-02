@@ -20,16 +20,12 @@ def generate_token(otp_length):
 
 def create_verification_token(email, token):
     """Create verification token"""
-    token = VerificationToken.objects.create(email=email)
-    return token
     time_generated = UTC.localize(datetime.now())
+    print(f"time: {time_generated}")
     verification_token = VerificationToken.objects.create(email=email, token=token, time=time_generated)
     return verification_token
 
 
-def generate_token(otp_length):
-    """Generate token"""
-    return ''.join([random.choice(string.ascii_uppercase + string.digits)] for _ in range(otp_length))
 def update_verification_token(verification_token, token):
     """Update verification token"""
     time_generated = UTC.localize(datetime.now())

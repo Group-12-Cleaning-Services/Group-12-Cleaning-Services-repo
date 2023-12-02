@@ -8,11 +8,12 @@ def create_profile(data):
         serializer.save()
         return serializer.data
     else:
-        return None
+        return serializer.errors
 
 
-def update_profile(data):
-    serializer = CleaningServiceUserProfileSerializer(data=data, partial=True, many=False)
+def update_profile(data, profile):
+    "updates a user's profile takes a profile instance and the data to be updated"
+    serializer = CleaningServiceUserProfileSerializer(data=data, instance=profile, partial=True, many=False)
     if serializer.is_valid():
         serializer.save()
         return serializer.data
