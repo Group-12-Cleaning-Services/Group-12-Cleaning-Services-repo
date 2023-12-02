@@ -64,8 +64,6 @@ const Register = ({navigation}) => {
 const window = Dimensions.get('window')
 const height = window.height
 const width = window.width
-const buttonWidth = width * 0.4
-const buttonWidth2 = width*0.6
 
 const styles = StyleSheet.create({
   container: {
@@ -112,18 +110,18 @@ const styles = StyleSheet.create({
     color: 'black',
     marginVertical:10
   },
+  buttonContainer: {
+    alignItems: 'center',
+    paddingTop: 10
+  },
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: buttonWidth,
+    width: width*0.4,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,
     overflow: 'hidden',
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    paddingTop: 10
   },
   haveAccount: {
     alignItems: 'center',
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
-    width: buttonWidth2,
+    width: width*0.6,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,

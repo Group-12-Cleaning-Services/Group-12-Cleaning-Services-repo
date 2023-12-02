@@ -72,8 +72,7 @@ const OrgRegister = ({navigation}) => {
  
 const window = Dimensions.get('window')
 const width = window.width
-const buttonWidth = width * 0.4
-const buttonWidth2 = width*0.6
+
 
 const styles = StyleSheet.create({
   container: {
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: buttonWidth,
+    width: width*0.4,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
-    width: buttonWidth2,
+    width: width*0.6,
     padding: Platform.OS === "ios"? 15 : 10,
     textAlign: 'center',
     borderRadius: 15,
