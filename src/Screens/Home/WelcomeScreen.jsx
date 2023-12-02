@@ -77,14 +77,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     backgroundColor:COLORS.white,
-    width: SIZES.width * 0.6,
-    height: SIZES.width * 0.15,
+    width: SIZES.width * 0.52,
+    height: SIZES.height * 0.08,
     textAlign: 'center',
     paddingTop: SIZES.height * 0.02,
     borderRadius: 15,
     overflow: "hidden",
     fontWeight: "bold",
-    fontSize: SIZES.h4, // Adjust font size if needed
+    fontSize: SIZES.h4,
   },
 });
 
