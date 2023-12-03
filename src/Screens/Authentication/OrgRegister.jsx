@@ -28,7 +28,7 @@ const OrgRegister = ({navigation}) => {
 
   const handleCreateAccount = async () => {
     try {
-      const response = await axios.post('https://localhost/orgRegister', {
+      const response = await axios.post('https://localhost/8000/accounts/create/', {
         username,
         password,
         email,

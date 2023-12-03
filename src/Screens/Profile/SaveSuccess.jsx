@@ -1,6 +1,6 @@
 import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Feather } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const SaveSuccess = () => {
@@ -12,7 +12,7 @@ const SaveSuccess = () => {
   return (
     <SafeAreaView style={container}>
         <View style={iconContainer}>
-            <Feather name={'check'} color={'green'} size={120}/>
+        <MaterialCommunityIcons name="check-outline" size={120} color="green" />
         </View>
         <View style={textContainer}>
             <Text style={saveMessage}>Saved Successfully</Text>

@@ -28,7 +28,7 @@ const Login = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://api.example.com/login', {
+      const response = await axios.post('https://loaclhost/8000/login', {
         username,
         password,
       });

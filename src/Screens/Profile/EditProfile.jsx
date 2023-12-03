@@ -25,7 +25,7 @@ const EditProfile = ({ navigation }) => {
 
   const handleProfileEdit = async () => {
     try {
-      const response = await axios.post('https://api.example.com/login', {
+      const response = await axios.post('https://localhost/8000//profile/update/', {
         username,
         fullName,
         phone,
