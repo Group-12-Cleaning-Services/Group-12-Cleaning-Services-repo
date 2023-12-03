@@ -1,0 +1,13 @@
+certifi==2023.7.22
+dbus-python==1.2.16
+distlib==0.3.7
+distro==1.5.0
+distro-info==1.0
+filelock==3.13.1
+pipenv==2023.10.24
+platformdirs==3.11.0
+pycurl==7.43.0.6
+PyGObject==3.38.0
+python-apt==2.2.1
+unattended-upgrades==0.1
+virtualenv==20.24.6
