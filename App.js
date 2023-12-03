@@ -5,11 +5,12 @@ import Navigation from "./src/Components/Navigation"
 import LandingScreen from './src/Screens/Organization/LandingScreen';
 import ProfileScreen from './src/Screens/Profile/Profile';
 import BookingsScreen from './src/Screens/Profile/MyBookings';
+import Scroll from './src/Screens/Organization/Scroll';
 
 const App = () => {
   const Stack = createNativeStackNavigator()
   return (
-    <BookingsScreen/>
+    <Navigation/>
   )
 }
 

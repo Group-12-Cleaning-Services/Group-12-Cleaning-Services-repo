@@ -16,11 +16,29 @@ import Button from '../../Components/Button';
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [err, setErr] = useState('')
 
-  const handleChange = (e) =>{
-    setUsername(e.target.value)
-    setPassword(e.target.value)
+  const handleChange = (key,value) =>{
+    if (key === 'username') {
+      setUsername(value);
+    } else if (key === 'password') {
+      setPassword(value);
+    }
   }
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('https://api.example.com/login', {
+        username,
+        password,
+      });
+      console.log('Login successful:', response.data);
+      navigation.navigate('Home');
+    } catch (error) {
+      setErr(error.message)
+    }
+  };
+
   const {
     container,
     linearGradientBackground,
@@ -57,7 +75,7 @@ const Login = ({ navigation }) => {
             style={input}
             placeholder="Username"
             placeholderTextColor="#fff"
-            onChangeText={handleChange}
+            onChangeText={(value)=>handleChange('usename', value)}
             value={username}
           />
           <TextInput
@@ -65,7 +83,7 @@ const Login = ({ navigation }) => {
             placeholder="Password"
             placeholderTextColor="#fff"
             secureTextEntry
-            onChangeText={handleChange}
+            onChangeText={(value)=>handleChange('password', value)}
             value={password}
           />
         </View>
@@ -73,7 +91,7 @@ const Login = ({ navigation }) => {
           title={'Login'}
           buttonContainer={buttonContainer}
           buttonText={buttonText}
-          press={() => navigation.navigate('Home')}
+          press={handleLogin}
         />
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>

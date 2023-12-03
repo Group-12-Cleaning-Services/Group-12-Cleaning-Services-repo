@@ -1,9 +1,46 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Dimensions, Platform, } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Platform, } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
+import { SIZES } from '../../Constants/Theme';
 
 const OrgRegister = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loaction, setLocation] = useState('');
+  const [err, setErr] = useState('');
+
+  const handleChange = (key,value) =>{
+    if (key === 'username') {
+      setUsername(value);
+    } else if (key === 'password') {
+      setPassword(value);
+    }else if (key === 'email') {
+      setEmail(value);
+    }else if (key === 'phone') {
+      setPhone(value);
+   }else if (key === 'location') {
+    setLocation(value);
+}
+}
+
+  const handleCreateAccount = async () => {
+    try {
+      const response = await axios.post('https://localhost/orgRegister', {
+        username,
+        password,
+        email,
+        phone,
+        location
+      });
+      console.log('Account created successful', response.data);
+      navigation.navigate('Login');
+    } catch (error) {
+      setErr(error.message)
+    }
+  };
   const {
     container,
     imageContainer,
@@ -34,30 +71,57 @@ const OrgRegister = ({navigation}) => {
       </View>
       <View style={inputContainer}>
         <View style={input}>
-          <Feather name={'user'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Username" />
+          <Feather name={'user'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput style={inputField} 
+           placeholder="Username" 
+           onChangeText={(value)=>handleChange('usename', value)}
+           />
         </View>
         <View style={input}>
-          <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Password" secureTextEntry />
+          <Feather name={'lock'} 
+           size={20} color={'black'} 
+           style={iconUser} 
+           />
+          <TextInput style={inputField} 
+           placeholder="Password" 
+           secureTextEntry 
+           onChangeText={(value)=>handleChange('password', value)}
+           />
         </View>
         <View style={input}>
-          <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Email" />
+          <Feather name={'mail'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput style={inputField} 
+           placeholder="Email"
+           onChangeText={(value)=>handleChange('email', value)} 
+          />
         </View>
         <View style={input}>
-          <Feather name={'phone'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Phone" />
+          <Feather name={'phone'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput style={inputField} 
+           placeholder="Phone" 
+           onChangeText={(value)=>handleChange('phone', value)}
+           />
         </View>
         <View style={input}>
-          <Feather name={'map-pin'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Location" />
+          <Feather name={'map-pin'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput style={inputField} 
+           placeholder="Location" 
+           onChangeText={(value)=>handleChange('location', value)}
+           />
         </View>
       </View>
       <Button title={'Create Account'}
        buttonContainer={buttonContainer}
        buttonText={buttonText}
-       press={()=>navigation.navigate("Login")}
+       press={handleCreateAccount}
       />
       <Button title={'Already have an account'}
        buttonContainer={haveAccount} 
@@ -70,9 +134,6 @@ const OrgRegister = ({navigation}) => {
   );
 };
  
-const window = Dimensions.get('window')
-const width = window.width
-
 
 const styles = StyleSheet.create({
   container: {
@@ -123,7 +184,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: width*0.4,
+    width: SIZES.width*0.4,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,
@@ -140,7 +201,7 @@ const styles = StyleSheet.create({
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
-    width: width*0.6,
+    width: SIZES.width*0.6,
     padding: Platform.OS === "ios"? 15 : 10,
     textAlign: 'center',
     borderRadius: 15,

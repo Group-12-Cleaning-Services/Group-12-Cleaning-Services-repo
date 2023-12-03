@@ -4,27 +4,8 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import { COLORS, SIZES } from '../../Constants/Theme';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Home from "./Home";
+import { slides } from "../../../Data";
 
-const slides = [
-  {
-    id: 1,
-    title: 'Laundry Services',
-    description: 'Get dependable and affordable services from organizations on this app',
-    image: require('../../../assets/laundry.png')
-  },
-  {
-    id: 2,
-    title: 'House Cleaning',
-    description: 'Get dependable and affordable services from organizations on this app',
-    image: require('../../../assets/houseCleaning.png')
-  },
-  {
-    id: 3,
-    title: 'Car Wash Services',
-    description: 'Get dependable and affordable services from organizations on this app',
-    image: require('../../../assets/carWash.png')
-  }
-]
 
 export default function OnBoarding({navigation}) {
   const [showHomePage, setShowHomePage] = useState(false);

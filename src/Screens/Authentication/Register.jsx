@@ -2,8 +2,37 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
+import {SIZES } from "../../Constants/Theme"
 
 const Register = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [err, setErr] = useState('')
+
+  const handleChange = (key,value) =>{
+    if (key === 'username') {
+      setUsername(value);
+    } else if (key === 'password') {
+      setPassword(value);
+    }else if (key === 'email') {
+      setEmail(value);
+    }
+  }
+
+  const handleCreateAccount = async () => {
+    try {
+      const response = await axios.post('https://localhost/register', {
+        username,
+        password,
+        email
+      });
+      console.log('Account created successful', response.data);
+      navigation.navigate('Login');
+    } catch (error) {
+      setErr(error.message)
+    }
+  };
   const {
     container,
     imageContainer,
@@ -34,22 +63,41 @@ const Register = ({navigation}) => {
       </View>
       <View style={inputContainer}>
         <View style={input}>
-          <Feather name={'user'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Username" />
+          <Feather name={'user'} 
+           size={20} color={'black'}
+           style={iconUser} />
+          <TextInput 
+           style={inputField} 
+           placeholder="Username"
+           onChangeText={(value)=>handleChange('usename', value)}
+          />
         </View>
         <View style={input}>
-          <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Password" secureTextEntry />
+          <Feather name={'lock'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput 
+           style={inputField}
+           placeholder="Password" 
+           secureTextEntry 
+           onChangeText={(value)=>handleChange('password', value)}
+           />
         </View>
         <View style={input}>
-          <Feather name={'mail'} size={20} color={'black'} style={iconUser} />
-          <TextInput style={inputField} placeholder="Email" />
+          <Feather name={'mail'} 
+          size={20} color={'black'} 
+          style={iconUser} />
+          <TextInput 
+           style={inputField} 
+           placeholder="Email" 
+           onChangeText={(value)=>handleChange('email', value)}
+           />
         </View>
       </View>
       <Button title={'Create Account'} 
        buttonContainer={buttonContainer}
        buttonText={buttonText}
-       press={()=>navigation.navigate("OTP")}
+       press={handleCreateAccount}
        />
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}
@@ -61,9 +109,6 @@ const Register = ({navigation}) => {
   );
 };
  
-const window = Dimensions.get('window')
-const height = window.height
-const width = window.width
 
 const styles = StyleSheet.create({
   container: {
@@ -117,7 +162,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: width*0.4,
+    width: SIZES.width*0.4,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,
@@ -130,7 +175,7 @@ const styles = StyleSheet.create({
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
-    width: width*0.6,
+    width: SIZES.width*0.6,
     padding: 10,
     textAlign: 'center',
     borderRadius: 15,

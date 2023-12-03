@@ -1,9 +1,35 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, Dimensions, ScrollView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 
 const ResetPassword = ({navigation}) => {
+  const [newPassword, setNewPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [err, setErr] = useState('')
+
+  const handleChange = (key,value) =>{
+    if (key === 'newPassword') {
+      setNewPassword(value);
+    } else if (key === 'confirm') {
+      setConfirm(value);
+    }
+  }
+
+  const handleReset = async () => {
+    try {
+      if(newPassword === confirm){
+        const response = await axios.post('https://api.example.com/reset', {
+          newPassword,
+          confirm,
+        });
+        console.log('Password updated successful:', response.data);
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      setErr(error.message)
+    }
+  };
   const {
     container,
     imageContainer,
@@ -33,19 +59,31 @@ const ResetPassword = ({navigation}) => {
       </View>
       <View style={inputContainer}>
         <View style={input}>
-          <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="New Password" secureTextEntry />
+          <Feather name={'lock'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput 
+           placeholder="New Password" 
+           secureTextEntry
+           onChangeText={(value)=>handleChange('newPassword', value)}
+           />
         </View>
         <View style={input}>
-          <Feather name={'lock'} size={20} color={'black'} style={iconUser} />
-          <TextInput placeholder="Confirm Password" secureTextEntry />
+          <Feather name={'lock'} 
+           size={20} color={'black'} 
+           style={iconUser} />
+          <TextInput 
+           placeholder="Confirm Password" 
+           secureTextEntry 
+           onChangeText={(value)=>handleChange('confirm', value)}
+           />
         </View>
       </View>
       <View style={btnsContainer}>
         <Button title={'Save'} 
         buttonContainer={saveCancelBtn} 
         buttonText={buttonText}
-        press={()=>navigation.navigate("Login")}
+        press={handleReset}
         />
         <Button title={'Cancel'} 
         buttonContainer={saveCancelBtn} 
