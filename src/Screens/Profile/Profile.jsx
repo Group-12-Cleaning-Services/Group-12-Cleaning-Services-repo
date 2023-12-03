@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#B3CDE0',
   },
   mirroredIcon: {
-    transform: [{ scaleX: -1 }], // This mirrors the icon horizontally
+    transform: [{ scaleX: -1 }],
   },
   header: {
     marginTop: 50,
