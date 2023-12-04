@@ -18,6 +18,7 @@ urlpatterns = [
     path('profile/', ProfileViewset.as_view({'get': 'list'})),
     path('profile/create/', ProfileViewset.as_view({'post': 'create'})),
     path('profile/update/', ProfileViewset.as_view({'post': 'update'})),
+    path('profile/retrieve/', ProfileViewset.as_view({'get': 'retrieve'})),
     #login
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

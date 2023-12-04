@@ -1,16 +1,25 @@
 from core.models import CleaningServiceUser, VerificationToken, PasswordToken
 from django.contrib.auth import get_user_model
 import random, string
+from core.serializers import CleaningServiceSerializer
 
 import pytz
 from datetime import datetime, timedelta
 
 UTC = pytz.UTC
 
-def create_user(email, password):
-    """Create user"""
-    user = CleaningServiceUser.objects.create_user(email=email, password=password)
-    return user
+# def create_user(email, password):
+#     """Create user"""
+#     user = CleaningServiceUser.objects.create_user(email=email, password=password)
+#     return user
+
+def create_user(data):
+    serializer = CleaningServiceSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return serializer.data
+    else:
+        return serializer.error
 
 
 def generate_token(otp_length):

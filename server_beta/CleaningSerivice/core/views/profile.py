@@ -48,7 +48,23 @@ class ProfileViewset(viewsets.ViewSet):
 
     def retrieve(self, request):
         """Retrieve user profile"""
-        pass
+        user = get_user_from_jwttoken(request)
+        if not user:
+            context = {
+                "detail": "user does not exist"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        profile = get_profile_by_user_id(user_id=user.user_id)
+        if not profile:
+            context = {
+                "detail": "profile does not exis"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        context = {
+            "profile": send_profile_information(profile)
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
 
     def delete(self, request):
         """Delete user profile"""

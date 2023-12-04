@@ -19,3 +19,10 @@ def update_profile(data, profile):
         return serializer.data
     else:
         return None
+    
+def send_profile_information(profile):
+    serializer = CleaningServiceUserProfileSerializer(profile)
+    if serializer.is_valid:
+        return serializer.data
+    else:
+        return serializer.error

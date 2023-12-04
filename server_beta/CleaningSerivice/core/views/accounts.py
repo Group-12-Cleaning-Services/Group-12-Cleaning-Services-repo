@@ -17,15 +17,16 @@ class AccountViewset(viewsets.ViewSet):
         """Create user"""
         email = request.data.get('email')
         password = request.data.get('password')
+        user_type = request.data.get('user_type')
         user = get_user_by_email(email)
         if user:
             context = {
                 'detail': 'User already exists'
             }
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
-        user = create_user(email, password)
-        context = {"detail": "User created successfully", "user": get_user_information(user)}
-        thread = threading.Thread(target=email_verification, args=[email, 6])
+        user = create_user(request.data)
+        context = {"detail": "User created successfully", "user": user}
+        thread = threading.Thread(target=email_verification, args=[email, 4])
         thread.start()
         return Response(context, status=status.HTTP_201_CREATED)
 
