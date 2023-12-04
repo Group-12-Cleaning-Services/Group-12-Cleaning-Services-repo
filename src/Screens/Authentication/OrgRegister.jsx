@@ -3,6 +3,8 @@ import { SafeAreaView, StyleSheet, ScrollView, Image, Text, View, TextInput, Pla
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import { SIZES } from '../../Constants/Theme';
+import axios from 'axios';
+
 
 const OrgRegister = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -28,7 +30,7 @@ const OrgRegister = ({navigation}) => {
 
   const handleCreateAccount = async () => {
     try {
-      const response = await axios.post('https://localhost/8000/accounts/create/', {
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
         username,
         password,
         email,
@@ -76,7 +78,7 @@ const OrgRegister = ({navigation}) => {
            style={iconUser} />
           <TextInput style={inputField} 
            placeholder="Username" 
-           onChangeText={(value)=>handleChange('usename', value)}
+           onChangeText={(value)=>handleChange('username', value)}
            />
         </View>
         <View style={input}>

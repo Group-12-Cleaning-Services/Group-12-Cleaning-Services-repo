@@ -3,13 +3,11 @@ import { View, Text, Image, StatusBar, StyleSheet } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { COLORS, SIZES } from '../../Constants/Theme';
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import Home from "./Home";
 import { slides } from "../../../Data";
 
 
 export default function OnBoarding({navigation}) {
   const [showHomePage, setShowHomePage] = useState(false);
-
 
   const buttonLabel = (label) => {
     return (

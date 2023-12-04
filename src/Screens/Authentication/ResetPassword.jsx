@@ -2,6 +2,9 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, Dimensions, ScrollView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
+import axios from 'axios';
+import { useState } from 'react';
+import { SIZES } from '../../Constants/Theme';
 
 const ResetPassword = ({navigation}) => {
   const [newPassword, setNewPassword] = useState('');
@@ -44,7 +47,8 @@ const ResetPassword = ({navigation}) => {
     cancelText,
     iconUser,
     scrollContainer,
-    btnsContainer
+    btnsContainer,
+    inputField
   } = styles;
 
   return (
@@ -62,7 +66,8 @@ const ResetPassword = ({navigation}) => {
           <Feather name={'lock'} 
            size={20} color={'black'} 
            style={iconUser} />
-          <TextInput 
+          <TextInput
+           style={inputField} 
            placeholder="New Password" 
            secureTextEntry
            onChangeText={(value)=>handleChange('newPassword', value)}
@@ -72,7 +77,8 @@ const ResetPassword = ({navigation}) => {
           <Feather name={'lock'} 
            size={20} color={'black'} 
            style={iconUser} />
-          <TextInput 
+          <TextInput
+           style={inputField} 
            placeholder="Confirm Password" 
            secureTextEntry 
            onChangeText={(value)=>handleChange('confirm', value)}
@@ -83,7 +89,8 @@ const ResetPassword = ({navigation}) => {
         <Button title={'Save'} 
         buttonContainer={saveCancelBtn} 
         buttonText={buttonText}
-        press={handleReset}
+        // press={handleReset}
+        press={()=>navigation.navigate("Login")}
         />
         <Button title={'Cancel'} 
         buttonContainer={saveCancelBtn} 
@@ -133,6 +140,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
+  inputField:{
+    width:SIZES.width*0.8
+  },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -143,8 +153,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     color: 'black',
     marginVertical:10,
-    width: Platform.OS === "ios"? 300 : 240,
-    padding: Platform.OS === "ios"? 10 : 7,
+    width:SIZES.width*0.8,
+    padding: SIZES.height*0.013,
   },
   btnsContainer:{
     alignItems:'center',

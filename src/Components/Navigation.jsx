@@ -13,7 +13,8 @@ import OnBoarding from '../Screens/Home/OnBoarding';
 import Home from '../Screens/Home/Home';
 import MyBookings from "../Screens/Profile/MyBookings";
 import ProfileScreen from '../Screens/Profile/Profile';
-
+import LandingScreen from "../Screens/Organization/LandingScreen"
+import EditProfile from "../Screens/Profile/EditProfile"
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -25,7 +26,7 @@ const Tabs = () => {
         }}
         >
             <Stack.Screen name='Welcome' component={WelcomeScreen} options={{statusBarColor:"#42322E"}}/>
-            <Stack.Screen name='onboard' component={OnBoarding} options={{statusBarColor:"#42322E"}}/>
+            <Stack.Screen name='onboard' component={OnBoarding} options={{statusBarColor:"#171717", statusBarStyle:"#FFFFF"}}/>
             <Stack.Screen name='Home' component={Home} options={{statusBarColor:"#42322E"}}/>
             <Stack.Screen name='Register' component={Register} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Login' component={Login} options={{statusBarColor:"#040268" }}/>
@@ -33,8 +34,10 @@ const Tabs = () => {
             <Stack.Screen name='ResetPassword' component={ResetPassword} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Bookings' component={BookingsScreen} options={{ statusBarColor: '#FF5733' }}/>
             <Stack.Screen name='OTP' component={OTPVerification} options={{ statusBarColor: 'black', statusBarStyle:"white" }}/>
-            <Stack.Screen name='Profile' component={ProfileScreen}/>
-            <Stack.Screen name='MyBookings' component={MyBookings}/>
+            <Stack.Screen name='Profile' component={ProfileScreen} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='MyBookings' component={MyBookings} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='Organizations' component={LandingScreen} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='EditProfile' component={EditProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

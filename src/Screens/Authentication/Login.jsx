@@ -10,17 +10,18 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../../Components/Button';
+import axios from 'axios';
 
 
 
 const Login = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('')
 
   const handleChange = (key,value) =>{
-    if (key === 'username') {
-      setUsername(value);
+    if (key === 'email') {
+      setEmail(value);
     } else if (key === 'password') {
       setPassword(value);
     }
@@ -28,14 +29,15 @@ const Login = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://loaclhost/8000/login', {
-        username,
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/login', {
+        email,
         password,
       });
-      console.log('Login successful:', response.data);
-      navigation.navigate('Home');
+      console.log(response.data);
+      navigation.navigate('Organizations');
     } catch (error) {
-      setErr(error.message)
+      // setErr(error.message)
+      console.log(error)
     }
   };
 
@@ -73,10 +75,9 @@ const Login = ({ navigation }) => {
         <View style={inputContainer}>
           <TextInput
             style={input}
-            placeholder="Username"
+            placeholder="Email"
             placeholderTextColor="#fff"
-            onChangeText={(value)=>handleChange('usename', value)}
-            value={username}
+            onChangeText={(value)=>handleChange('email', value)}
           />
           <TextInput
             style={input}
@@ -84,14 +85,14 @@ const Login = ({ navigation }) => {
             placeholderTextColor="#fff"
             secureTextEntry
             onChangeText={(value)=>handleChange('password', value)}
-            value={password}
           />
         </View>
         <Button
           title={'Login'}
           buttonContainer={buttonContainer}
           buttonText={buttonText}
-          press={handleLogin}
+          // press={handleLogin}
+          press={()=>navigation.navigate('Organizations')}
         />
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>

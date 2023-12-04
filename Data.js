@@ -51,7 +51,7 @@ export const bookings = [
     }
   ];
 
-  export const Organizations =[
+  export const OrganizationsData =[
     {
       id:1,
       image:require("./assets/org1.png"),

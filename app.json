@@ -2,6 +2,7 @@
   "expo": {
     "name": "cleaning-service-app",
     "slug": "cleaning-service-app",
+    "owner": "software_developers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -11,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#171717"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -25,6 +24,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "updates": {
+      "useClassicUpdates": true
+    },
+    "privacy": "public"
   }
 }

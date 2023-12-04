@@ -1,11 +1,14 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import {SIZES } from "../../Constants/Theme"
+import { useState } from 'react';
+import axios from 'axios';
+
 
 const Register = ({navigation}) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [err, setErr] = useState('')
@@ -22,15 +25,13 @@ const Register = ({navigation}) => {
 
   const handleCreateAccount = async () => {
     try {
-      const response = await axios.post('https://localhost/register', {
-        username,
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
         password,
         email
       });
-      console.log('Account created successful', response.data);
       navigation.navigate('Login');
     } catch (error) {
-      setErr(error.message)
+      console.log(error.message)
     }
   };
   const {
@@ -69,7 +70,7 @@ const Register = ({navigation}) => {
           <TextInput 
            style={inputField} 
            placeholder="Username"
-           onChangeText={(value)=>handleChange('usename', value)}
+           onChangeText={(value)=>handleChange('username', value)}
           />
         </View>
         <View style={input}>
@@ -98,6 +99,7 @@ const Register = ({navigation}) => {
        buttonContainer={buttonContainer}
        buttonText={buttonText}
        press={handleCreateAccount}
+      // press={()=>navigation.navigate('Login')}
        />
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}

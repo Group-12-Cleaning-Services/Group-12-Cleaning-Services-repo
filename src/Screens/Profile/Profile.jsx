@@ -7,7 +7,11 @@ export default function ProfileScreen({navigation}) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={{flex:1}}>
       <View style={styles.header}>
-      <Feather name="log-out" size={24} color="black" style={styles.mirroredIcon} />
+      <Feather name="log-out" 
+       size={24} color="black" 
+       style={styles.mirroredIcon} 
+       onPress={() => navigation.goBack()}
+      />
       </View>
       <View style={styles.profileSection}>
         <Image
@@ -17,7 +21,7 @@ export default function ProfileScreen({navigation}) {
         <Text style={styles.name}>Elizabeth Geraldo</Text>
         <Text style={styles.email}>lizzygeraldo23@gmail.com</Text>
         <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
+          <Text style={styles.editButtonText} onPress={()=>navigation.navigate("EditProfile")}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.optionsSection}>
@@ -33,8 +37,8 @@ export default function ProfileScreen({navigation}) {
           <Text style={styles.optionText} onPress={()=>navigation.navigate("MyBookings")}>My Bookings</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option}>
-          <Feather name="log-out" size={24} color="black" />
+        <TouchableOpacity style={styles.option} onPress={()=>navigation.navigate("Home")}>
+          <Feather name="log-out" size={24} color="black"  />
           <Text style={styles.optionText}>Logout</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>

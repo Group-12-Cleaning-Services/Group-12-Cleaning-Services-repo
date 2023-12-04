@@ -25,7 +25,7 @@ const EditProfile = ({ navigation }) => {
 
   const handleProfileEdit = async () => {
     try {
-      const response = await axios.post('https://localhost/8000//profile/update/', {
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/profile/update/', {
         username,
         fullName,
         phone,
@@ -41,6 +41,7 @@ const EditProfile = ({ navigation }) => {
       setErr(error.message);
     }
   };
+  console.log(username)
 
   const {
     container,
@@ -56,7 +57,8 @@ const EditProfile = ({ navigation }) => {
     cancelText,
     iconUser,
     btnsContainer,
-    scrollContainer
+    scrollContainer,
+    inputField
   } = styles;
 
   return (
@@ -79,6 +81,7 @@ const EditProfile = ({ navigation }) => {
                   size={20} color={'black'}
                   style={iconUser} />
                 <TextInput
+                  style={inputField}
                   placeholder="Full Name"
                   secureTextEntry
                   onChangeText={(value) => handleChange('fullName', value)}
@@ -89,6 +92,7 @@ const EditProfile = ({ navigation }) => {
                   size={20} color={'black'}
                   style={iconUser} />
                 <TextInput
+                 style={inputField}
                   placeholder="Username"
                   secureTextEntry
                   onChangeText={(value) => handleChange('username', value)}
@@ -99,6 +103,7 @@ const EditProfile = ({ navigation }) => {
                   size={20} color={'black'}
                   style={iconUser} />
                 <TextInput
+                style={inputField}
                   placeholder="Phone"
                   secureTextEntry
                   onChangeText={(value) => handleChange('phone', value)}
@@ -109,7 +114,8 @@ const EditProfile = ({ navigation }) => {
               <Button title={'Save'}
                 buttonContainer={saveCancelBtn}
                 buttonText={buttonText}
-                press={handleProfileEdit}
+                // press={handleProfileEdit}
+                press={()=>navigation.navigate("Profile")}
               />
               <Button title={'Cancel'}
                 buttonContainer={saveCancelBtn}
@@ -154,10 +160,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
+  inputField:{
+    width:SIZES.width*0.8
+  },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 240,
+    width: SIZES.width*0.8,
     padding: 7,
     borderRadius: 10,
     margin: 7,
