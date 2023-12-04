@@ -53,6 +53,14 @@ def get_verification_token(email):
     except VerificationToken.DoesNotExist:
         return None
 
+
+def get_password_token(email):
+    """Get password token"""
+    try:
+        return PasswordToken.objects.get(email=email)
+    except PasswordToken.DoesNotExist:
+        return None
+
 def get_profile_by_id(id):
     try:
         return CleaningServiceUserProfile.objects.get(profile_id=id)

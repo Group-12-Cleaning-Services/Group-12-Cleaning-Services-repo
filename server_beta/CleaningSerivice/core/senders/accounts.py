@@ -47,7 +47,7 @@ def update_verification_token(verification_token, token):
 def create_password_token(email, token):
     """Create password token"""
     time_generated = UTC.localize(datetime.now())
-    password_token = PasswordResetToken.objects.create(email=email, token=token, time=time_generated)
+    password_token = PasswordToken.objects.create(email=email, token=token, time=time_generated)
     return password_token
 
 

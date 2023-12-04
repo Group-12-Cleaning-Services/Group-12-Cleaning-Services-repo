@@ -80,12 +80,12 @@ def verification_confirmation_email(email):
     # return False
 
 
-def password_cofirmation_email(email, otp_length):
+def password_reset_email(email, otp_length):
     """
     Confirm password reset
     """
     subject = "Clean Password Reset Confirmation"
-    pin = generate_otp(otp_length)
+    pin = generate_token(otp_length)
     sender = ""
     receiver = [email]
     html_content = render_to_string(
@@ -97,7 +97,7 @@ def password_cofirmation_email(email, otp_length):
     email_obj.attach_alternative(html_content, "text/html")
 
     if email_obj.send():
-        token = get_password_reset_token(receiver)
+        token = get_password_token(receiver)
         if token:
             update_password_token(token, pin)
         else:

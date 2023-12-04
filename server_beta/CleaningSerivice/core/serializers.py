@@ -4,8 +4,8 @@ from rest_framework import serializers
 class CleaningServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CleaningServiceUser
-        fields = ( 'email', 'password', 'user_type')
-        extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True}}
+        fields = ( 'email', 'password', 'user_type', 'profile')
+        extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
         
         
         

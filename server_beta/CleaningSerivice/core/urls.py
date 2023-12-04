@@ -2,6 +2,7 @@ from django.urls import path
 from core.views.accounts import AccountViewset
 from core.views.profile import ProfileViewset
 from core.views.services import ServiceViewset
+from core.views.reset_password import PasswordResetViewset
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
@@ -22,6 +23,9 @@ urlpatterns = [
     #login
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    #password reset
+    path('accounts/password-reset/', PasswordResetViewset.as_view({'post': 'password_reset_request'})),
+    path('accounts/password-reset-confirm/', PasswordResetViewset.as_view({'post': 'password_reset_confirm'})),
     #service
     path('service/all/', ServiceViewset.as_view({'get': 'list_service'})),
     path('service/create/', ServiceViewset.as_view({'post': 'create_service'})),
