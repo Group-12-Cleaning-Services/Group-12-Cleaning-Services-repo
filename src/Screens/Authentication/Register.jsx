@@ -1,9 +1,11 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, StatusBar, TouchableOpacity, Dimensions, useWindowDimensions, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, ActivityIndicator, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import {SIZES } from "../../Constants/Theme"
 import { useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 
 
@@ -11,7 +13,11 @@ const Register = ({navigation}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [user_type, setUserType] = useState("customer");
+  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('')
+
+
 
   const handleChange = (key,value) =>{
     if (key === 'username') {
@@ -25,15 +31,31 @@ const Register = ({navigation}) => {
 
   const handleCreateAccount = async () => {
     try {
+      setLoading(true);
       const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
+        email,
         password,
-        email
+        user_type
       });
-      navigation.navigate('Login');
+      if(response.status === 201){
+        Alert.alert("Success","User created succesful")
+        await AsyncStorage.setItem("userRegistered",email);
+        await AsyncStorage.setItem("user_type",user_type);
+        navigation.navigate("OTP")
+      }
+      if(response.status === 208){
+        alert("User already exist")
+      }
     } catch (error) {
-      console.log(error.message)
+      Alert.alert("Warning", "Something went wrong")
+      setLoading(false); 
+    }finally {
+      setLoading(false); 
+      setEmail('');
+      setPassword('')
     }
   };
+
   const {
     container,
     imageContainer,
@@ -49,7 +71,8 @@ const Register = ({navigation}) => {
     haveAccountText,
     haveAccount,
     iconUser,
-    scrollContainer
+    scrollContainer,
+    indicator
   } = styles;
 
   return (
@@ -79,9 +102,8 @@ const Register = ({navigation}) => {
            style={iconUser} />
           <TextInput 
            style={inputField}
-           placeholder="Password" 
-           secureTextEntry 
-           onChangeText={(value)=>handleChange('password', value)}
+           placeholder="Email" 
+           onChangeText={(value)=>handleChange('email', value)}
            />
         </View>
         <View style={input}>
@@ -90,8 +112,9 @@ const Register = ({navigation}) => {
           style={iconUser} />
           <TextInput 
            style={inputField} 
-           placeholder="Email" 
-           onChangeText={(value)=>handleChange('email', value)}
+           placeholder="Password"
+           secureTextEntry  
+           onChangeText={(value)=>handleChange('password', value)}
            />
         </View>
       </View>
@@ -101,6 +124,9 @@ const Register = ({navigation}) => {
        press={handleCreateAccount}
       // press={()=>navigation.navigate('Login')}
        />
+       <Text style={indicator}>
+          {loading && <ActivityIndicator color="yellow" size="large" press={handleCreateAccount} />} 
+        </Text>
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}
        buttonText={haveAccountText}
@@ -196,6 +222,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#B3CDE0",
     flexGrow: 1,
     paddingBottom:50
+  },
+  indicator:{
+    alignItems:'center',
+    textAlign:'center',
+    position:"absolute",
+    top:SIZES.height*0.779,
+    left:SIZES.width*0.45
   }
 });
 

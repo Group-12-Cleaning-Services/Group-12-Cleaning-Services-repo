@@ -2,7 +2,6 @@
   "expo": {
     "name": "cleaning-service-app",
     "slug": "cleaning-service-app",
-    "owner": "software_developers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",

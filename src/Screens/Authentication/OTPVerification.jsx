@@ -1,17 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const OTPVerification = ({navigation}) => {
-    const {headerContainer, headerTitle, headerMessage, resendContainer, resendText} = styles
-  const [verificationCode, setVerificationCode] = useState('');
+  const {headerContainer, headerTitle, headerMessage, resendContainer, resendText} = styles
+  const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('')
+  
 
-  const handleVerificationSubmit = () => {
-    const expectedCode = '1234';
+  useEffect(() => {
+    const getItemFromStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userRegistered');
+        if (value !== null) {
+          setEmail(value)
+        } else {
+          console.log('Item not found in AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error retrieving item from AsyncStorage:', error);
+      }
+    };
 
-    if (verificationCode === expectedCode) {
-      Alert.alert('Verification Successful', 'You may proceed to the next step.');
-    } else {
-      Alert.alert('Verification Failed', 'Please enter the correct verification code.');
+    getItemFromStorage();
+  }, []); 
+
+  const handleVerificationSubmit = async() => {
+    try {
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/verify-account/', {
+      otp,
+      email
+      });
+      if(response.status === 200){
+       Alert.alert("Success", "Your account has been verified");
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      Alert.alert("Warning","Something went wrong! try again")
     }
   };
 
@@ -28,12 +55,12 @@ const OTPVerification = ({navigation}) => {
             style={styles.codeInput}
             keyboardType="numeric"
             maxLength={1}
-            value={verificationCode[index - 1]}
+            value={otp[index - 1]}
             onChangeText={(text) => {
-            let updatedCode = verificationCode;
+            let updatedCode = otp;
             updatedCode = updatedCode.split('');
             updatedCode[index - 1] = text;
-            setVerificationCode(updatedCode.join(''));
+            setOtp(updatedCode.join(''));
             }}
           />
         ))}

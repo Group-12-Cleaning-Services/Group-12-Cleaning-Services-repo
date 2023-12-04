@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,37 +8,52 @@ import {
   View,
   TextInput,
   StatusBar,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../../Components/Button';
 import axios from 'axios';
-
-
+import { SIZES } from '../../Constants/Theme';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [err, setErr] = useState('')
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
 
-  const handleChange = (key,value) =>{
+  const handleChange = (key, value) => {
     if (key === 'email') {
       setEmail(value);
     } else if (key === 'password') {
       setPassword(value);
     }
-  }
+  };
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/login', {
-        email,
-        password,
-      });
-      console.log(response.data);
-      navigation.navigate('Organizations');
+      setLoading(true);
+
+      const response = await axios.post(
+        'https://cleaningserve.pythonanywhere.com/api/login/',
+        {
+          email,
+          password,
+        }
+      );
+
+      if (response.status === 200) {
+        await AsyncStorage.setItem('access', response.data.access);
+        await AsyncStorage.setItem('user', email);
+        navigation.navigate('Organizations');
+      }
     } catch (error) {
-      // setErr(error.message)
-      console.log(error)
+      Alert.alert('Invalid', 'Incorrect password or username');
+      setLoading(false); 
+    } finally {
+      setLoading(false); 
+      setEmail('');
+      setPassword('')
     }
   };
 
@@ -56,6 +72,7 @@ const Login = ({ navigation }) => {
     forgotPass,
     forgotPassText,
     clickHere,
+    indicator
   } = styles;
 
   return (
@@ -77,29 +94,30 @@ const Login = ({ navigation }) => {
             style={input}
             placeholder="Email"
             placeholderTextColor="#fff"
-            onChangeText={(value)=>handleChange('email', value)}
+            onChangeText={(value) => handleChange('email', value)}
+            value={email}
           />
           <TextInput
             style={input}
             placeholder="Password"
             placeholderTextColor="#fff"
             secureTextEntry
-            onChangeText={(value)=>handleChange('password', value)}
+            onChangeText={(value) => handleChange('password', value)}
+            value={password}
           />
         </View>
         <Button
           title={'Login'}
           buttonContainer={buttonContainer}
           buttonText={buttonText}
-          // press={handleLogin}
-          press={()=>navigation.navigate('Organizations')}
+          press={handleLogin}
         />
+        <Text style={indicator}>
+          {loading && <ActivityIndicator color="yellow" size="large" press={handleLogin} />} 
+        </Text>
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>
-          <Text
-            style={clickHere}
-            onPress={() => navigation.navigate('ResetPassword')}
-          >
+          <Text style={clickHere} onPress={() => navigation.navigate('ResetPassword')}>
             Click Here
           </Text>
         </View>
@@ -115,7 +133,7 @@ const styles = StyleSheet.create({
   linearGradientBackground: {
     flex: 1,
     width: '100%',
-    paddingTop: Platform.OS ==="ios" ? 120 : 0
+    paddingTop: Platform.OS === "ios" ? 120 : 0
   },
   imageContainer: {
     alignItems: 'center',
@@ -176,6 +194,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  indicator:{
+    alignItems:'center',
+    textAlign:'center',
+    position:"absolute",
+    top:SIZES.height*0.74,
+    left:SIZES.width*0.45
+  }
 });
 
 export default Login;

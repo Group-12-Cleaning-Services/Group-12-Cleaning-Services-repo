@@ -1,8 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function ProfileScreen({navigation}) {
+  const [user, setUser] = useState('')
+  const [userType, setUserType] = useState()
+
+ 
+  useEffect(() => {
+    const getItemFromStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem('user');
+        const user_typeValue = await AsyncStorage.getItem('user_type');
+        if (value !== null) {
+          setUser(value);
+        }if(user_typeValue !== null){
+          setUserType(user_typeValue)
+        } else {
+          console.log('Item not found in AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error retrieving item from AsyncStorage:', error);
+      }
+    };
+
+    getItemFromStorage();
+  }, []); 
+
+  
+
+
+
+
+  const handleLogout = async() =>{
+    await AsyncStorage.removeItem("access");
+    await AsyncStorage.removeItem("user")
+    navigation.navigate("Home")
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{flex:1}}>
@@ -19,7 +56,7 @@ export default function ProfileScreen({navigation}) {
           style={styles.profileImage}
         />
         <Text style={styles.name}>Elizabeth Geraldo</Text>
-        <Text style={styles.email}>lizzygeraldo23@gmail.com</Text>
+        <Text style={styles.email}>{user}</Text>
         <TouchableOpacity style={styles.editButton}>
           <Text style={styles.editButtonText} onPress={()=>navigation.navigate("EditProfile")}>Edit Profile</Text>
         </TouchableOpacity>
@@ -30,16 +67,16 @@ export default function ProfileScreen({navigation}) {
       </View>
         <View style={styles.option}>
           <Feather name="user" size={24} color="black" />
-          <Text style={styles.optionText}>Registered as a customer</Text>
+          <Text style={styles.optionText}>Regsitered as a {userType.replace(/_/g, ' ' )}</Text>
         </View>
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />
           <Text style={styles.optionText} onPress={()=>navigation.navigate("MyBookings")}>My Bookings</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option} onPress={()=>navigation.navigate("Home")}>
+        <TouchableOpacity style={styles.option} onPress={handleLogout}>
           <Feather name="log-out" size={24} color="black"  />
-          <Text style={styles.optionText}>Logout</Text>
+          <Text style={styles.optionText} >Logout</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
       </View>

@@ -59,17 +59,17 @@ export const bookings = [
     },
     {
       id:2,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org2.png"),
       desc: "Pacific Cleaners"
     },
     {
       id:3,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org3.png"),
       desc: "Pacific Cleaners"
     },
     {
       id:4,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org4.png"),
       desc: "Pacific Cleaners"
     },
     {
@@ -79,17 +79,17 @@ export const bookings = [
     },
     {
       id:6,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org2.png"),
       desc: "Pacific Cleaners"
     },
     {
       id:7,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org3.png"),
       desc: "Pacific Cleaners"
     },
     {
       id:8,
-      image:require("./assets/org1.png"),
+      image:require("./assets/org4.png"),
       desc: "Pacific Cleaners"
     }
   ]
