@@ -9,9 +9,8 @@ export default function ProfileScreen({navigation}) {
   const [user, setUser] = useState('')
   const [userType, setUserType] = useState();
   const [profileState, setProfileState] = useState('');
-  const [username, setUsername] = useState('')
-  const [lastname, setLastName] = useState('')
-console.log(profileState)
+  const [first_name, setFirst_name] = useState('')
+  const [last_name, setLast_name] = useState('')
 
   useEffect(() => {
     const getItemFromStorage = async () => {
@@ -26,20 +25,13 @@ console.log(profileState)
               },
             }
           );
-    
-          setUsername(response.data.profile.first_name);
-          setLastName(response.data.profile.last_name)
+
+          setFirst_name(response.data.profile.first_name);
+          setLast_name(response.data.profile.last_name)
     
         }
         const value = await AsyncStorage.getItem('user');
         const user_typeValue = await AsyncStorage.getItem('user_type');
-        const profile_state_value = await AsyncStorage.getItem("profile_state")
-        if(profile_state_value === "null"){
-          setProfileState(null)
-        }
-        if(profile_state_value === "true"){
-          setProfileState("true")
-        }
         if (value !== null) {
           setUser(value);
         }if(user_typeValue !== null){
@@ -53,12 +45,9 @@ console.log(profileState)
     };
 
     getItemFromStorage();
-  }, [profileState]); 
+  }, []); 
 
   
-
-
-
 
   const handleLogout = async() =>{
     await AsyncStorage.removeItem("access");
@@ -81,14 +70,14 @@ console.log(profileState)
         source={require("../../../assets/profile.png")}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>{username} {lastname}</Text>
+        <Text style={styles.name}>{first_name} {last_name}</Text>
         <Text style={styles.email}>{user}</Text>
-        {!profileState &&
+        {!first_name &&
         <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("CreateProfile")}>
         <Text style={styles.editButtonText} >Create Profile</Text>
       </TouchableOpacity> 
         }
-        {profileState &&
+        {first_name &&
         <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("EditProfile")}>
         <Text style={styles.editButtonText} >Edit Profile</Text>
       </TouchableOpacity>

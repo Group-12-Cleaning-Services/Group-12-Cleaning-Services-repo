@@ -41,14 +41,14 @@ const Login = ({ navigation }) => {
           password,
         }
       );
-
       if (response.status === 200) {
         await AsyncStorage.setItem('access', response.data.access);
         await AsyncStorage.setItem('user', email);
+        Alert.alert("Success✔️", "Logged in successful")
         navigation.navigate('Organizations');
       }
     } catch (error) {
-      Alert.alert('Invalid', 'Incorrect password or username');
+      Alert.alert('Invalid⚠️', 'Incorrect password or username');
       setLoading(false); 
     } finally {
       setLoading(false); 
@@ -113,7 +113,7 @@ const Login = ({ navigation }) => {
           press={handleLogin}
         />
         <Text style={indicator}>
-          {loading && <ActivityIndicator color="yellow" size="large" press={handleLogin} />} 
+          {loading && <ActivityIndicator color="yellow" size={45} press={handleLogin} />} 
         </Text>
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>

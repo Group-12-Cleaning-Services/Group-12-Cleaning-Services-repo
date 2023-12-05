@@ -18,7 +18,6 @@ const Register = ({navigation}) => {
   const [err, setErr] = useState('')
 
 
-
   const handleChange = (key,value) =>{
     if (key === 'username') {
       setUsername(value);
@@ -40,9 +39,6 @@ const Register = ({navigation}) => {
       if(response.status === 201){
         await AsyncStorage.setItem("userRegistered",email);
         await AsyncStorage.setItem("user_type",user_type);
-        if(response.data.user.profile === null){
-          await AsyncStorage.setItem("profile_state", "null")
-        }
         Alert.alert("Success","User created succesful")
         navigation.navigate("OTP")
       }

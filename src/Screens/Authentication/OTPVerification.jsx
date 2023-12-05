@@ -8,7 +8,6 @@ const OTPVerification = ({navigation}) => {
   const {headerContainer, headerTitle, headerMessage, resendContainer, resendText} = styles
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('')
-  
 
   useEffect(() => {
     const getItemFromStorage = async () => {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
@@ -41,17 +42,20 @@ const EditProfile = ({ navigation }) => {
             },
           }
         );
-  
-        await AsyncStorage.setItem('profile_state', 'true');
-        Alert.alert("Profile updated successful")
+        await AsyncStorage.setItem("profile_details", first_name)
+        Alert.alert("Success","Profile updated successful")
         navigation.navigate("Profile")
   
       } else {
-        console.log('User does not have access token. Redirecting to login or showing an error.');
+        Alert.alert("Not authorized")
          navigation.navigate('Login');
       }
     } catch (error) {
       console.log(error);
+    }finally{
+      setFirst_name('')
+      setLast_name('')
+      setContact('')
     }
   };
  
@@ -86,7 +90,7 @@ const EditProfile = ({ navigation }) => {
             </View>
             <View style={welcomeContainer}>
               <Text style={welcomeTitle}>Edit Profile</Text>
-              <Text style={welcomeText}>Changes made to this file can be changed again</Text>
+              <Text style={welcomeText}>Changes made to this profile can be changed again</Text>
             </View>
             <View style={inputContainer}>
               <View style={input}>
@@ -97,6 +101,7 @@ const EditProfile = ({ navigation }) => {
                   style={inputField}
                   placeholder="First Name"
                   onChangeText={(value) => handleChange('first_name', value)}
+                  value={first_name}
                 />
               </View>
               <View style={input}>
@@ -107,6 +112,7 @@ const EditProfile = ({ navigation }) => {
                  style={inputField}
                   placeholder="Last Name"
                   onChangeText={(value) => handleChange('last_name', value)}
+                  value={last_name}
                 />
               </View>
               <View style={input}>
@@ -116,7 +122,9 @@ const EditProfile = ({ navigation }) => {
                 <TextInput
                 style={inputField}
                   placeholder="Phone"
+                  keyboardType="numeric"
                   onChangeText={(value) => handleChange('contact', value)}
+                  value={contact}
                 />
               </View>
             </View>

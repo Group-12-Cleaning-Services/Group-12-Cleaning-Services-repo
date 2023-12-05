@@ -33,7 +33,7 @@ const OTPVerification = ({navigation}) => {
         email
         });
         if(response.status === 200){
-         Alert.alert("Success", "Your has successful reset");
+         Alert.alert("Success✅", "Password reset successful");
           navigation.navigate('Login');
         }
       } catch (error) {
@@ -67,7 +67,7 @@ const OTPVerification = ({navigation}) => {
         <Text style={headerMessage}>Enter the 4-digit we sent via email</Text>
       </View>
       <View style={styles.codeContainer}>
-        {[1, 2, 3, 4,5,6].map((index) => (
+        {[1, 2, 3, 4].map((index) => (
           <TextInput
             key={index}
             style={styles.codeInput}
