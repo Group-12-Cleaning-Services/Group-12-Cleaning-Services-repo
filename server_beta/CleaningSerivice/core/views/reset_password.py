@@ -19,7 +19,7 @@ class PasswordResetViewset(viewsets.ViewSet):
         user_token = get_password_token(email)
         if user_token:
             user_token.delete()
-        if password_reset_email(email, 6):
+        if password_reset_email(email, 4):
             context = {
                 'detail': 'Password reset code sent'
             }
@@ -43,14 +43,16 @@ class PasswordResetViewset(viewsets.ViewSet):
                 'detail': 'Password reset token does not exist'
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
+        print(f"usertoken {user_token.token} token {token}")
         if user_token.token != token:
             context = {
                 'detail': 'Password reset token is invalid'
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         if datetime.now(UTC) > user_token.time + timedelta(minutes=5):
+            user_token.delete()
             context = {
-                'detail': 'Password reset token has expired'
+                'detail': 'Password reset token has expired request a new one'
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         user.set_password(password)

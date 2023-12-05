@@ -21,7 +21,10 @@ class ProfileViewset(viewsets.ViewSet):
         print(f"profile {profile}")
         user.profile = get_profile_by_id(profile["profile_id"])
         user.save()
-        context = {"detail": "Profile created successfully", "profile": profile}
+        context = {
+            "detail": "Profile created successfully", "profile": profile,
+            "user": get_user_information(user)
+            }
         return Response(context, status=status.HTTP_201_CREATED)
 
 
