@@ -7,41 +7,54 @@ import SaveSuccess from "../Profile/SaveSuccess";
 import axios from 'axios';
 
 const EditProfile = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [err, setErr] = useState('');
+  const [first_name, setFirst_name] = useState('');
+  const [contact, setContact] = useState('');
+  const [last_name, setLast_name] = useState('')
   const [showSuccess, setShowSuccess] = useState(false);
+ 
 
   const handleChange = (key, value) => {
-    if (key === 'username') {
-      setUsername(value);
-    } else if (key === 'fullName') {
-      setFullName(value);
-    } else if (key === 'phone') {
-      setPhone(value);
+    if (key === 'first_name') {
+      setFirst_name(value);
+    } else if (key === 'last_name') {
+      setLast_name(value);
+    } else if (key === 'contact') {
+      setContact(value);
     }
   };
 
   const handleProfileEdit = async () => {
     try {
-      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/profile/update/', {
-        username,
-        fullName,
-        phone,
-      });
-      console.log('Profile updated successful:', response.data);
-      setShowSuccess(true);
-
-      setTimeout(() => {
-        setShowSuccess(false);
-        navigation.navigate('Profile');
-      }, 1000);
+      const accessToken = await AsyncStorage.getItem('access');
+  
+      if (accessToken) {
+        const response = await axios.post(
+          'https://cleaningserve.pythonanywhere.com/api/profile/update/',
+          {
+            first_name,
+            last_name,
+            contact,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, 
+            },
+          }
+        );
+  
+        await AsyncStorage.setItem('profile_state', 'true');
+        Alert.alert("Profile updated successful")
+        navigation.navigate("Profile")
+  
+      } else {
+        console.log('User does not have access token. Redirecting to login or showing an error.');
+         navigation.navigate('Login');
+      }
     } catch (error) {
-      setErr(error.message);
+      console.log(error);
     }
   };
-  console.log(username)
+ 
 
   const {
     container,
@@ -82,9 +95,8 @@ const EditProfile = ({ navigation }) => {
                   style={iconUser} />
                 <TextInput
                   style={inputField}
-                  placeholder="Full Name"
-                  secureTextEntry
-                  onChangeText={(value) => handleChange('fullName', value)}
+                  placeholder="First Name"
+                  onChangeText={(value) => handleChange('first_name', value)}
                 />
               </View>
               <View style={input}>
@@ -93,9 +105,8 @@ const EditProfile = ({ navigation }) => {
                   style={iconUser} />
                 <TextInput
                  style={inputField}
-                  placeholder="Username"
-                  secureTextEntry
-                  onChangeText={(value) => handleChange('username', value)}
+                  placeholder="Last Name"
+                  onChangeText={(value) => handleChange('last_name', value)}
                 />
               </View>
               <View style={input}>
@@ -105,8 +116,7 @@ const EditProfile = ({ navigation }) => {
                 <TextInput
                 style={inputField}
                   placeholder="Phone"
-                  secureTextEntry
-                  onChangeText={(value) => handleChange('phone', value)}
+                  onChangeText={(value) => handleChange('contact', value)}
                 />
               </View>
             </View>
@@ -114,8 +124,8 @@ const EditProfile = ({ navigation }) => {
               <Button title={'Save'}
                 buttonContainer={saveCancelBtn}
                 buttonText={buttonText}
-                // press={handleProfileEdit}
-                press={()=>navigation.navigate("Profile")}
+                press={handleProfileEdit}
+                // press={()=>navigation.navigate("Profile")}
               />
               <Button title={'Cancel'}
                 buttonContainer={saveCancelBtn}

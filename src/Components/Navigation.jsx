@@ -14,7 +14,10 @@ import Home from '../Screens/Home/Home';
 import MyBookings from "../Screens/Profile/MyBookings";
 import ProfileScreen from '../Screens/Profile/Profile';
 import LandingScreen from "../Screens/Organization/LandingScreen"
-import EditProfile from "../Screens/Profile/EditProfile"
+import EditProfile from "../Screens/Profile/EditProfile";
+import CreateProfile from '../Screens/Profile/CreateProfile';
+import OTPMailReq from "../Screens/Authentication/OTPMailReq";
+import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP"
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -38,6 +41,9 @@ const Tabs = () => {
             <Stack.Screen name='MyBookings' component={MyBookings} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Organizations' component={LandingScreen} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='EditProfile' component={EditProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='CreateProfile' component={CreateProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='OTPMail' component={OTPMailReq} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='ResetPasswordOTP' component={ResetPasswordOTP} options={{ statusBarColor: '#171717', }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

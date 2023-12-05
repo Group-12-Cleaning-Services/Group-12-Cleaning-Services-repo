@@ -117,7 +117,7 @@ const Login = ({ navigation }) => {
         </Text>
         <View style={forgotPass}>
           <Text style={forgotPassText}>Forgot Password?</Text>
-          <Text style={clickHere} onPress={() => navigation.navigate('ResetPassword')}>
+          <Text style={clickHere} onPress={() => navigation.navigate('OTPMail')}>
             Click Here
           </Text>
         </View>

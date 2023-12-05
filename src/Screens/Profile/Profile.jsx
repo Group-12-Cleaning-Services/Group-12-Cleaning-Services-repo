@@ -2,18 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 export default function ProfileScreen({navigation}) {
   const [user, setUser] = useState('')
-  const [userType, setUserType] = useState()
+  const [userType, setUserType] = useState();
+  const [profileState, setProfileState] = useState('');
+  const [username, setUsername] = useState('')
+  const [lastname, setLastName] = useState('')
+console.log(profileState)
 
- 
   useEffect(() => {
     const getItemFromStorage = async () => {
       try {
+        const accessToken = await AsyncStorage.getItem('access');
+        if (accessToken) {
+          const response = await axios.get(
+            'https://cleaningserve.pythonanywhere.com/api/profile/retrieve/',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`, 
+              },
+            }
+          );
+    
+          setUsername(response.data.profile.first_name);
+          setLastName(response.data.profile.last_name)
+    
+        }
         const value = await AsyncStorage.getItem('user');
         const user_typeValue = await AsyncStorage.getItem('user_type');
+        const profile_state_value = await AsyncStorage.getItem("profile_state")
+        if(profile_state_value === "null"){
+          setProfileState(null)
+        }
+        if(profile_state_value === "true"){
+          setProfileState("true")
+        }
         if (value !== null) {
           setUser(value);
         }if(user_typeValue !== null){
@@ -27,7 +53,7 @@ export default function ProfileScreen({navigation}) {
     };
 
     getItemFromStorage();
-  }, []); 
+  }, [profileState]); 
 
   
 
@@ -55,11 +81,18 @@ export default function ProfileScreen({navigation}) {
         source={require("../../../assets/profile.png")}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>Elizabeth Geraldo</Text>
+        <Text style={styles.name}>{username} {lastname}</Text>
         <Text style={styles.email}>{user}</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText} onPress={()=>navigation.navigate("EditProfile")}>Edit Profile</Text>
-        </TouchableOpacity>
+        {!profileState &&
+        <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("CreateProfile")}>
+        <Text style={styles.editButtonText} >Create Profile</Text>
+      </TouchableOpacity> 
+        }
+        {profileState &&
+        <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("EditProfile")}>
+        <Text style={styles.editButtonText} >Edit Profile</Text>
+      </TouchableOpacity>
+        }
       </View>
       <View style={styles.optionsSection}>
       <View style={styles.profileHeaderText}>
@@ -67,7 +100,7 @@ export default function ProfileScreen({navigation}) {
       </View>
         <View style={styles.option}>
           <Feather name="user" size={24} color="black" />
-          <Text style={styles.optionText}>Regsitered as a {userType.replace(/_/g, ' ' )}</Text>
+          <Text style={styles.optionText}>Regsitered as a {userType?.replace(/_/g, ' ' )}</Text>
         </View>
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />

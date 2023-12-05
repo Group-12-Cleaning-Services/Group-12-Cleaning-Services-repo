@@ -38,9 +38,12 @@ const Register = ({navigation}) => {
         user_type
       });
       if(response.status === 201){
-        Alert.alert("Success","User created succesful")
         await AsyncStorage.setItem("userRegistered",email);
         await AsyncStorage.setItem("user_type",user_type);
+        if(response.data.user.profile === null){
+          await AsyncStorage.setItem("profile_state", "null")
+        }
+        Alert.alert("Success","User created succesful")
         navigation.navigate("OTP")
       }
       if(response.status === 208){
@@ -48,11 +51,16 @@ const Register = ({navigation}) => {
       }
     } catch (error) {
       Alert.alert("Warning", "Something went wrong")
-      setLoading(false); 
+      // console.log(error)
+      setLoading(false);
+      setEmail('');
+      setPassword('');
+      setUsername('') 
     }finally {
       setLoading(false); 
       setEmail('');
       setPassword('')
+      setUsername('')
     }
   };
 
@@ -94,6 +102,7 @@ const Register = ({navigation}) => {
            style={inputField} 
            placeholder="Username"
            onChangeText={(value)=>handleChange('username', value)}
+           value={username}
           />
         </View>
         <View style={input}>
@@ -104,6 +113,7 @@ const Register = ({navigation}) => {
            style={inputField}
            placeholder="Email" 
            onChangeText={(value)=>handleChange('email', value)}
+           value={email}
            />
         </View>
         <View style={input}>
@@ -115,6 +125,7 @@ const Register = ({navigation}) => {
            placeholder="Password"
            secureTextEntry  
            onChangeText={(value)=>handleChange('password', value)}
+           value={password}
            />
         </View>
       </View>
