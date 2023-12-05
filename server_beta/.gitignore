@@ -9,8 +9,7 @@ venv/
 secret_key.txt
 
 # Ignore the database file
-db.sqlite3
-
+./CleaningSerivice/db.sqlite3
 # Ignore static files directory (if using collectstatic)
 staticfiles/
 
