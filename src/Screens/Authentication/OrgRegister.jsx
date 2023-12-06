@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView, StyleSheet, ScrollView, Alert, ActivityIndicator,Image, Text, View, TextInput, Platform, } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
-import { SIZES } from '../../Constants/Theme';
+import {SIZES } from "../../Constants/Theme"
+import { useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 
 
 const OrgRegister = ({navigation}) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [loaction, setLocation] = useState('');
-  const [user_type, setUserType] = useState("service_provider")
+  const [user_type, setUserType] = useState("service_provider");
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState('')
+
 
   const handleChange = (key,value) =>{
     if (key === 'username') {
@@ -24,42 +25,41 @@ const OrgRegister = ({navigation}) => {
       setPassword(value);
     }else if (key === 'email') {
       setEmail(value);
-    }else if (key === 'phone') {
-      setPhone(value);
-   }else if (key === 'location') {
-    setLocation(value);
-}
-}
-
-const handleCreateAccount = async () => {
-  try {
-    setLoading(true);
-    const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
-      email,
-      password,
-      user_type
-    });
-    if(response.status === 201){
-      Alert.alert("Success","User created succesful")
-      await AsyncStorage.setItem("userRegistered",email);
-      await AsyncStorage.setItem("user_type",user_type);
-      navigation.navigate("OTP")
     }
-    if(response.status === 208){
-      alert("User already exist")
-    }
-  } catch (error) {
-    // Alert.alert("Warning", "Something went wrong")
-    console.log(error)
-    setLoading(false); 
-    setEmail('');
-    setPassword('')
-  }finally {
-    setLoading(false); 
-    setEmail('');
-    setPassword('')
   }
-};
+
+  const handleCreateAccount = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
+        email,
+        password,
+        user_type
+      });
+      if(response.status === 201){
+        await AsyncStorage.setItem("userRegistered",email);
+        await AsyncStorage.setItem("user_type",user_type);
+        Alert.alert("Success ✔️","User created succesful")
+        navigation.navigate("OTP")
+      }
+      if(response.status === 208){
+        Alert.alert("Warning ⚠️","User already exist")
+      }
+    } catch (error) {
+      Alert.alert("Warning ⚠️", "Something went wrong")
+      // console.log(error)
+      setLoading(false);
+      setEmail('');
+      setPassword('');
+      setUsername('') 
+    }finally {
+      setLoading(false); 
+      setEmail('');
+      setPassword('')
+      setUsername('')
+    }
+  };
+
   const {
     container,
     imageContainer,
@@ -68,8 +68,8 @@ const handleCreateAccount = async () => {
     welcomeTitle,
     welcomeText,
     inputContainer,
-    input,
     inputField,
+    input,
     buttonText,
     buttonContainer,
     haveAccountText,
@@ -81,7 +81,7 @@ const handleCreateAccount = async () => {
 
   return (
     <SafeAreaView style={container}>
-       <ScrollView style={scrollContainer}>
+      <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../../assets/logo.png")} style={image} />
       </View>
@@ -92,70 +92,54 @@ const handleCreateAccount = async () => {
       <View style={inputContainer}>
         <View style={input}>
           <Feather name={'user'} 
-           size={20} color={'black'} 
+           size={20} color={'black'}
            style={iconUser} />
-          <TextInput style={inputField} 
-           placeholder="Username" 
+          <TextInput 
+           style={inputField} 
+           placeholder="Username"
            onChangeText={(value)=>handleChange('username', value)}
-           />
+           value={username}
+          />
         </View>
         <View style={input}>
           <Feather name={'lock'} 
            size={20} color={'black'} 
-           style={iconUser} 
-           />
-          <TextInput style={inputField} 
-           placeholder="Password" 
-           secureTextEntry 
-           onChangeText={(value)=>handleChange('password', value)}
-           value={password}
+           style={iconUser} />
+          <TextInput 
+           style={inputField}
+           placeholder="Email" 
+           onChangeText={(value)=>handleChange('email', value)}
+           value={email}
            />
         </View>
         <View style={input}>
           <Feather name={'mail'} 
-           size={20} color={'black'} 
-           style={iconUser} />
-          <TextInput style={inputField} 
-           placeholder="Email"
-           onChangeText={(value)=>handleChange('email', value)}
-           value={email} 
-          />
-        </View>
-        <View style={input}>
-          <Feather name={'phone'} 
-           size={20} color={'black'} 
-           style={iconUser} />
-          <TextInput style={inputField} 
-           placeholder="Phone" 
-           onChangeText={(value)=>handleChange('phone', value)}
-           />
-        </View>
-        <View style={input}>
-          <Feather name={'map-pin'} 
-           size={20} color={'black'} 
-           style={iconUser} />
-          <TextInput style={inputField} 
-           placeholder="Location" 
-           onChangeText={(value)=>handleChange('location', value)}
+          size={20} color={'black'} 
+          style={iconUser} />
+          <TextInput 
+           style={inputField} 
+           placeholder="Password"
+           secureTextEntry  
+           onChangeText={(value)=>handleChange('password', value)}
+           value={password}
            />
         </View>
       </View>
-      <Button title={'Create Account'}
+      <Button title={'Create Account'} 
        buttonContainer={buttonContainer}
        buttonText={buttonText}
        press={handleCreateAccount}
-      />
-      <Text style={indicator}>
-        {loading && <ActivityIndicator color="yellow" size="large" press={handleCreateAccount} />} 
-      </Text>
-      <Button title={'Already have an account'}
-       buttonContainer={haveAccount} 
+       />
+       <Text style={indicator}>
+          {loading && <ActivityIndicator color="yellow" size={55} press={handleCreateAccount} />} 
+        </Text>
+      <Button title={'Already have an account?'}
+       buttonContainer={haveAccount}
        buttonText={haveAccountText}
        press={()=>navigation.navigate("Login")}
        />
-      </ScrollView>
+       </ScrollView> 
     </SafeAreaView>
-    
   );
 };
  
@@ -170,12 +154,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 160,
-    height: 160,
+    width: SIZES.width*0.7,
+    height: SIZES.height*0.30,
   },
   welcomeContainer: {
     alignItems: 'center',
-    paddingBottom:10
   },
   welcomeTitle: {
     fontWeight: 'bold',
@@ -186,53 +169,52 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 5,
     textAlign: 'center',
-    width: 200
+    width: SIZES.width*0.6
   },
   inputContainer: {
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: SIZES.height*0.01,
+  },
+  inputField:{
+    width: SIZES.width*0.64,
+    padding: SIZES.height*0.0007,
   },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: Platform.OS === "ios"? 300 : 240,
-    padding: Platform.OS === "ios"? 10 : 7,
+    width: SIZES.width*0.8,
+    padding: SIZES.height*0.014,
     borderRadius: 10,
     margin: 7,
     backgroundColor: 'white',
     color: 'black',
     marginVertical:10
   },
-  inputField:{
-    width:500
+  buttonContainer: {
+    alignItems: 'center',
+    top:SIZES.height*0.01
   },
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: SIZES.width*0.4,
-    padding: 10,
+    width: SIZES.width*0.45,
+    padding: SIZES.height*0.02,
     textAlign: 'center',
     borderRadius: 15,
     overflow: 'hidden',
   },
-  buttonContainer: {
-    alignItems: 'center',
-    paddingTop: 10
-  },
   haveAccount: {
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: SIZES.height*0.035
   },
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
     width: SIZES.width*0.6,
-    padding: Platform.OS === "ios"? 15 : 10,
+    padding: SIZES.height*0.017,
     textAlign: 'center',
     borderRadius: 15,
-    paddingTop: 10,
-    overflow:'hidden',
-    bottom:5,
+    overflow:'hidden'
   },
   iconUser: {
     margin:2,
@@ -242,15 +224,16 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   scrollContainer: {
+    flex: 1,
+    backgroundColor: "#B3CDE0",
     flexGrow: 1,
-    paddingBottom: 100,
-    paddingTop: Platform.OS ==="ios" ? 25 : 0
+    paddingBottom:50
   },
   indicator:{
     alignItems:'center',
     textAlign:'center',
     position:"absolute",
-    top:SIZES.height*0.97,
+    top:SIZES.height*0.765,
     left:SIZES.width*0.45
   }
 });

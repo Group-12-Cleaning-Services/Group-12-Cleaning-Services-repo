@@ -23,13 +23,11 @@ const ResetPassword = ({navigation}) => {
         });
         await AsyncStorage.setItem("otp_mail", email)
         if(response.status === 200){
-          Alert.alert("Success","Password reset code sent")
+          Alert.alert("Success✔️","Password reset code sent")
           navigation.navigate('ResetPasswordOTP');
-        }else{
-          Alert.alert("Warning","Something went wrong!")
         }
       } catch (error) {
-      console.log(error)
+        Alert.alert("Inavlaid ❌", "Accout doesnt exist")
      }finally{
       setEmail('')
      }
@@ -108,8 +106,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 180,
-    height: 180,
+    width: SIZES.width*0.5,
+    height: SIZES.height*0.37,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -123,14 +121,15 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 5,
     textAlign: 'center',
-    width: 200
+    width: SIZES.width*0.5
   },
   inputContainer: {
     alignItems: 'center',
     paddingTop: 10,
   },
   inputField:{
-    width:SIZES.width*0.8
+    width:SIZES.width*0.68,
+    height: SIZES.height*0.045
   },
   input: {
     flexDirection: 'row',

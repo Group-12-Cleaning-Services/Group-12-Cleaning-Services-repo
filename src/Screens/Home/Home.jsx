@@ -105,8 +105,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     width: SIZES.width*0.6,
-    height: SIZES.height*0.07,
-    padding: 10,
+    padding: SIZES.height*0.02,
     textAlign: 'center',
     borderRadius: 15,
     overflow: 'hidden',

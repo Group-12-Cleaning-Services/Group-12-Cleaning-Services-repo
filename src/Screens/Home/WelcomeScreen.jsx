@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     backgroundColor:COLORS.white,
-    width: SIZES.width * 0.52,
-    height: SIZES.height * 0.08,
+    width: SIZES.width * 0.53,
+    padding:SIZES.height*0.021,
     textAlign: 'center',
     paddingTop: SIZES.height * 0.02,
     borderRadius: 15,

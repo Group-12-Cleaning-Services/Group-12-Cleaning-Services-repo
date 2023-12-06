@@ -33,19 +33,18 @@ const OTPVerification = ({navigation}) => {
         email
         });
         if(response.status === 200){
-         Alert.alert("Success✅", "Password reset successful");
+         Alert.alert("Success✔️", "Password reset successful");
           navigation.navigate('Login');
         }
       } catch (error) {
-        // Alert.alert("Warning","Something went wrong! try again")
-        console.log(error)
+        Alert.alert("Invalid ❌","Incorrect otp code entered")
       }finally{
         setPassword('')
         setOtp('')
         setConfirm('')
       }
     }else{
-      Alert.alert("Password doesn't match")
+      Alert.alert("Invalid❌","Password doesn't match")
     }
   };
   const {
@@ -118,13 +117,6 @@ const OTPVerification = ({navigation}) => {
       <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
         Resend code
       </Text>
-      {/* <View style={btnsContainer}>
-        <Button title={'Submit'} 
-        buttonContainer={saveCancelBtn} 
-        buttonText={buttonText}
-        press={handleVerificationSubmit}
-        />
-      </View> */}
     </SafeAreaView>
   );
 };
@@ -152,31 +144,31 @@ const styles = StyleSheet.create({
   codeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 200,
+    width: SIZES.width*0.7,
   },
   codeInput: {
-    height: 40,
-    width: 40,
+    height: SIZES.height*0.08,
+    width: SIZES.width*0.145,
     borderColor: 'gray',
     borderWidth: 1,
     textAlign: 'center',
     fontSize: 16,
     borderRadius:50,
-    color:'white'
+    color:'white',
   },
   button: {
-    paddingTop:30,
-    alignItems:'center'
+    paddingTop:SIZES.height*0.04,
+    alignItems:'center',
   },
   buttonText: {
     color: 'black',
-    fontSize: 16,
-    textAlign:'center',
     backgroundColor: 'white',
-    padding: 10,
+    width: SIZES.width*0.4,
+    padding: SIZES.height*0.0148,
+    textAlign: 'center',
     borderRadius: 15,
-    marginTop: 20,
-    width:100,
+    overflow: 'hidden',
+    fontSize:SIZES.height*0.030
   },
   resendContainer:{
     alignItems:'center',
@@ -191,7 +183,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   inputField:{
-    width:SIZES.width*0.8
+    width:SIZES.width*0.8,
+    padding:SIZES.width*0.002
   },
   input: {
     flexDirection: 'row',
@@ -215,15 +208,6 @@ const styles = StyleSheet.create({
   saveCancelBtn: {
     alignItems: 'center',
     margin:12
-  },
-  buttonText: {
-    color: 'black',
-    backgroundColor: 'white',
-    width: SIZES.width*0.3,
-    padding: 10,
-    textAlign: 'center',
-    borderRadius: 15,
-    overflow: 'hidden',
   },
   cancelText: {
     color: 'white',

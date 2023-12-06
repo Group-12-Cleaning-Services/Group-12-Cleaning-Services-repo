@@ -39,14 +39,14 @@ const Register = ({navigation}) => {
       if(response.status === 201){
         await AsyncStorage.setItem("userRegistered",email);
         await AsyncStorage.setItem("user_type",user_type);
-        Alert.alert("Success","User created succesful")
+        Alert.alert("Success ✔️","User created succesful")
         navigation.navigate("OTP")
       }
       if(response.status === 208){
-        alert("User already exist")
+        Alert.alert("Warning ⚠️","User already exist")
       }
     } catch (error) {
-      Alert.alert("Warning", "Something went wrong")
+      Alert.alert("Warning ⚠️", "Something went wrong")
       // console.log(error)
       setLoading(false);
       setEmail('');
@@ -129,10 +129,9 @@ const Register = ({navigation}) => {
        buttonContainer={buttonContainer}
        buttonText={buttonText}
        press={handleCreateAccount}
-      // press={()=>navigation.navigate('Login')}
        />
        <Text style={indicator}>
-          {loading && <ActivityIndicator color="yellow" size="large" press={handleCreateAccount} />} 
+          {loading && <ActivityIndicator color="yellow" size={55} press={handleCreateAccount} />} 
         </Text>
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}
@@ -155,8 +154,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 180,
-    height: 180,
+    width: SIZES.width*0.7,
+    height: SIZES.height*0.30,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -170,20 +169,21 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 5,
     textAlign: 'center',
-    width: 200
+    width: SIZES.width*0.5
   },
   inputContainer: {
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: SIZES.height*0.01,
   },
   inputField:{
-    width:500
+    width: SIZES.width*0.64,
+    padding: SIZES.height*0.0007,
   },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 240,
-    padding: 7,
+    width: SIZES.width*0.8,
+    padding: SIZES.height*0.014,
     borderRadius: 10,
     margin: 7,
     backgroundColor: 'white',
@@ -192,29 +192,28 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    paddingTop: 10
+    top:SIZES.height*0.01
   },
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: SIZES.width*0.4,
-    padding: 10,
+    width: SIZES.width*0.45,
+    padding: SIZES.height*0.02,
     textAlign: 'center',
     borderRadius: 15,
     overflow: 'hidden',
   },
   haveAccount: {
     alignItems: 'center',
-    paddingTop: 20
+    paddingTop: SIZES.height*0.035
   },
   haveAccountText: {
     color: 'white',
     backgroundColor: '#6497B1',
     width: SIZES.width*0.6,
-    padding: 10,
+    padding: SIZES.height*0.017,
     textAlign: 'center',
     borderRadius: 15,
-    paddingTop: 10,
     overflow:'hidden'
   },
   iconUser: {
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     textAlign:'center',
     position:"absolute",
-    top:SIZES.height*0.779,
+    top:SIZES.height*0.765,
     left:SIZES.width*0.45
   }
 });
