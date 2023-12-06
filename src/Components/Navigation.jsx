@@ -17,7 +17,7 @@ import LandingScreen from "../Screens/Organization/LandingScreen"
 import EditProfile from "../Screens/Profile/EditProfile";
 import CreateProfile from '../Screens/Profile/CreateProfile';
 import OTPMailReq from "../Screens/Authentication/OTPMailReq";
-import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP"
+import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP";
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()

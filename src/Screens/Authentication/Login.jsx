@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
@@ -7,9 +7,11 @@ import {
   Text,
   View,
   TextInput,
-  StatusBar,
   Alert,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../../Components/Button';
@@ -20,7 +22,6 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
 
   const handleChange = (key, value) => {
     if (key === 'email') {
@@ -44,16 +45,15 @@ const Login = ({ navigation }) => {
       if (response.status === 200) {
         await AsyncStorage.setItem('access', response.data.access);
         await AsyncStorage.setItem('user', email);
-        Alert.alert("Success✔️", "Logged in successful")
+        Alert.alert('Success✔️', 'Logged in successful');
         navigation.navigate('Organizations');
       }
     } catch (error) {
       Alert.alert('Invalid⚠️', 'Incorrect password or username');
-      setLoading(false); 
     } finally {
-      setLoading(false); 
+      setLoading(false);
       setEmail('');
-      setPassword('')
+      setPassword('');
     }
   };
 
@@ -72,7 +72,7 @@ const Login = ({ navigation }) => {
     forgotPass,
     forgotPassText,
     clickHere,
-    indicator
+    indicator,
   } = styles;
 
   return (
@@ -81,47 +81,54 @@ const Login = ({ navigation }) => {
       locations={[0.36, 0.4889, 0.9948]}
       style={linearGradientBackground}
     >
+      <ScrollView>
       <SafeAreaView style={container}>
-        <View style={imageContainer}>
-          <Image source={require('../../../assets/logo.png')} style={image} />
-        </View>
-        <View style={welcomeContainer}>
-          <Text style={welcomeTitle}>Welcome Back!</Text>
-          <Text style={welcomeText}>Please Log into your existing account</Text>
-        </View>
-        <View style={inputContainer}>
-          <TextInput
-            style={input}
-            placeholder="Email"
-            placeholderTextColor="#fff"
-            onChangeText={(value) => handleChange('email', value)}
-            value={email}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : '100%'}
+          style={container}
+        >
+          <View style={imageContainer}>
+            <Image source={require('../../../assets/logo.png')} style={image} />
+          </View>
+          <View style={welcomeContainer}>
+            <Text style={welcomeTitle}>Welcome Back!</Text>
+            <Text style={welcomeText}>Please Log into your existing account</Text>
+          </View>
+          <View style={inputContainer}>
+            <TextInput
+              style={input}
+              placeholder="Email"
+              placeholderTextColor="#fff"
+              onChangeText={(value) => handleChange('email', value)}
+              value={email}
+            />
+            <TextInput
+              style={input}
+              placeholder="Password"
+              placeholderTextColor="#fff"
+              secureTextEntry
+              onChangeText={(value) => handleChange('password', value)}
+              value={password}
+            />
+          </View>
+          <Button
+            title={'Login'}
+            buttonContainer={buttonContainer}
+            buttonText={buttonText}
+            press={handleLogin}
           />
-          <TextInput
-            style={input}
-            placeholder="Password"
-            placeholderTextColor="#fff"
-            secureTextEntry
-            onChangeText={(value) => handleChange('password', value)}
-            value={password}
-          />
-        </View>
-        <Button
-          title={'Login'}
-          buttonContainer={buttonContainer}
-          buttonText={buttonText}
-          press={handleLogin}
-        />
-        <Text style={indicator}>
-          {loading && <ActivityIndicator color="yellow" size={45} press={handleLogin} />} 
-        </Text>
-        <View style={forgotPass}>
-          <Text style={forgotPassText}>Forgot Password?</Text>
-          <Text style={clickHere} onPress={() => navigation.navigate('OTPMail')}>
-            Click Here
+          <Text style={indicator}>
+            {loading && <ActivityIndicator color="yellow" size={55} />}
           </Text>
-        </View>
+          <View style={forgotPass}>
+            <Text style={forgotPassText}>Forgot Password?</Text>
+            <Text style={clickHere} onPress={() => navigation.navigate('OTPMail')}>
+              Click Here
+            </Text>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -133,14 +140,14 @@ const styles = StyleSheet.create({
   linearGradientBackground: {
     flex: 1,
     width: '100%',
-    paddingTop: Platform.OS === "ios" ? 120 : 0
   },
   imageContainer: {
     alignItems: 'center',
+    paddingTop: SIZES.height * 0.02,
   },
   image: {
-    width: Platform.OS === 'ios' ? 210 : 200,
-    height: Platform.OS === 'ios' ? 210 : 200,
+    width: SIZES.width * 0.4,
+    height: SIZES.height * 0.34,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -158,26 +165,26 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: SIZES.height * 0.05,
   },
   input: {
     borderWidth: 2,
     borderColor: '#fff',
-    width: Platform.OS === "ios"? 300 : 240,
-    padding: Platform.OS === "ios"? 15 : 7,
+    width: SIZES.width * 0.8,
+    padding: SIZES.height * 0.011,
     borderRadius: 10,
     margin: 10,
     color: 'white',
   },
   buttonContainer: {
     alignItems: 'center',
-    paddingTop: 5,
+    paddingTop: SIZES.height * 0.02,
   },
   buttonText: {
     color: 'black',
     backgroundColor: 'white',
-    width: 110,
-    padding: 10,
+    width: SIZES.width * 0.4,
+    padding: SIZES.height * 0.017,
     textAlign: 'center',
     borderRadius: 10,
     overflow: 'hidden',
@@ -194,13 +201,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  indicator:{
-    alignItems:'center',
-    textAlign:'center',
-    position:"absolute",
-    top:SIZES.height*0.74,
-    left:SIZES.width*0.45
-  }
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.76,
+    left: SIZES.width * 0.45,
+  },
 });
 
 export default Login;
