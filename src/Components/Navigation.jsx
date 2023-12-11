@@ -18,6 +18,7 @@ import EditProfile from "../Screens/Profile/EditProfile";
 import CreateProfile from '../Screens/Profile/CreateProfile';
 import OTPMailReq from "../Screens/Authentication/OTPMailReq";
 import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP";
+import SingleOrgScreen from '../Screens/Organization/SingleOrgScreen';
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -28,7 +29,7 @@ const Tabs = () => {
             headerShown:false
         }}
         >
-            <Stack.Screen name='Welcome' component={WelcomeScreen} options={{statusBarColor:"#42322E"}}/>
+            <Stack.Screen name='Welcome' component={WelcomeScreen} options={{statusBarColor:"#756F69"}}/>
             <Stack.Screen name='onboard' component={OnBoarding} options={{statusBarColor:"#171717", statusBarStyle:"#FFFFF"}}/>
             <Stack.Screen name='Home' component={Home} options={{statusBarColor:"#42322E"}}/>
             <Stack.Screen name='Register' component={Register} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
@@ -44,6 +45,7 @@ const Tabs = () => {
             <Stack.Screen name='CreateProfile' component={CreateProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='OTPMail' component={OTPMailReq} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='ResetPasswordOTP' component={ResetPasswordOTP} options={{ statusBarColor: '#171717', }}/>
+            <Stack.Screen name='SingleOrg' component={SingleOrgScreen} options={{ statusBarColor: '#fff', }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

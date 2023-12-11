@@ -21,7 +21,7 @@ const WelcomeScreen = ({ navigation }) => {
     <SafeAreaView style={container}>
       <ImageBackground
         style={background}
-        source={require("../../../assets/landing.png")}
+        source={require("../../../assets/welcome.png")}
       >
         <View style={imageContainer}>
           <Image
