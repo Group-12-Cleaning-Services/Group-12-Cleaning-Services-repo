@@ -11,7 +11,7 @@ const ListItem = ({ item, navigation }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handleCardPress}>
+    <TouchableOpacity style={styles.card}>
       <View style={styles.imageContainer}>
         <Image
           source={item.image}

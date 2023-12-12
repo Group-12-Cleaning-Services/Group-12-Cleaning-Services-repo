@@ -23,7 +23,7 @@ const LandingScreen = ({ navigation }) => {
         <FontAwesome name="user-circle-o" size={24} color="black" onPress={() => navigation.navigate('Profile')} />
       </View>
         <View style={header}>
-          <Text style={headerText}>ORGANIZATIONS</Text>
+          <Text style={headerText} onPress={()=>navigation.navigate('Login')}>ORGANIZATIONS</Text>
         </View>
         <View style={styles.container}>
         <View style={slideContainer}>
