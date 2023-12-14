@@ -21,7 +21,7 @@ const SingleOrgScreen = ({navigation}) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={singleOrganizationData}
-        renderItem={({ item }) => <OrgSingleListItem item={item} />}
+        renderItem={({ item }) => <OrgSingleListItem item={item} nav={()=> navigation.navigate('Booking')}/>}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>

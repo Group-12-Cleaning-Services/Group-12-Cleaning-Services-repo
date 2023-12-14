@@ -40,7 +40,7 @@ const LandingScreen = ({ navigation }) => {
                 <FlatList
                   horizontal
                   data={section.data}
-                  renderItem={({ item }) => <ListItem item={item} />}
+                  renderItem={({ item }) => <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')}/>}
                   showsHorizontalScrollIndicator={false}
                 />
               ) : null}
@@ -50,7 +50,7 @@ const LandingScreen = ({ navigation }) => {
             if (section.horizontal) {
               return null;
             }
-            return <ListItem item={item} />;
+            return <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')} />;
           }}
         />
     </View>
@@ -92,9 +92,6 @@ const styles = StyleSheet.create({
     width: SIZES.width * 1,
     borderRadius: 25,
     resizeMode:"contain"
-  },
-  rate:{
-    margin:SIZES.width*0.005
   },
   sectionHeader:{
     paddingLeft:SIZES.width*0.05,

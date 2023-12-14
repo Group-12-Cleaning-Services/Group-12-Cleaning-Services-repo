@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,38 +10,56 @@ import {
   ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Feather, MaterialIcons, EvilIcons, Fontisto } from "@expo/vector-icons";
+import {
+  Feather,
+  MaterialIcons,
+  EvilIcons,
+  Fontisto,
+} from "@expo/vector-icons";
 import Button from "../../Components/Button";
 import { SIZES } from "../../Constants/Theme";
-import { useState } from "react";
 import axios from "axios";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import CheckBox from "react-native-check-box";
+import ModalScreen from "./Modal";
+import { useDispatch } from 'react-redux';
+import { modalActions } from "../../store/modal";
+import { useSelector } from 'react-redux';
+
+
+
 
 const Booking = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [user_type, setUserType] = useState("customer");
+
+  const [FullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [time, setTime] = useState(new Date());
   const [bookingDate, setBookingDate] = useState();
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [bookingTime, setBookingTime] = useState();
+  const [isChecked, setIsChecked] = useState(false);
+  const [showModal, setShowModal] = useState(true)
 
+  const modalVisible = useSelector((state)=>state.modal.modal);
+  const buttonslVisible = useSelector((state)=>state.modal.button)
+
+console.log(buttonslVisible)
+
+  const dispatch = useDispatch()
   const handleChange = (key, value) => {
-    if (key === "username") {
-      setUsername(value);
-    } else if (key === "password") {
-      setPassword(value);
-    } else if (key === "email") {
-      setEmail(value);
+    if (key === "fullName") {
+      setFullName(value);
+    }else if (key === "address") {
+      setAddress(value);
     }
   };
 
   const handleShowPicker = () => {
     setShowPicker(!showPicker);
   };
+
   const handleDateChange = ({ type }, selectedDate) => {
     handleShowPicker();
     if (type == "set") {
@@ -51,11 +69,10 @@ const Booking = ({ navigation }) => {
     }
   };
 
-
   const handleShowTimePicker = () => {
     setShowTimePicker(!showTimePicker);
   };
-  
+
   const handleTimeChange = ({ type }, selectedTime) => {
     handleShowTimePicker();
     if (type == "set") {
@@ -65,39 +82,43 @@ const Booking = ({ navigation }) => {
     }
   };
 
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
 
   const handleBooking = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        "https://cleaningserve.pythonanywhere.com/api/accounts/create/",
-        {
-          email,
-          password,
-          user_type,
-        },
-      );
-      if (response.status === 201) {
-        await AsyncStorage.setItem("userRegistered", email);
-        await AsyncStorage.setItem("user_type", user_type);
-        Alert.alert("Success ✔️", "User created succesful");
-        navigation.navigate("OTP");
-      }
-      if (response.status === 208) {
-        Alert.alert("Warning ⚠️", "User already exist");
-      }
-    } catch (error) {
-      Alert.alert("Warning ⚠️", "Something went wrong");
-      setLoading(false);
-      setEmail("");
-      setPassword("");
-      setUsername("");
-    } finally {
-      setLoading(false);
-      setEmail("");
-      setPassword("");
-      setUsername("");
-    }
+    // try {
+    //   setLoading(true);
+    //   const response = await axios.post(
+    //     "https://cleaningserve.pythonanywhere.com/api/accounts/create/",
+    //     {
+    //       email,
+    //       password,
+    //       user_type,
+    //     }
+    //   );
+    //   if (response.status === 201) {
+    //     await AsyncStorage.setItem("userRegistered", email);
+    //     await AsyncStorage.setItem("user_type", user_type);
+    //     Alert.alert("Success ✔️", "User created successful");
+    //     navigation.navigate("OTP");
+    //   }
+    //   if (response.status === 208) {
+    //     Alert.alert("Warning ⚠️", "User already exists");
+    //   }
+    // } catch (error) {
+    //   Alert.alert("Warning ⚠️", "Something went wrong");
+    //   setLoading(false);
+    //   setEmail("");
+    //   setPassword("");
+    //   setUsername("");
+    // } finally {
+    //   setLoading(false);
+    //   setEmail("");
+    //   setPassword("");
+    //   setUsername("");
+    // }
+    dispatch(modalActions.handleModal(false))
   };
 
   const {
@@ -110,12 +131,10 @@ const Booking = ({ navigation }) => {
     input,
     iconUser,
     scrollContainer,
-    indicator,
   } = styles;
 
   return (
     <SafeAreaView style={container}>
-      <ScrollView style={scrollContainer}>
         <View style={styles.gobackIcon}>
           <Feather
             name="log-out"
@@ -125,10 +144,11 @@ const Booking = ({ navigation }) => {
             onPress={() => navigation.goBack()}
           />
         </View>
+      <ScrollView style={scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={welcomeContainer}>
           <Text style={welcomeTitle}>Booking</Text>
           <Text style={welcomeText}>
-            Proceed to provide us with your detail
+            Proceed to provide us with your details
           </Text>
         </View>
         <View style={inputContainer}>
@@ -137,8 +157,8 @@ const Booking = ({ navigation }) => {
             <TextInput
               style={inputField}
               placeholder="Full Name"
-              onChangeText={(value) => handleChange("username", value)}
-              value={username}
+              onChangeText={(value) => handleChange("fullName", value)}
+              value={FullName}
             />
           </View>
           <View style={input}>
@@ -151,8 +171,8 @@ const Booking = ({ navigation }) => {
             <TextInput
               style={inputField}
               placeholder="Address"
-              onChangeText={(value) => handleChange("email", value)}
-              value={email}
+              onChangeText={(value) => handleChange("address", value)}
+              value={address}
             />
           </View>
           <View style={input}>
@@ -177,7 +197,12 @@ const Booking = ({ navigation }) => {
             </Pressable>
           </View>
           <View style={input}>
-          <MaterialIcons name="av-timer" size={20} color="black" style={iconUser}/>
+            <MaterialIcons
+              name="av-timer"
+              size={20}
+              color="black"
+              style={iconUser}
+            />
             {showTimePicker && (
               <DateTimePicker
                 mode="time"
@@ -198,19 +223,35 @@ const Booking = ({ navigation }) => {
             </Pressable>
           </View>
         </View>
-        <View style={styles.btnsContainer}>
-          <Button
-            title={"Cancel"}
-            buttonContainer={styles.saveCancelBtn}
-            buttonText={styles.cancelText}
-            press={() => navigation.navigate("Login")}
-          />
-          <Button
-            title={"Proceed"}
-            buttonContainer={styles.saveCancelBtn}
-            buttonText={styles.proceedlText}
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            onClick={handleCheck}
+            isChecked={isChecked}
+            rightText="I agree to all terms and conditions"
           />
         </View>
+        {buttonslVisible &&
+        <View style={styles.btnsContainer}>
+        <Button
+          title={"Cancel"}
+          buttonContainer={styles.saveCancelBtn}
+          buttonText={styles.cancelText}
+          press={() => navigation.navigate("Login")}
+        />
+        <Button
+          title={"Proceed"}
+          buttonContainer={styles.saveCancelBtn}
+          buttonText={styles.proceedlText}
+          press={handleBooking}
+        />
+      </View> 
+         }
+        <ModalScreen
+        time={bookingTime}
+        location={address}
+        date={bookingDate}
+        nav={()=> navigation.navigate('Booking')}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -305,7 +346,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    backgroundColor: "#B3CDE0",
     flexGrow: 1,
     paddingBottom: 50,
   },
@@ -317,7 +357,7 @@ const styles = StyleSheet.create({
     left: SIZES.width * 0.45,
   },
   gobackIcon: {
-    marginTop: 50,
+    paddingTop:SIZES.height*0.07,
     marginHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -346,6 +386,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     overflow: "hidden",
   },
+  checkboxContainer:{
+    paddingLeft:SIZES.width*0.1,
+    paddingTop:SIZES.height*0.01
+  }
 });
 
 export default Booking;

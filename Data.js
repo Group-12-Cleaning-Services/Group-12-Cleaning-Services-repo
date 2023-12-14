@@ -233,3 +233,25 @@ export const bookings = [
     },
   ];
   
+  export const paymentMethods = [
+    {
+      id:1,
+      name:"pay with Credit card",
+      image:require("./assets/cash.png"),
+    },
+    {
+      id:2,
+      name:"pay with Paypal",
+      image:require("./assets/cash.png"),
+    },
+    {
+      id:3,
+      name:"pay with MobileMoney",
+      image:require("./assets/cash.png"),
+    },
+    {
+      id:4,
+      name:"pay on cash",
+      image:require("./assets/cash.png"),
+    },
+  ]

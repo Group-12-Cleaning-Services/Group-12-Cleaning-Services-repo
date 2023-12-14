@@ -1,9 +1,9 @@
 import React from 'react';
-import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, View, Text, StyleSheet, Pressable } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../Constants/Theme';
 
-const ListItem = ({ item, navigation }) => {
+const ListItem = ({ item, nav }) => {
   const ratings = [1, 2, 3, 4, 5];
 
   const handleCardPress = () => {
@@ -11,7 +11,9 @@ const ListItem = ({ item, navigation }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.card}>
+    <Pressable style={styles.card}
+    onPress={nav}
+    >
       <View style={styles.imageContainer}>
         <Image
           source={item.image}
@@ -27,11 +29,11 @@ const ListItem = ({ item, navigation }) => {
             size={20}
             color="#FFBA49"
             key={index}
-            style={styles.rate}
+            style={styles.rating}
           />
         ))}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -63,12 +65,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingTop: 5,
       },
+      rating:{
+        margin:SIZES.width*0.001
+      },
       ratings:{
         alignItems:'center',
         paddingTop:SIZES.height*0.007,
         flexDirection:'row',
         justifyContent:'center',
-        margin:SIZES.width*0.01
+        margin:SIZES.width*0.015
       },
 })
 

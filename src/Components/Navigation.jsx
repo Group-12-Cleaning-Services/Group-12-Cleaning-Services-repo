@@ -20,7 +20,8 @@ import OTPMailReq from "../Screens/Authentication/OTPMailReq";
 import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP";
 import SingleOrgScreen from '../Screens/Organization/SingleOrgScreen';
 import OrgSingleListItem from './OrgSingleListItem';
-import ListItem from './ListItems';
+import Booking from "../Screens/Booking/Booking"
+
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -47,9 +48,9 @@ const Tabs = () => {
             <Stack.Screen name='CreateProfile' component={CreateProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='OTPMail' component={OTPMailReq} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='ResetPasswordOTP' component={ResetPasswordOTP} options={{ statusBarColor: '#171717', }}/>
-            <Stack.Screen name='SingleOrg' component={SingleOrgScreen} options={{ statusBarColor: '#fff', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='SingleOrg' component={SingleOrgScreen} options={{ statusBarStyle:"dark" }}/>
             <Stack.Screen name='OrgSigleListItem' component={OrgSingleListItem} options={{ statusBarColor: '#fff', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='ListItem' component={ListItem} options={{ statusBarColor: '#fff', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='Booking' component={Booking} options={{  statusBarColor: '#B3CDE0', statusBarStyle:"dark"  }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

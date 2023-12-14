@@ -4,12 +4,13 @@ import {
   StyleSheet,
   Text,
   Image,
+  Pressable,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { SIZES } from '../Constants/Theme';
 
 
-const OrgSingleListItem = ({ item }) => {
+const OrgSingleListItem = ({ item, nav }) => {
     return (
       <View style={styles.itemsContainer}>
         <View style={styles.itemInfo}>
@@ -23,7 +24,11 @@ const OrgSingleListItem = ({ item }) => {
           </View>
         </View>
         <View style={styles.arrowIcon}>
+        <Pressable
+        onPress={nav}
+        >
         <Feather name="arrow-right-circle" size={24} color="black" />
+        </Pressable>
         </View>
       </View>
       )

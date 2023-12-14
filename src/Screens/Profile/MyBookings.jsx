@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, SafeAr
 import { Feather } from '@expo/vector-icons';
 import { bookings } from '../../../Data';
 
-export default function BookingsScreen({navigation}) {
+export default function MyBookings({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
