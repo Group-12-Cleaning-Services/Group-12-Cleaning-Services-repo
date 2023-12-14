@@ -7,15 +7,14 @@ import { useDispatch } from 'react-redux';
 import { modalActions } from "../../store/modal";
 
 
-const ModalScreen = ({time, location, date, nav}) => {
+const ModalScreen = ({time, location, date, paymentNav}) => {
   const dispatch = useDispatch()
   const modalVisible = useSelector((state)=>state.modal.modal)
-// console.log(modalVisible)
 
   const handleModalState =()=>{
     dispatch(modalActions.handleModal())
   }
-
+console.log(modalVisible)
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -34,7 +33,7 @@ const ModalScreen = ({time, location, date, nav}) => {
            </View>
            <View style={styles.confirmCancelBtns}>
            <Pressable
-           onPress={nav}
+           onPress={paymentNav}
               style={[styles.button, styles.buttonContinue]}
             >
               <Text style={styles.textStyle}>Continue</Text>

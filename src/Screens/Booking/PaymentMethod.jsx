@@ -10,7 +10,7 @@ import CheckBox from 'react-native-check-box';
 import Button from '../../Components/Button';
 
 
-const PaymentMethod = () =>{
+const PaymentMethod = ({navigation}) =>{
     const [isChecked, setIsChecked] = useState(false);
     const [selectedId, setSelectedId] = useState();
 
@@ -71,6 +71,7 @@ const PaymentMethod = () =>{
             title={"Proceed"}
             buttonContainer={styles.saveCancelBtn}
             buttonText={styles.proceedlText}
+            press={()=>navigation.navigate("BookingSummary")}
           />
         </View>
            </ScrollView>

@@ -20,8 +20,9 @@ import OTPMailReq from "../Screens/Authentication/OTPMailReq";
 import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP";
 import SingleOrgScreen from '../Screens/Organization/SingleOrgScreen';
 import OrgSingleListItem from './OrgSingleListItem';
-import Booking from "../Screens/Booking/Booking"
-
+import Booking from "../Screens/Booking/Booking";
+import  paymentMethod  from '../Screens/Booking/PaymentMethod';
+import BookingSummary from "../Screens/Booking/BookingSummary"
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -51,6 +52,8 @@ const Tabs = () => {
             <Stack.Screen name='SingleOrg' component={SingleOrgScreen} options={{ statusBarStyle:"dark" }}/>
             <Stack.Screen name='OrgSigleListItem' component={OrgSingleListItem} options={{ statusBarColor: '#fff', statusBarStyle:"dark" }}/>
             <Stack.Screen name='Booking' component={Booking} options={{  statusBarColor: '#B3CDE0', statusBarStyle:"dark"  }}/>
+            <Stack.Screen name='PaymentMethods' component={paymentMethod} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
+            <Stack.Screen name='BookingSummary' component={BookingSummary} options={{ statusBarColor:"#040268"  }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

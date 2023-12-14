@@ -118,7 +118,7 @@ console.log(buttonslVisible)
     //   setPassword("");
     //   setUsername("");
     // }
-    dispatch(modalActions.handleModal(false))
+    dispatch(modalActions.handleModal())
   };
 
   const {
@@ -250,7 +250,7 @@ console.log(buttonslVisible)
         time={bookingTime}
         location={address}
         date={bookingDate}
-        nav={()=> navigation.navigate('Booking')}
+        paymentNav={()=> navigation.navigate('PaymentMethods')}
         />
       </ScrollView>
     </SafeAreaView>
