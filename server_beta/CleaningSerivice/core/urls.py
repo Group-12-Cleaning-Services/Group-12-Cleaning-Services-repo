@@ -34,6 +34,8 @@ urlpatterns = [
     path('service/retrieve/<uuid:id>/', ServiceViewset.as_view({'get': 'retrieve'})),
     path('service/book/<uuid:id>/', ServiceViewset.as_view({'post': 'book_service'})),
     path('service/booked-user-service/<uuid:id>/', ServiceViewset.as_view({'get': 'list_booked_service_by_customer'})),
+    path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'}))
+
 
 ]
 if settings.DEBUG:

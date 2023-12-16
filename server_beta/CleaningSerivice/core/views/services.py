@@ -203,6 +203,62 @@ class ServiceViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_200_OK)
     
     
+    def cancel_booked_service(self, request, id):
+        """Cancel Booked Service
+
+        Args:
+            request (http): delete request
+            id (uuid): service id
+        """
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "customer":
+            context = {
+                "detail": "You are not a customer"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        schedule_service = get_booked_service_by_id(id)
+        if not schedule_service:
+            context = {
+                "detail": "Schedule service not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        schedule_service.delete()
+        context = {
+            "detail": "Schedule service deleted successfully"
+        }
+        return Response(context, status=status.HTTP_200_OK)
+        
+    
+    
+    def service_feedback(self, request, id):
+        """ Service Feedback
+
+        Args:
+            request (http): post request
+            id (uuid): service id
+        """
+        review = request.data.get("review")
+        rating = request.data.get("rating")
+        user = get_user_from_jwttoken(request)
+        if user.user_type != "customer":
+            context = {
+                "detail": "You are not a customer"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        service = get_booked_service_by_id(id)
+        if not service or service.customer != user:
+            context = {
+                "detail": "Service not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        feedback = create_feedback(review, service, rating)
+        context = {
+            "detail": "Feedback created successfully",
+            "feedback": feedback
+        }
+        return Response(context, status=status.HTTP_201_CREATED)
+    
+    
     def get_permission(self):
         """Get permission for the viewset
 

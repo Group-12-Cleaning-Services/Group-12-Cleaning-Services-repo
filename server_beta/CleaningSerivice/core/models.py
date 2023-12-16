@@ -22,7 +22,8 @@ USER_TYPE = [
 
 SCHEDULE_STATUS = [
     ("booked", "Booked"),
-    ("completed", "Completed")
+    ("completed", "Completed"),
+    ("deleted", "Deleted")
 ]
 
 class CleaningServiceUserProfile(models.Model):
@@ -130,11 +131,12 @@ class ScheduleService(models.Model):
     
 
 class ServiceFeedback(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='feedback')
-    customer = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
+    serviceFeedback_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    service = models.ForeignKey(ScheduleService, on_delete=models.CASCADE, related_name='feedback')
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-
-    review = models.TextField()
+    review = models.TextField(default=None, null=True, blank=True)
 
     def __str__(self):
-        return f"Feedback for {self.service.title} by {self.user.email} at {self.timestamp}"
+        return f"Feedback for {self.service.service.title} by {self.service.customer.email}"
+
+

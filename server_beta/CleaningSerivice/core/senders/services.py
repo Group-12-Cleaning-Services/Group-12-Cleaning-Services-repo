@@ -1,5 +1,5 @@
 from core.models import *
-from core.serializers import ServiceSerializer, ScheduleServiceSerializer
+from core.serializers import ServiceSerializer, ScheduleServiceSerializer, ServiceFeedbackSerialiazer
 from core.retrievers.services import *
 import json
 
@@ -101,7 +101,16 @@ def send_booked_service_by_provider(provider: CleaningServiceUser) -> dict:
     booked_service_queryset = get_booked_service_by_provider(provider)
     serializer = ScheduleServiceSerializer(booked_service_queryset, many=True)
     return serializer.data
-    
+
+def create_feedback(review: str, service:ScheduleService, rating:str) -> dict:
+    """Create feedback
+
+    Args:
+        data (str): post data with required fields
+    """
+    service_feedback = ServiceFeedback.objects.create(service=service, rating=rating, review=review)
+    serializer = ServiceFeedbackSerialiazer(service_feedback)
+    return serializer.data
 
 def all_profiles():
     """Get all profiles"""

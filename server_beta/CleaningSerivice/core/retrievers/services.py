@@ -58,7 +58,36 @@ def get_booked_service_by_customer(customer: CleaningServiceUser) -> Service:
         return None
     
 
+def get_booked_service_by_id(id: uuid) -> Service:
+    """Get booked service by id
+
+    Args:
+        id (uuid): provide a valid uuid to get a service
+
+    Returns:
+        Service: A service is it exists else it return none
+    """
+    try:
+        query = ScheduleService.objects.get(scheduleservice_id=id)
+        return query
+    except ScheduleService.DoesNotExist:
+        return None
+
 def get_booked_service_by_provider(provider: CleaningServiceUser) -> Service:
+    """Get all booked service by a provider
+
+    Args:
+        provider (CleaningServiceUser): CleaningServiceUser instance
+        Return: All booked service by a provider
+    """
+    try:
+        query_set = ScheduleService.objects.filter(service__user=provider)
+        return query_set
+    except ScheduleService.DoesNotExist:
+        return None
+    
+
+def get_all_booked_service_by_provider(provider: CleaningServiceUser) -> Service:
     """Get all booked service by a provider
 
     Args:
