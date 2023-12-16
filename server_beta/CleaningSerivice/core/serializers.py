@@ -54,3 +54,11 @@ class ServiceFeedbackSerialiazer(serializers.ModelSerializer):
     class Meta:
         model = ServiceFeedback
         fields = "__all__"
+        
+    
+class NotificationSerializer(serializers.ModelSerializer):
+    """Notification Serializer"""
+
+    class Meta:
+        model = Notification
+        fields =   "__all__"

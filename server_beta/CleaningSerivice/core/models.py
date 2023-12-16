@@ -138,5 +138,15 @@ class ServiceFeedback(models.Model):
 
     def __str__(self):
         return f"Feedback for {self.service.service.title} by {self.service.customer.email}"
+    
+
+class Notification(models.Model):
+    notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.user.email} - at notification {self.message}"
 
 

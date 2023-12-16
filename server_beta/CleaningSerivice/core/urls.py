@@ -2,6 +2,7 @@ from django.urls import path
 from core.views.accounts import AccountViewset
 from core.views.profile import ProfileViewset
 from core.views.services import ServiceViewset
+from core.views.notification import NotificationViewset
 from core.views.reset_password import PasswordResetViewset
 from django.conf import settings
 from django.conf.urls.static import static
@@ -34,8 +35,9 @@ urlpatterns = [
     path('service/retrieve/<uuid:id>/', ServiceViewset.as_view({'get': 'retrieve'})),
     path('service/book/<uuid:id>/', ServiceViewset.as_view({'post': 'book_service'})),
     path('service/booked-user-service/<uuid:id>/', ServiceViewset.as_view({'get': 'list_booked_service_by_customer'})),
-    path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'}))
-
+    path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'})),
+    ##Notification
+    path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
 
 ]
 if settings.DEBUG:
