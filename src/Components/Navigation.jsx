@@ -22,7 +22,10 @@ import SingleOrgScreen from '../Screens/Organization/SingleOrgScreen';
 import OrgSingleListItem from './OrgSingleListItem';
 import Booking from "../Screens/Booking/Booking";
 import  paymentMethod  from '../Screens/Booking/PaymentMethod';
-import BookingSummary from "../Screens/Booking/BookingSummary"
+import BookingSummary from "../Screens/Booking/BookingSummary";
+import AddService from '../Screens/Organization/AddService';
+import Dashboard from '../Screens/Organization/Dashboard';
+import Bookings from '../Screens/Organization/Bookings';
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -54,6 +57,9 @@ const Tabs = () => {
             <Stack.Screen name='Booking' component={Booking} options={{  statusBarColor: '#B3CDE0', statusBarStyle:"dark"  }}/>
             <Stack.Screen name='PaymentMethods' component={paymentMethod} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='BookingSummary' component={BookingSummary} options={{ statusBarColor:"#040268"  }}/>
+            <Stack.Screen name='Dashboard' component={Dashboard} options={{ statusBarColor:"#040268"  }}/>
+            <Stack.Screen name='Upload' component={AddService} options={{ statusBarColor:"#040268"  }}/>
+            <Stack.Screen name='BookingsInfo' component={Bookings} options={{ statusBarColor:"#040268"  }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

@@ -93,7 +93,12 @@ export default function ProfileScreen({navigation}) {
         </View>
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("MyBookings")}>My Bookings</Text>
+          {userType === "customer" &&
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>My Bookings</Text>
+          }
+          {userType === "service_provider" &&
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>Dashboard</Text> 
+          }
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.option} onPress={handleLogout}>
