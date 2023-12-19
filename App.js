@@ -7,7 +7,7 @@ import TabView from "./src/Components/TabView"
 const App = () => {
   return (
     <Provider store={store}>
-    <TabView/>
+    <Navigation/>
     </Provider>
   )
 }

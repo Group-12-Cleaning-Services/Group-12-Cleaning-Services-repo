@@ -5,7 +5,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Dashboard from '../Screens/Organization/Dashboard';
 import AddService from '../Screens/Organization/AddService';
 import Bookings from '../Screens/Organization/Bookings';
-import DashboardNavbar from './DashboardNavbar';
+import DashboardNavbar from './DashboardNavIcons';
 import { SIZES } from '../Constants/Theme';
 
 
@@ -16,7 +16,7 @@ const renderScene = SceneMap({
   bookings: Bookings,
 });
 
-export default function TabViewExample() {
+export default function TabViewComponent({navigation}) {
   const layout = useWindowDimensions();
   const [isActiveButton, setIsActiveButton] = useState("view")
 
@@ -62,6 +62,7 @@ export default function TabViewExample() {
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor:"#fff"
     },
 })

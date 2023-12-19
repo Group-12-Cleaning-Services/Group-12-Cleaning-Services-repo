@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   container: { 
     padding: SIZES.width*0.05, 
     paddingTop: SIZES.height*0.005, 
-    backgroundColor: "#fff" ,
   },
   head: { 
     height: SIZES.height*0.07, 
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
   },
   dataWrapper: { 
     flexGrow: 1,
-    height:SIZES.height*0.40
+    height:SIZES.height*0.38
   },
   row: { 
     height: SIZES.height*0.08

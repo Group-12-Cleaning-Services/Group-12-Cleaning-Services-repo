@@ -3,7 +3,7 @@ import { View,  StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SIZES } from '../../Constants/Theme';
 import ServicesTable from "../../Components/ServicesTable"
-import DashboardNavbar from '../../Components/DashboardNavbar';
+import DashboardNavbar from '../../Components/DashboardNavIcons';
 import Search from '../../Components/Search';
 import DashboardIncomeHeader from "../../Components/DashboardIncomeHeader"
 

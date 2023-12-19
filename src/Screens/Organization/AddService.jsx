@@ -1,6 +1,5 @@
 import React from 'react';
 import {View,Text,SafeAreaView,StyleSheet, TextInput,ScrollView,} from 'react-native';
-import DashboardNavbar from '../../Components/DashboardNavbar';
 import { SIZES } from '../../Constants/Theme';
 import Textarea from 'react-native-textarea';
 import Button from '../../Components/Button';
