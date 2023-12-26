@@ -150,3 +150,6 @@ class Notification(models.Model):
         return f"{self.user.email} - at notification {self.message}"
 
 
+class Transaction(models.Model):
+    user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=5, decimal_places=2)
