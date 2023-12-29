@@ -127,7 +127,7 @@ class ScheduleService(models.Model):
     status = models.CharField(choices=SCHEDULE_STATUS, max_length=50, default="booked", null=True, blank=True)
     
     def __str__(self):
-        return f"{self.service.title} is booked by {self.service.user.email} - {self.customer.email} at {self.time}"
+        return f"{self.service.title} is booked by - {self.customer.email} at {self.time}"
     
 
 class ServiceFeedback(models.Model):
@@ -153,3 +153,6 @@ class Notification(models.Model):
 class Transaction(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.amount}"

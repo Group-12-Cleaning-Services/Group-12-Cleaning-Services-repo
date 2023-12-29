@@ -53,7 +53,7 @@ def send_all_services_by_category(category: str):
     return serializer.data
 
 
-def book_service(service: Service, user: CleaningServiceUser, data: str) -> dict:
+def book_service(service: Service, user: CleaningServiceUser, time: str) -> dict:
     """Book a service
 
     Args:
@@ -61,12 +61,9 @@ def book_service(service: Service, user: CleaningServiceUser, data: str) -> dict
         user (CleaningServiceUser): CleaningServiceUser instance
         data (str): post data with required fields
     """
-    serializer = ScheduleServiceSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save(service=service, customer=user)
-        return serializer.data
-    else:
-        return serializer.errors
+    service = ScheduleService.objects.create(service=service, customer=user, time=time)
+    serializer = ScheduleServiceSerializer(service)
+    return serializer.data
     
     
 def send_all_booked_service() -> dict:
