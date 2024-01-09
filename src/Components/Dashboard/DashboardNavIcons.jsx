@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Text,  Pressable } from 'react-native'
 import { FontAwesome,Ionicons   } from '@expo/vector-icons';
-import { SIZES } from '../Constants/Theme';
-import ProfileModal from './ProfileModal';
+import { SIZES } from '../../Constants/Theme';
+import { useDispatch } from 'react-redux';
+import { modalActions } from '../../store/modal';
+import { useSelector } from 'react-redux';
 
 
 
-const DashboardNavbar = ({servicesNav, uploadNav, bookingsNav}) => {;
+const DashboardNavIcons = ({servicesNav, uploadNav, bookingsNav}) => {
+
+  const dispatch = useDispatch()
+
+  const handleProfileModal = () =>{
+    dispatch(modalActions.handleProfileModal())
+  }
+  const modalVisible = useSelector((state)=>state.modal.profileModal);
+  console.log(modalVisible)
 
 return (
 <View>
@@ -16,11 +26,11 @@ return (
   </View>
   <View style={styles.headerIconsContainer}>
     <Ionicons style={styles.notfiIcon} name="notifications" size={24} color="black" />
-    <FontAwesome style={styles.userIcon} name="user-circle" size={24} color="black" />
+    <FontAwesome style={styles.userIcon}
+     name="user-circle" size={24} color="black"
+     onPress={handleProfileModal} 
+    />
   </View>
-</View>
-<View style={styles.profileModal}>
-  <ProfileModal/>
 </View>
  </View>
   )
@@ -65,9 +75,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:"space-between",
     },
-    profileModal:{
-      justifyContent:"flex-end"
-    },
       activeBtn:{
         backgroundColor:"#005B96",
         padding:SIZES.width*0.015,
@@ -77,4 +84,4 @@ const styles = StyleSheet.create({
         color:"white"
       }
 })
-export default DashboardNavbar
+export default DashboardNavIcons

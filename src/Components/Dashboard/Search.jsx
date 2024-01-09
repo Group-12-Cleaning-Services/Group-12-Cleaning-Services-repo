@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, TextInput } from 'react-native'
 import { Feather  } from '@expo/vector-icons';
-import { SIZES } from '../Constants/Theme';
+import { SIZES } from '../../Constants/Theme';
 
 const Search = () => {
   return (

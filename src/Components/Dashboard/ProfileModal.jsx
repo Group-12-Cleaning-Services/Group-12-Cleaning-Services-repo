@@ -1,10 +1,32 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import { FontAwesome,Feather, MaterialIcons } from '@expo/vector-icons';
-import { SIZES } from '../Constants/Theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SIZES } from '../../Constants/Theme';
+import { useDispatch } from 'react-redux';
+import { modalActions } from '../../store/modal';
+import { useSelector } from 'react-redux';
 
-const ProfileModal = ({profileNav}) => {
-  const [modalVisible, setModalVisible] = useState(true);
+
+
+const ProfileModal = ({viewNav, logoutNav}) => {
+
+  const dispatch = useDispatch()
+
+  const handleViewProfile =()=>{
+    dispatch(modalActions.handleProfileModal())
+    viewNav()
+  }
+
+  const handleLogout = async() =>{
+    await AsyncStorage.removeItem("access");
+    await AsyncStorage.removeItem("user")
+    logoutNav()
+    dispatch(modalActions.handleProfileModal())
+  }
+  const modalVisible = useSelector((state)=>state.modal.profileModal);
+  console.log(modalVisible)
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -13,16 +35,17 @@ const ProfileModal = ({profileNav}) => {
         visible={modalVisible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalHeaderText}>Xavier & Co.</Text>
-            <FontAwesome style={styles.userIcon} 
-             name="user-circle" size={40} color="black"/>
+            <FontAwesome style={styles.userIcon}
+             name="user-circle" size={40} color="black"
+             />
             <Pressable
               style={[styles.button, styles.viewProfileBtn]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={handleViewProfile}
+              >
               <MaterialIcons name="dashboard" 
               size={24} color="black" 
               style={styles.dashboardIcon}
@@ -31,7 +54,7 @@ const ProfileModal = ({profileNav}) => {
             </Pressable>
             <Pressable
               style={[styles.button, styles.logoutBtn]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={handleLogout}>
               <Feather name="log-out" 
               size={24} color="white"
               style={styles.logoutIcon}

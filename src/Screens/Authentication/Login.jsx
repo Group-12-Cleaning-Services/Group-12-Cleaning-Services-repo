@@ -34,7 +34,7 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-
+  
       const response = await axios.post(
         'https://cleaningserve.pythonanywhere.com/api/login/',
         {
@@ -45,6 +45,8 @@ const Login = ({ navigation }) => {
       if (response.status === 200) {
         await AsyncStorage.setItem('access', response.data.access);
         await AsyncStorage.setItem('user', email);
+        setEmail('');
+        setPassword('');
         Alert.alert('Success✔️', 'Logged in successful');
         navigation.navigate('Organizations');
       }
@@ -52,10 +54,8 @@ const Login = ({ navigation }) => {
       Alert.alert('Invalid⚠️', 'Incorrect password or username');
     } finally {
       setLoading(false);
-      setEmail('');
-      setPassword('');
     }
-  };
+  };  
 
   const {
     container,

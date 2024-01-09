@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Text} from 'react-native'
 import { FontAwesome5} from '@expo/vector-icons';
-import { SIZES } from '../Constants/Theme';
-import Button from './Button';
+import { SIZES } from '../../Constants/Theme';
+import Button from '../../Components/Button';
 
 const DashboardIncomeHeader = () => {
   return (
@@ -30,7 +30,7 @@ const DashboardIncomeHeader = () => {
     />
   </View>
 </View>
-    </View>
+</View>
   )
 }
 const styles = StyleSheet.create({

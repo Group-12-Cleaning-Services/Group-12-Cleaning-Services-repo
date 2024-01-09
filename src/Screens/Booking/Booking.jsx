@@ -42,10 +42,6 @@ const Booking = ({ navigation }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [showModal, setShowModal] = useState(true)
 
-  const modalVisible = useSelector((state)=>state.modal.modal);
-  const buttonslVisible = useSelector((state)=>state.modal.button)
-
-console.log(buttonslVisible)
 
   const dispatch = useDispatch()
   const handleChange = (key, value) => {
@@ -87,39 +83,12 @@ console.log(buttonslVisible)
   };
 
   const handleBooking = async () => {
-    // try {
-    //   setLoading(true);
-    //   const response = await axios.post(
-    //     "https://cleaningserve.pythonanywhere.com/api/accounts/create/",
-    //     {
-    //       email,
-    //       password,
-    //       user_type,
-    //     }
-    //   );
-    //   if (response.status === 201) {
-    //     await AsyncStorage.setItem("userRegistered", email);
-    //     await AsyncStorage.setItem("user_type", user_type);
-    //     Alert.alert("Success ✔️", "User created successful");
-    //     navigation.navigate("OTP");
-    //   }
-    //   if (response.status === 208) {
-    //     Alert.alert("Warning ⚠️", "User already exists");
-    //   }
-    // } catch (error) {
-    //   Alert.alert("Warning ⚠️", "Something went wrong");
-    //   setLoading(false);
-    //   setEmail("");
-    //   setPassword("");
-    //   setUsername("");
-    // } finally {
-    //   setLoading(false);
-    //   setEmail("");
-    //   setPassword("");
-    //   setUsername("");
-    // }
     dispatch(modalActions.handleModal())
   };
+
+  const modalVisible = useSelector((state)=>state.modal.modal);
+  const buttonsVisible = useSelector((state)=>state.modal.button);
+  // console.log(buttonsVisible)
 
   const {
     container,
@@ -230,7 +199,7 @@ console.log(buttonslVisible)
             rightText="I agree to all terms and conditions"
           />
         </View>
-        {buttonslVisible &&
+        {buttonsVisible &&
         <View style={styles.btnsContainer}>
         <Button
           title={"Cancel"}

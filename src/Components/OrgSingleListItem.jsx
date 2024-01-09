@@ -42,6 +42,7 @@ const OrgSingleListItem = ({ item, nav }) => {
             padding: SIZES.width*0.03,
             borderBottomWidth: 1,
             borderBottomColor: '#ccc',
+            backgroundColor:"#fff"
           },
           itemInfo:{
             flexDirection: 'row', 

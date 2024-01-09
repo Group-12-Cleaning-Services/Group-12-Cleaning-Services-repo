@@ -31,6 +31,7 @@ const SingleOrgScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex:1,
+    backgroundColor:"#fff"
   },
   header:{
     paddingLeft:SIZES.width*0.07,

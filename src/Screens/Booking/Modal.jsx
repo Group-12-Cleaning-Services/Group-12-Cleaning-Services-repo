@@ -9,12 +9,13 @@ import { modalActions } from "../../store/modal";
 
 const ModalScreen = ({time, location, date, paymentNav}) => {
   const dispatch = useDispatch()
-  const modalVisible = useSelector((state)=>state.modal.modal)
 
   const handleModalState =()=>{
     dispatch(modalActions.handleModal())
   }
-console.log(modalVisible)
+  const modalVisible = useSelector((state)=>state.modal.modal)
+  // console.log(modalVisible)
+
   return (
     <View style={styles.centeredView}>
       <Modal

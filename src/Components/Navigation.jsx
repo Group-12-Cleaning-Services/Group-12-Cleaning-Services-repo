@@ -21,9 +21,10 @@ import ResetPasswordOTP from "../Screens/Authentication/ResetPassOTP";
 import SingleOrgScreen from '../Screens/Organization/SingleOrgScreen';
 import OrgSingleListItem from './OrgSingleListItem';
 import Booking from "../Screens/Booking/Booking";
-import  paymentMethod  from '../Screens/Booking/PaymentMethod';
+import paymentMethod  from '../Screens/Booking/PaymentMethod';
 import BookingSummary from "../Screens/Booking/BookingSummary";
-import TabView from "./TabView"
+import Dashboard from '../Screens/Organization/Dashboard';
+import ProfileModal from './Dashboard/ProfileModal';
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -55,7 +56,8 @@ const Tabs = () => {
             <Stack.Screen name='Booking' component={Booking} options={{  statusBarColor: '#B3CDE0', statusBarStyle:"dark"  }}/>
             <Stack.Screen name='PaymentMethods' component={paymentMethod} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
             <Stack.Screen name='BookingSummary' component={BookingSummary} options={{ statusBarColor:"#040268"  }}/>
-            <Stack.Screen name='TabView' component={TabView} options={{ statusBarStyle:"dark"  }}/>
+            <Stack.Screen name='Dashboard' component={Dashboard} options={{ statusBarStyle:"dark"  }}/>
+            <Stack.Screen name='ModalProfile' component={ProfileModal} />
         </Stack.Navigator>
     </NavigationContainer>
   )

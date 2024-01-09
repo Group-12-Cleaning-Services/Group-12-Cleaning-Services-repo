@@ -94,7 +94,7 @@ export default function ProfileScreen({navigation}) {
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />
           {userType === "customer" &&
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("TabView")}>My Bookings</Text>
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>My Bookings</Text>
           }
           {userType === "service_provider" &&
           <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>Dashboard</Text> 
