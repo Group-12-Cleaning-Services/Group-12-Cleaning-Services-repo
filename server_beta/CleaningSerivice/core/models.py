@@ -8,11 +8,11 @@ from phone_field import PhoneField
 
 
 
-CATEGORY = [
-    ("car", "Car Wash"),
-    ("laundry", "Laundry"),
-    ("home", "Home Cleaning")
-]
+# CATEGORY = [
+#     ("car", "Car Wash"),
+#     ("laundry", "Laundry"),
+#     ("home", "Home Cleaning")
+# ]
 
 USER_TYPE = [
     ("customer", "Customer"),
@@ -110,7 +110,7 @@ class Service(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    category = models.CharField(choices=CATEGORY, max_length=50)
+    category = models.CharField(max_length=50)
     thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     
