@@ -1,5 +1,6 @@
 # Kleen
-
+## Official Documentation for Kleen
+https://konadus-organization.gitbook.io/untitled/
 
 ## Overview
 
@@ -119,7 +120,6 @@ Get a list of all services booked by a customer.
 ### Request
 - Method: `GET`
 - Authentication: Required
-- URL Params: `id` The ID of the customer.
 ### Response
 - Status Code: 200 OK
 - Body:
@@ -140,7 +140,7 @@ Create a new service.
 - Body:
   ```json
   {
-    "name",
+    "title",
     "description",
     "price",
     "category",
@@ -164,7 +164,6 @@ Update an existing service.
 ### Request
 - Method: `PUT`
 - Authentication: Required
-- URL Params: `id` The ID of the service.
 - Body:
   ```json
   {
@@ -194,7 +193,6 @@ Retrieve a specific service.
 ### Request
 - Method: `GET`
 - Authentication: Required
-- URL Params: `id` The ID of the service.
 ### Response
 - Status Code: 200 OK
 - Body:
@@ -212,7 +210,6 @@ Delete a specific service.
 ### Request
 - Method: `DELETE`
 - Authentication: Required
-- URL Params: `id` The ID of the service.
 ### Response
 - Status Code: 200 OK
 - Body:
@@ -230,7 +227,6 @@ Provide feedback for a specific service.
 ### Request
 - Method: `POST`
 - Authentication: Required
-- URL Params: `id` The ID of the service.
 - Body:
   ```json
   {
