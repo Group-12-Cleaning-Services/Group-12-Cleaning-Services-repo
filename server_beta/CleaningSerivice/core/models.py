@@ -10,9 +10,9 @@ from phone_field import PhoneField
 
 
 CATEGORY = [
-    ("car_wash", "Car Wash"),
-    ("laundary", "Laundary"),
-    ("home_cleaning", "Home Cleanin")
+    ("car", "Car Wash"),
+    ("laundry", "Laundry"),
+    ("home", "Home Cleaning")
 ]
 
 USER_TYPE = [

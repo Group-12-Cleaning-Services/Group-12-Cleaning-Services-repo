@@ -56,7 +56,7 @@ class PaymentViewset(viewsets.ViewSet):
         if service:
             data = {
                 "email": email,
-                "amount": str(service.price) * 10,
+                "amount": str(service.price * 100),
                 "currency": 'GHS'
             }
             headers = {
@@ -193,8 +193,6 @@ class PaymentViewset(viewsets.ViewSet):
             }
         
         response = requests.get(url, headers=headers)
-        print(response.json())
-        
         
         if response.status_code == 200:
             response = response.json()
