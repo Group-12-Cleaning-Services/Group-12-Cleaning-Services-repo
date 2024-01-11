@@ -9,9 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
+import dj_database_url
 
 from pathlib import Path
 import os
@@ -26,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.environ.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -92,6 +90,7 @@ DATABASES = {
     }
 }
 
+DATABASES["default"] = dj_database_url.parse("postgres://lord:TMCshFutRZZ5ROSiw8pa5fzMXcFRmFkC@dpg-cmft38en7f5s73c98v7g-a.oregon-postgres.render.com/cleaning_u0bm")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -152,13 +151,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.CleaningServiceUser"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-import django_heroku
-django_heroku.settings(locals())
+EMAIL_HOST = os.environ.getenv("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.environ.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.environ.getenv("EMAIL_USE_TLS")
 
 
 # CORS_ALLOW_CREDENTIALS = True

@@ -16,6 +16,8 @@ pytz = "*"
 requests = "*"
 psycopg2-binary = "*"
 whitenoise = "*"
+dj-database-url = "*"
+gunicorn = "*"
 
 [dev-packages]
 

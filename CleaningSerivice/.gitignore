@@ -14,6 +14,8 @@ db*
 ./db*
 # Ignore static files directory (if using collectstatic)
 staticfiles/
+Pipfile.lock
+Pipfile
 
 # Ignore media files directory
 media/
