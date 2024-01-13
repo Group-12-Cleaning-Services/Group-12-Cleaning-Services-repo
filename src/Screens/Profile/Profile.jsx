@@ -18,7 +18,7 @@ export default function ProfileScreen({navigation}) {
         const accessToken = await AsyncStorage.getItem('access');
         if (accessToken) {
           const response = await axios.get(
-            'https://cleaningserve.pythonanywhere.com/api/profile/retrieve/',
+            'https://cleaningservice.onrender.com/api/profile/retrieve/',
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`, 
@@ -28,6 +28,7 @@ export default function ProfileScreen({navigation}) {
 
           setFirst_name(response.data.profile.first_name);
           setLast_name(response.data.profile.last_name)
+          // setUser_type(response.data.user_type)
     
         }
         const value = await AsyncStorage.getItem('user');
@@ -40,7 +41,7 @@ export default function ProfileScreen({navigation}) {
           console.log('Item not found in AsyncStorage');
         }
       } catch (error) {
-        console.error('Error retrieving item from AsyncStorage:', error);
+        console.error(error);
       }
     };
 
@@ -70,8 +71,8 @@ export default function ProfileScreen({navigation}) {
         source={require("../../../assets/profile.png")}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>{first_name} {last_name}</Text>
-        <Text style={styles.email}>{user}</Text>
+        <Text style={styles.name}>{first_name || ''} {last_name || ''}</Text>
+        <Text style={styles.email}>{user || ''}</Text>
         {!first_name &&
         <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("CreateProfile")}>
         <Text style={styles.editButtonText} >Create Profile</Text>
@@ -94,10 +95,10 @@ export default function ProfileScreen({navigation}) {
         <TouchableOpacity style={styles.option}>
           <Feather name="book-open" size={24} color="black" />
           {userType === "customer" &&
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>My Bookings</Text>
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("MyBookings")}>My Bookings</Text>
           }
           {userType === "service_provider" &&
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>Dashboard</Text> 
+          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>View Dashboard</Text> 
           }
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>

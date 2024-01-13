@@ -4,6 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SIZES } from '../../Constants/Theme';
 import { Feather } from '@expo/vector-icons';
+import { LoadingModal } from "react-native-loading-modal";
 import Button from '../../Components/Button';
 
 
@@ -12,7 +13,7 @@ const OTPVerification = ({navigation}) => {
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
-  console.log(password.value === confirm.avlue)
+  const [loading, setLoading] = useState(false);
   
 
   const handleChange = (key,value) =>{
@@ -26,8 +27,9 @@ const OTPVerification = ({navigation}) => {
   const handleVerificationSubmit = async() => {
     if(password.value === confirm.value){
       try {
+        setLoading(true);
         const email = await AsyncStorage.getItem("otp_mail")
-        const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/password-reset-confirm/', {
+        const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/password-reset-confirm/', {
         otp,
         password,
         email
@@ -116,6 +118,9 @@ const OTPVerification = ({navigation}) => {
       </TouchableOpacity>
       <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
         Resend code
+      </Text>
+      <Text style={indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
       </Text>
     </SafeAreaView>
   );
@@ -225,6 +230,13 @@ const styles = StyleSheet.create({
     color:'#9CADF2',
     borderColor: '#DBE3FF', 
     borderRightWidth: 1,
+  },
+  indicator:{
+    alignItems:'center',
+    textAlign:'center',
+    position:"absolute",
+    top:SIZES.height*0.765,
+    left:SIZES.width*0.45,
   },
   scrollContainer: {
     flex: 1,

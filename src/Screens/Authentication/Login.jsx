@@ -14,6 +14,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { LoadingModal } from "react-native-loading-modal";
 import Button from '../../Components/Button';
 import axios from 'axios';
 import { SIZES } from '../../Constants/Theme';
@@ -36,18 +37,19 @@ const Login = ({ navigation }) => {
       setLoading(true);
   
       const response = await axios.post(
-        'https://cleaningserve.pythonanywhere.com/api/login/',
+        'https://cleaningservice.onrender.com/api/login/',
         {
           email,
           password,
         }
       );
       if (response.status === 200) {
-        await AsyncStorage.setItem('access', response.data.access);
+        console.log(response.status)
+        await AsyncStorage.setItem('access', response.data.token.access);
         await AsyncStorage.setItem('user', email);
+        Alert.alert('Success✔️', 'Logged in successful');
         setEmail('');
         setPassword('');
-        Alert.alert('Success✔️', 'Logged in successful');
         navigation.navigate('Organizations');
       }
     } catch (error) {
@@ -118,7 +120,7 @@ const Login = ({ navigation }) => {
             press={handleLogin}
           />
           <Text style={indicator}>
-            {loading && <ActivityIndicator color="yellow" size={55} />}
+            {loading && <LoadingModal modalVisible={true} />}
           </Text>
           <View style={forgotPass}>
             <Text style={forgotPassText}>Forgot Password?</Text>
@@ -205,8 +207,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     position: 'absolute',
-    top: SIZES.height * 0.76,
-    left: SIZES.width * 0.45,
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
   },
 });
 

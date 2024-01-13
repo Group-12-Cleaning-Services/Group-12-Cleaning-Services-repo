@@ -1,20 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, Pressable, View, Linking} from 'react-native';
 import { SIZES } from '../../Constants/Theme';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { modalActions } from "../../store/modal";
+import { useRoute } from '@react-navigation/native';
 
 
 const ModalScreen = ({time, location, date, paymentNav}) => {
   const dispatch = useDispatch()
 
-  const handleModalState =()=>{
+  const handleCancelModalState =()=>{
     dispatch(modalActions.handleModal())
   }
   const modalVisible = useSelector((state)=>state.modal.modal)
-  // console.log(modalVisible)
+
+  const handleBooking = async () => {
+    try {  
+      const accessToken = await AsyncStorage.getItem('access');
+      const auth_url =  await AsyncStorage.getItem("auth")
+      if(accessToken){
+        const supported = await Linking.canOpenURL(auth_url);
+      if (supported) {
+        await Linking.openURL(auth_url);
+      } else {
+        console.error('Cannot open URL:', auth_url);
+      }
+        dispatch(modalActions.handleModal())
+      }
+    } catch (error) {
+      console.error("Error handling booking:", error);
+    }
+  };
+  
 
   return (
     <View style={styles.centeredView}>
@@ -34,14 +53,14 @@ const ModalScreen = ({time, location, date, paymentNav}) => {
            </View>
            <View style={styles.confirmCancelBtns}>
            <Pressable
-           onPress={paymentNav}
-              style={[styles.button, styles.buttonContinue]}
+            onPress={handleBooking}
+            style={[styles.button, styles.buttonContinue]}
             >
               <Text style={styles.textStyle}>Continue</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={handleModalState}>
+              onPress={handleCancelModalState}>
               <Text style={styles.textStyle}>Cancel</Text>
             </Pressable>
            </View>

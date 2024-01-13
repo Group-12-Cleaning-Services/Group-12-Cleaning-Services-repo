@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -6,13 +6,55 @@ import {
   View,
   Text
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 import { singleOrganizationData } from '../../../Data';
 import OrgSingleListItem from '../../Components/OrgSingleListItem';
 import { SIZES } from '../../Constants/Theme';
+import { useRoute } from '@react-navigation/native';
 
 
 
 const SingleOrgScreen = ({navigation}) => {
+
+  const[services, setServices] = useState()
+
+  const route = useRoute();
+  const { itemId } = route.params;
+  console.log(itemId)
+
+  const handleNavigate = (service_id) => {
+    navigation.navigate('Booking', { service_id });
+  };
+
+  useEffect(() => {
+    const getServices = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('access');
+        if (accessToken) {
+          const response = await axios.get(
+            `https://cleaningservice.onrender.com/api/service/provider-services/${itemId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`, 
+              },
+            }
+          );
+          if(response.status === 200){
+            setServices(response.data.services)
+          }
+          else{
+            Alert.alert("Error⚠️", 'Something went wrong!')
+          }
+        }
+      } catch (error) {
+        console.error('Something went wrong!', error);
+      }
+    };
+    getServices();
+  }, []); 
+console.log(services)
+
   return (
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
@@ -20,8 +62,8 @@ const SingleOrgScreen = ({navigation}) => {
         </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={singleOrganizationData}
-        renderItem={({ item }) => <OrgSingleListItem item={item} nav={()=> navigation.navigate('Booking')}/>}
+        data={services}
+        renderItem={({ item }) => <OrgSingleListItem item={item} nav={()=> handleNavigate(item.service_id)}/>}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>

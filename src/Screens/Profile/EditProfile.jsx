@@ -30,7 +30,7 @@ const EditProfile = ({ navigation }) => {
   
       if (accessToken) {
         const response = await axios.post(
-          'https://cleaningserve.pythonanywhere.com/api/profile/update/',
+          'https://cleaningservice.onrender.com/api/profile/update/',
           {
             first_name,
             last_name,

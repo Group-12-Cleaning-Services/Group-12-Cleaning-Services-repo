@@ -2,22 +2,26 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { bookings } from '../../../Data';
+import { SIZES } from '../../Constants/Theme';
 
 export default function MyBookings({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+      <View style={styles.gobackArrow}>
         <Feather name="arrow-left" size={24}
          color="black" onPress={()=>navigation.goBack()} />
       </View>
-      <View style={styles.tabContainer}>
+      {/* <View style={styles.tabContainer}>
         <TouchableOpacity style={styles.activeButtonContainer}>
           <Text style={styles.tabButtonText}>Active</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.successButtonContainer}>
           <Text style={styles.tabButtonText}>Success</Text>
         </TouchableOpacity>
+      </View> */}
+      <View style={styles.MyBookingsTextContainer}>
+        <Text style={styles.MyBookingsText}>My Bookings</Text>
       </View>
       <ScrollView style={styles.bookingList}>
         {bookings.map((booking, index) => (
@@ -49,11 +53,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#B3CDE0",
   },
-  header: {
+  gobackArrow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    paddingTop:SIZES.height*0.05,
+    paddingLeft:SIZES.height*0.03
   },
   headerTitle: {
     fontSize: 20,
@@ -67,6 +72,14 @@ const styles = StyleSheet.create({
     margin:10,
     justifyContent:"space-around",
     alignItems:"center"
+  },
+  MyBookingsTextContainer:{
+    alignItems:"center",
+    justifyContent:"center",
+    paddingBottom:SIZES.height*0.02
+  },
+  MyBookingsText:{
+    fontSize:SIZES.width*0.07
   },
   activeButton: {
     backgroundColor: '#d1d1d1',

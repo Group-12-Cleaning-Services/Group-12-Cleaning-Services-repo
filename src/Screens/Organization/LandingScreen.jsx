@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, View, SafeAreaView, Text, StyleSheet, StatusBar, SectionList, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 import { FontAwesome } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../Constants/Theme';
 import { organizations } from '../../../Data';
@@ -7,6 +9,80 @@ import ListItem from '../../Components/ListItems';
 
 
 const LandingScreen = ({ navigation }) => {
+
+  const[organizationss, setOrganizations] = useState([]);
+  const[horizontal, setHorizontal] = useState(true)
+
+  // useEffect(() => {
+  //   const getServices = async () => {
+  //     try {
+  //       const accessToken = await AsyncStorage.getItem('access');
+  //       if (accessToken) {
+  //         const response = await axios.get(
+  //           `https://cleaningservice.onrender.com/api/service/providers/`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${accessToken}`, 
+  //             },
+  //           }
+  //         );
+  //         if(response.status === 200){
+  //           setOrganizations(response.data)
+  //         }
+  //         else{
+  //           Alert.alert("Error⚠️", 'Something went wrong!')
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Something went wrong!', error);
+  //     }
+  //   };
+  //   getServices();
+  // }, []); 
+
+  useEffect(() => {
+    const getServices = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('access');
+        if (accessToken) {
+          const response = await axios.get(
+            `https://cleaningservice.onrender.com/api/service/providers/`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            const responseData = response.data;
+  
+            // Ensure responseData has a data property and it is an array
+            if (responseData && Array.isArray(responseData.data)) {
+              const sections = [
+                {
+                  organization_name: null,
+                  data: responseData.data,
+                },
+              ];
+  
+              setOrganizations(sections);
+            } else {
+              console.error('Invalid response format:', responseData);
+            }
+          } else {
+            Alert.alert('Error⚠️', 'Something went wrong!');
+          }
+        }
+      } catch (error) {
+        console.error('Something went wrong!', error);
+      }
+    };
+  
+    getServices();
+  }, []);
+  
+  
+
   const {  
     container, 
     header, 
@@ -15,6 +91,10 @@ const LandingScreen = ({ navigation }) => {
     slideImage, 
     headerIcon 
   } = styles;
+
+  const handleNavigate = (itemId) => {
+    navigation.navigate('SingleOrg', { itemId });
+  };
 
   return (
     <SafeAreaView style={container}>
@@ -32,22 +112,22 @@ const LandingScreen = ({ navigation }) => {
         <SectionList
           contentContainerStyle={{ paddingHorizontal: 10 }}
           stickySectionHeadersEnabled={false}
-          sections={organizations}
+          sections={organizationss}
           renderSectionHeader={({ section }) => (
             <>
-              <Text style={styles.sectionHeader}>{section.title}</Text>
-              {section.horizontal ? (
+              <Text style={styles.sectionHeader}>Available Organizations</Text>
+              {horizontal ? (
                 <FlatList
                   horizontal
                   data={section.data}
-                  renderItem={({ item }) => <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')}/>}
+                  renderItem={({ item }) => <ListItem item={item} nav={() => handleNavigate(item.user_id)}/>}
                   showsHorizontalScrollIndicator={false}
                 />
               ) : null}
             </>
           )}
           renderItem={({ item, section }) => {
-            if (section.horizontal) {
+            if (horizontal) {
               return null;
             }
             return <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')} />;

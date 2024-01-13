@@ -6,6 +6,7 @@ import Button from '../../Components/Button';
 import {SIZES } from "../../Constants/Theme"
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
+import { LoadingModal } from "react-native-loading-modal";
 import axios from 'axios';
 
 
@@ -31,7 +32,7 @@ const Register = ({navigation}) => {
   const handleCreateAccount = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
+      const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/create/', {
         email,
         password,
         user_type
@@ -131,7 +132,7 @@ const Register = ({navigation}) => {
        press={handleCreateAccount}
        />
        <Text style={indicator}>
-          {loading && <ActivityIndicator color="yellow" size={55} press={handleCreateAccount} />} 
+          {loading && <LoadingModal modalVisible={true} />} 
         </Text>
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}

@@ -2,7 +2,7 @@ import React from 'react'
 import { View,  StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SIZES } from '../../Constants/Theme';
-import ServicesTable from "./ServicesTable"
+import BookedServices from "./BookedServices"
 import Search from '../../Components/Dashboard/Search';
 import DashboardIncomeHeader from "../../Components/Dashboard/DashboardIncomeHeader"
 
@@ -12,7 +12,7 @@ const Bookings = () => {
       <View style={styles.itemsContainer}>
         <DashboardIncomeHeader/>
         <Search/>
-        <ServicesTable/>
+        <BookedServices/>
       </View>
     </SafeAreaView>
   )

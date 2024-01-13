@@ -32,7 +32,7 @@ const CreateProfile = ({ navigation }) => {
   
       if (accessToken) {
         const response = await axios.post(
-          'https://cleaningserve.pythonanywhere.com/api/profile/create/',
+          'https://cleaningservice.onrender.com/api/profile/create/',
           {
             first_name,
             last_name,

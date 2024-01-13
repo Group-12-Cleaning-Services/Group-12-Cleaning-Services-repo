@@ -18,7 +18,7 @@ const ResetPassword = ({navigation}) => {
 
   const handleReset = async () => {
     try {
-        const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/password-reset/', {
+        const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/password-reset/', {
           email
         });
         await AsyncStorage.setItem("otp_mail", email)
@@ -58,7 +58,7 @@ const ResetPassword = ({navigation}) => {
       </View>
       <View style={welcomeContainer}>
         <Text style={welcomeTitle}>Reset Pasword</Text>
-        <Text style={welcomeText}>An otp verification code will be sent to you via you emailprovided</Text>
+        <Text style={welcomeText}>An otp verification code will be sent to you via your email provided</Text>
       </View>
       <View style={inputContainer}>
         <View style={input}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 5,
     textAlign: 'center',
-    width: SIZES.width*0.5
+    width: SIZES.width*0.6
   },
   inputContainer: {
     alignItems: 'center',

@@ -28,7 +28,7 @@ const PaymentMethod = ({navigation}) =>{
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
            <View style={styles.gobackIcon}>
             <Feather
              name="log-out"
@@ -74,7 +74,7 @@ const PaymentMethod = ({navigation}) =>{
             press={()=>navigation.navigate("BookingSummary")}
           />
         </View>
-           </ScrollView>
+         </ScrollView>
         </SafeAreaView>
        )
 

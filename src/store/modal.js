@@ -8,7 +8,8 @@ export const modalSlice = createSlice({
         modal:[false], 
         button:[true],
         profileModal:[true],
-        updateModal:[false]
+        updateModal:[false],
+        updateId:[]
     },
     reducers:{
         handleModal:(state, action)=>{
@@ -22,6 +23,9 @@ export const modalSlice = createSlice({
         },
         handleUpdateModal:(state, action)=>{
             state.updateModal = !state.updateModal
+        },
+        handleUpdateId:(state, action)=>{
+            state.updateId = action.payload
         }
     }
   

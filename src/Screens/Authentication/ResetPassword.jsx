@@ -22,7 +22,7 @@ const ResetPassword = ({navigation}) => {
   const handleReset = async () => {
     try {
       if(newPassword === confirm){
-        const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/', {
+        const response = await axios.post('https://cleaningservice.onrender.com/api/', {
           newPassword,
           confirm,
         });

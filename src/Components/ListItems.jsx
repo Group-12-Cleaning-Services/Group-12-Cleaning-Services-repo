@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../Constants/Theme';
 
 const ListItem = ({ item, nav }) => {
+
   const ratings = [1, 2, 3, 4, 5];
 
   const handleCardPress = () => {
@@ -16,12 +17,12 @@ const ListItem = ({ item, nav }) => {
     >
       <View style={styles.imageContainer}>
         <Image
-          source={item.image}
+          source={item?.image}
           style={styles.image}
           resizeMode="cover"
         />
       </View>
-      <Text style={styles.cardText}>{item.text}</Text>
+      <Text style={styles.cardText}>{item?.organization_name}</Text>
       <View style={styles.ratings}>
         {ratings.map((value, index) => (
           <FontAwesome

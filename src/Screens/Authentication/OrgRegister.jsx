@@ -5,12 +5,13 @@ import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import {SIZES } from "../../Constants/Theme"
 import { useState } from 'react';
+import { LoadingModal } from "react-native-loading-modal";
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 
 
 const OrgRegister = ({navigation}) => {
-  const [username, setUsername] = useState('')
+  const [organization_name, setOrganization_name] = useState('')
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [user_type, setUserType] = useState("service_provider");
@@ -19,8 +20,8 @@ const OrgRegister = ({navigation}) => {
 
 
   const handleChange = (key,value) =>{
-    if (key === 'username') {
-      setUsername(value);
+    if (key === 'organization_name') {
+      setOrganization_name(value);
     } else if (key === 'password') {
       setPassword(value);
     }else if (key === 'email') {
@@ -31,32 +32,31 @@ const OrgRegister = ({navigation}) => {
   const handleCreateAccount = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/create/', {
+      const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/create/', {
         email,
         password,
-        user_type
+        user_type,
+        organization_name
       });
       if(response.status === 201){
         await AsyncStorage.setItem("userRegistered",email);
         await AsyncStorage.setItem("user_type",user_type);
-        Alert.alert("Success ✔️","User created succesful")
+        Alert.alert("Success ✔️","Organization created succesful")
         navigation.navigate("OTP")
       }
       if(response.status === 208){
         Alert.alert("Warning ⚠️","User already exist")
       }
     } catch (error) {
-      Alert.alert("Warning ⚠️", "Something went wrong")
-      // console.log(error)
+      // Alert.alert("Warning ⚠️", "Something went wrong")
+      console.log(error)
       setLoading(false);
       setEmail('');
-      setPassword('');
-      setUsername('') 
+      setPassword('');; 
     }finally {
       setLoading(false); 
       setEmail('');
-      setPassword('')
-      setUsername('')
+      setPassword('');
     }
   };
 
@@ -91,17 +91,6 @@ const OrgRegister = ({navigation}) => {
       </View>
       <View style={inputContainer}>
         <View style={input}>
-          <Feather name={'user'} 
-           size={20} color={'black'}
-           style={iconUser} />
-          <TextInput 
-           style={inputField} 
-           placeholder="Username"
-           onChangeText={(value)=>handleChange('username', value)}
-           value={username}
-          />
-        </View>
-        <View style={input}>
           <Feather name={'lock'} 
            size={20} color={'black'} 
            style={iconUser} />
@@ -124,6 +113,17 @@ const OrgRegister = ({navigation}) => {
            value={password}
            />
         </View>
+        <View style={input}>
+          <Feather name={'user'} 
+           size={20} color={'black'}
+           style={iconUser} />
+          <TextInput 
+           style={inputField} 
+           placeholder="Organization name"
+           onChangeText={(value)=>handleChange('organization_name', value)}
+           value={organization_name}
+          />
+        </View>
       </View>
       <Button title={'Create Account'} 
        buttonContainer={buttonContainer}
@@ -131,8 +131,8 @@ const OrgRegister = ({navigation}) => {
        press={handleCreateAccount}
        />
        <Text style={indicator}>
-          {loading && <ActivityIndicator color="yellow" size={55} press={handleCreateAccount} />} 
-        </Text>
+          {loading && <LoadingModal modalVisible={true} />} 
+       </Text>
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}
        buttonText={haveAccountText}
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
     position:"absolute",
     top:SIZES.height*0.765,
-    left:SIZES.width*0.45
+    left:SIZES.width*0.45,
   }
 });
 

@@ -68,7 +68,7 @@ const BookingSummary = ({ navigation }) => {
             title={'Back to home'}
             buttonContainer={buttonContainer}
             buttonText={buttonText}
-            press={navigation.navigate("Home")}
+            press={()=>navigation.navigate("Home")}
           />
         </KeyboardAvoidingView>
       </SafeAreaView>

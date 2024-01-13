@@ -10,6 +10,8 @@ import {
   ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import {
   Feather,
   MaterialIcons,
@@ -25,6 +27,8 @@ import ModalScreen from "./Modal";
 import { useDispatch } from 'react-redux';
 import { modalActions } from "../../store/modal";
 import { useSelector } from 'react-redux';
+import { dropdownData } from "../../../Data";
+import { useRoute } from '@react-navigation/native';
 
 
 
@@ -41,7 +45,8 @@ const Booking = ({ navigation }) => {
   const [bookingTime, setBookingTime] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [showModal, setShowModal] = useState(true)
-
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
 
   const dispatch = useDispatch()
   const handleChange = (key, value) => {
@@ -82,13 +87,52 @@ const Booking = ({ navigation }) => {
     setIsChecked(!isChecked);
   };
 
-  const handleBooking = async () => {
-    dispatch(modalActions.handleModal())
+  const route = useRoute();
+  const { service_id } = route.params;
+  console.log(service_id)
+
+  const resetFields = () => {
+    setAddress('');
+    setBookingDate('');
+    setBookingTime('');
+    setFullName('');
   };
+
+  const handleBooking = async () => {
+    try {  
+      const accessToken = await AsyncStorage.getItem('access');
+      if (accessToken) {
+        const response = await axios.post(
+          'https://cleaningservice.onrender.com/api/service/book/',
+          { service_id },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          await AsyncStorage.setItem('address', address);
+          await AsyncStorage.setItem('date', date.toISOString()); 
+          await AsyncStorage.setItem('time', time.toISOString());
+          await AsyncStorage.setItem('service_id', String(service_id));
+          await AsyncStorage.setItem("auth", response.data.data.authorization_url)
+          dispatch(modalActions.handleModal());
+        } else if (response.status === 403) {
+          Alert.alert('Warning⚠️', 'Not authorized');
+        }
+      }
+    } catch (error) {
+      console.error("Error handling booking:", error);
+    }
+  };
+  
 
   const modalVisible = useSelector((state)=>state.modal.modal);
   const buttonsVisible = useSelector((state)=>state.modal.button);
-  // console.log(buttonsVisible)
+  
+
 
   const {
     container,
@@ -191,6 +235,35 @@ const Booking = ({ navigation }) => {
               />
             </Pressable>
           </View>
+          {/* <View style={styles.input}>
+         <Dropdown
+           style={[styles.inputField, isFocus && { borderColor: 'blue' }]}
+           placeholderStyle={styles.placeholderStyle}
+           selectedTextStyle={styles.selectedTextStyle}
+           inputSearchStyle={styles.inputSearchStyle}
+           iconStyle={styles.iconStyle}
+           data={dropdownData}
+           maxHeight={300}
+           labelField="label"
+           valueField="value"
+           placeholder={!isFocus ? 'Select item' : '...'}
+           value={value}
+           onFocus={() => setIsFocus(true)}
+           onBlur={() => setIsFocus(false)}
+           onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          renderLeftIcon={() => (
+            <AntDesign
+              style={styles.icon}
+              color={isFocus ? 'blue' : 'black'}
+              name="Safety"
+              size={20}
+            />
+          )}
+        />
+      </View> */}
         </View>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -243,7 +316,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     fontSize: 25,
-    paddingTop: SIZES.height * 0.05,
+    paddingTop: SIZES.height * 0.02,
   },
   welcomeText: {
     color: "black",
@@ -358,7 +431,33 @@ const styles = StyleSheet.create({
   checkboxContainer:{
     paddingLeft:SIZES.width*0.1,
     paddingTop:SIZES.height*0.01
-  }
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 });
 
 export default Booking;

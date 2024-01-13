@@ -28,7 +28,7 @@ const OTPVerification = ({navigation}) => {
 
   const handleVerificationSubmit = async() => {
     try {
-      const response = await axios.post('https://cleaningserve.pythonanywhere.com/api/accounts/verify-account/', {
+      const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/verify-account/', {
       otp,
       email
       });
