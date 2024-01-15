@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
           press={()=>navigation.navigate("Register")}
           />
 
-          <Text style={haveAccountText}>Already have an account</Text>
+          <Text style={haveAccountText}>Already have an account?</Text>
 
           <Button title={'Click Here'}
           buttonText={clickHereText}

@@ -569,6 +569,7 @@ delete: "Delete",
 ]
 
 export const dropdownData = [
-  { label: 'Mobile Money', value: 'Mobile Money' },
-  { label: 'Credit Card', value: 'Credit Card' },
+  { label: 'Ongoing', value: 'Ongoing' },
+  { label: 'Completed', value: 'Completed' },
+  { label: 'Not Started', value: 'Not Started' },
 ];

@@ -24,21 +24,20 @@ export default function ProfileScreen({navigation}) {
                 Authorization: `Bearer ${accessToken}`, 
               },
             }
-          );
+          ); console.log(response.data)
 
           setFirst_name(response.data.profile.first_name);
           setLast_name(response.data.profile.last_name)
           // setUser_type(response.data.user_type)
-    
-        }
-        const value = await AsyncStorage.getItem('user');
-        const user_typeValue = await AsyncStorage.getItem('user_type');
-        if (value !== null) {
-          setUser(value);
-        }if(user_typeValue !== null){
-          setUserType(user_typeValue)
-        } else {
-          console.log('Item not found in AsyncStorage');
+          const value = await AsyncStorage.getItem('user');
+          const user_typeValue = await AsyncStorage.getItem('user_type');
+          if (value !== null) {
+            setUser(value);
+          }if(user_typeValue !== null){
+            setUserType(user_typeValue)
+          } else {
+            console.log('Item not found in AsyncStorage');
+          }
         }
       } catch (error) {
         console.error(error);

@@ -7,6 +7,8 @@ import { SIZES } from '../../Constants/Theme';
 import Textarea from 'react-native-textarea';
 import Buttons from '../../Components/Button';
 import { FontAwesome } from '@expo/vector-icons';
+import { LoadingModal } from "react-native-loading-modal";
+import { nanoid } from "@reduxjs/toolkit";
 
 const AddService = () => {
   const [title, setTitle] = useState('');
@@ -14,6 +16,7 @@ const AddService = () => {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [thumnail, setThumnail] = useState(null);
+  const [loading, setLoading] = useState(false); 
 
   const handleChange = (key, value) => {
     if (key === 'title') {
@@ -40,6 +43,7 @@ const AddService = () => {
     }
   };
 
+
   const resetFields = () => {
     setTitle('');
     setPrice('');
@@ -50,6 +54,7 @@ const AddService = () => {
 
   const handleAddService = async () => {
     try {
+      setLoading(true)
       const accessToken = await AsyncStorage.getItem('access');
       if (accessToken) {
         const formData = new FormData();
@@ -57,9 +62,9 @@ const AddService = () => {
         formData.append('description', description);
         formData.append('price', price);
         formData.append('category', category);
-        formData.append('thumbnail', {
+        formData.append('thumnail', {
           uri: thumnail,
-          name: 'thumbnail.jpg',
+          name: 'thumnail.jpg',
           type: 'image/jpeg',
         });
 
@@ -75,17 +80,31 @@ const AddService = () => {
         );
 
         if (response.status === 201) {
-          console.log(response.data)
+          console.log(response.data);
           Alert.alert('Success✔️', 'Service created Successfully');
-          resetFields(); 
+          resetFields();
         } else if (response.status === 403) {
           Alert.alert('Warning⚠️', 'Not authorized');
         }
       }
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false)
     }
   };
+
+  // const handleAddService = () =>{
+  //   dispatch(updateService(
+  //     {
+  //       id:nanoid(), 
+  //       title:title, 
+  //       price:price, 
+  //       category:category, 
+  //       thumnail:thumnail
+  //     }
+  //     ))
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -143,6 +162,9 @@ const AddService = () => {
             press={handleAddService}
           />
         </ScrollView>
+        <Text style={styles.indicator}>
+          {loading && <LoadingModal task='Adding Service..' modalVisible={true} />} 
+       </Text>
       </View>
     </SafeAreaView>
   );

@@ -8,7 +8,7 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { modalActions } from "../../store/modal";
 import { useSelector } from 'react-redux';
-import UpdateModal from "./UpdateModal";
+import BookedModal from "./BookedModal";
 
 
 const BookedServices = () => {
@@ -19,9 +19,14 @@ const BookedServices = () => {
     widthArr: [100, 100, 100, 100, 100],
   });
 
+  const status = useSelector((state)=>state.service.serviceStatus)
+  const modalVisible = useSelector((state.modal.serviceStatusModal))
+  console.log(modalVisible)
+
   const dispatch = useDispatch()
-  
- 
+  const handleStatus = () =>{
+    dispatch(modalActions.handleServiceStatusModal())
+  } 
 
   useEffect(() => {
     const getServices = async () => {
@@ -36,11 +41,16 @@ const BookedServices = () => {
               },
             }
           );
-          console.log(response.data)
           if(response.status === 200){
-            setServices(response.data)
-          }
-          else{
+            const bookedServices = response.data.data;
+            if (bookedServices && Array.isArray(bookedServices)) {
+              const serviceDataArray = bookedServices.map(service => service.service);
+              console.log(serviceDataArray);
+              setServices(serviceDataArray)
+            } else {
+              console.log('Invalid or empty response data.');
+            }
+          } else {
             Alert.alert("Error⚠️", 'Something went wrong!')
           }
         }
@@ -48,9 +58,11 @@ const BookedServices = () => {
         console.error('Something went wrong!', error);
       }
     };
+  
     getServices();
-  }, []); 
-  console.log(services)
+  }, []);
+  
+ 
 
   const handleDelete = async (id) => {
     try {
@@ -94,24 +106,24 @@ const BookedServices = () => {
            style={styles.dataWrapper}
           >
             <Table borderStyle={{ borderColor: "#C1C0B9" }}>
-              {BookedService.map((item, index) => (
+              {services?.map((item, index) => (
                 <Row
                   key={index}
                   data={[
-                    item.service,
-                    item.date,
-                    item.amount,
+                    item?.title,
+                    item?.created_at,
+                    item?.price,
                     <Pressable 
                      style={styles.updateDeleteContainer}
-                     onPress={()=>handleStatus(item.id)}
+                     onPress={handleStatus}
                      >
-                      <Text style={styles.updateText}>{item.status}</Text>
+                      <Text style={styles.updateText}>Status</Text>
                     </Pressable>,
                     <Pressable 
                      style={styles.updateDeleteContainer}
-                     onPress={()=>handleDelete(item.id)}
+                     onPress={()=>handleDelete(item?.service_id)}
                      >
-                    <Text style={styles.deleteText}>{item.delete}</Text>
+                    <Text style={styles.deleteText}>Delete</Text>
                    </Pressable>,
                   ]}
                   widthArr={tableHeader.widthArr}
@@ -123,6 +135,7 @@ const BookedServices = () => {
                 />
               ))}
             </Table>
+            {modalVisible && BookedModal}
           </ScrollView>
         </View>
       </ScrollView>

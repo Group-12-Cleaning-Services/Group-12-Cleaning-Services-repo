@@ -28,6 +28,7 @@ import { useDispatch } from 'react-redux';
 import { modalActions } from "../../store/modal";
 import { useSelector } from 'react-redux';
 import { dropdownData } from "../../../Data";
+import { LoadingModal } from "react-native-loading-modal";
 import { useRoute } from '@react-navigation/native';
 
 
@@ -47,6 +48,7 @@ const Booking = ({ navigation }) => {
   const [showModal, setShowModal] = useState(true)
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch()
   const handleChange = (key, value) => {
@@ -78,7 +80,8 @@ const Booking = ({ navigation }) => {
     handleShowTimePicker();
     if (type == "set") {
       const currentTime = selectedTime;
-      setTime(currentTime);
+      const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      setTime(formattedTime);
       setBookingTime(currentTime.toTimeString());
     }
   };
@@ -91,32 +94,26 @@ const Booking = ({ navigation }) => {
   const { service_id } = route.params;
   console.log(service_id)
 
-  const resetFields = () => {
-    setAddress('');
-    setBookingDate('');
-    setBookingTime('');
-    setFullName('');
-  };
 
   const handleBooking = async () => {
-    try {  
+    try {
+      setLoading(true);  
       const accessToken = await AsyncStorage.getItem('access');
       if (accessToken) {
         const response = await axios.post(
           'https://cleaningservice.onrender.com/api/service/book/',
-          { service_id },
+          { service_id,
+            address,
+            time,
+            date: date.toISOString(),
+          },
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-
         if (response.status === 200) {
-          await AsyncStorage.setItem('address', address);
-          await AsyncStorage.setItem('date', date.toISOString()); 
-          await AsyncStorage.setItem('time', time.toISOString());
-          await AsyncStorage.setItem('service_id', String(service_id));
           await AsyncStorage.setItem("auth", response.data.data.authorization_url)
           dispatch(modalActions.handleModal());
         } else if (response.status === 403) {
@@ -125,6 +122,8 @@ const Booking = ({ navigation }) => {
       }
     } catch (error) {
       console.error("Error handling booking:", error);
+    }finally{
+      setLoading(false);
     }
   };
   
@@ -288,6 +287,9 @@ const Booking = ({ navigation }) => {
         />
       </View> 
          }
+        <Text style={indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
+       </Text>
         <ModalScreen
         time={bookingTime}
         location={address}
@@ -457,6 +459,13 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
   },
 });
 

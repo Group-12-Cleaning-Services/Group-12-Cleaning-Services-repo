@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar } from 'react-native';
 import axios from 'axios';
+import { LoadingModal } from "react-native-loading-modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SIZES } from '../../Constants/Theme';
 
 
 const OTPVerification = ({navigation}) => {
   const {headerContainer, headerTitle, headerMessage, resendContainer, resendText} = styles
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false)
 
   useEffect(() => {
     const getItemFromStorage = async () => {
@@ -26,18 +30,44 @@ const OTPVerification = ({navigation}) => {
     getItemFromStorage();
   }, []); 
 
+  console.log(otp, email)
+
   const handleVerificationSubmit = async() => {
+    setLoading(true)
     try {
       const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/verify-account/', {
       otp,
       email
       });
-      if(response.status === 200){
+
+      if(response.data === 200){
        Alert.alert("Success", "Your account has been verified");
         navigation.navigate('Login');
       }
     } catch (error) {
+      console.log(error)
       Alert.alert("Warning","Something went wrong! try again")
+    }finally{
+      setLoading(false)
+    }
+  };
+
+  const handleResendCode = async() => {
+    setResendLoading(true)
+    try {
+      const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/resend-verification-pin/', {
+      otp,
+      email
+      });
+      if(response.status === 200){
+       Alert.alert("Success", "Code sent again");
+        navigation.navigate('OTP');
+      }
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Warning","Something went wrong! try again")
+    }finally{
+      setResendLoading(false)
     }
   };
 
@@ -69,10 +99,14 @@ const OTPVerification = ({navigation}) => {
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
       <View style={resendContainer}>
-        <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
-        Resend code
+        <Text style={resendText} onPress={handleResendCode}>
+           Resend code
         </Text>
       </View>
+      <Text style={styles.indicator}>
+          {loading && <LoadingModal task='Veryfying' modalVisible={true} />}
+          {resendLoading && <LoadingModal task='Resending Code..' modalVisible={true} />}  
+      </Text>
     </SafeAreaView>
   );
 };
@@ -132,7 +166,14 @@ const styles = StyleSheet.create({
   },
   resendText:{
     color:'rgba(153, 144, 255, 1)'
-  }
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default OTPVerification;

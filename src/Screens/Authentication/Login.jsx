@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
             press={handleLogin}
           />
           <Text style={indicator}>
-            {loading && <LoadingModal modalVisible={true} />}
+            {loading && <LoadingModal task='Logging in..' modalVisible={true} />}
           </Text>
           <View style={forgotPass}>
             <Text style={forgotPassText}>Forgot Password?</Text>

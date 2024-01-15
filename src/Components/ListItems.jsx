@@ -17,7 +17,7 @@ const ListItem = ({ item, nav }) => {
     >
       <View style={styles.imageContainer}>
         <Image
-          source={item?.image}
+          source={{uri:'https://cleaningservice.onrender.com'+item.organization_logo}}
           style={styles.image}
           resizeMode="cover"
         />

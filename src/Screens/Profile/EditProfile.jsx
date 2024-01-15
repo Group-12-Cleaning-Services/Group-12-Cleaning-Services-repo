@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Ale
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
-import SaveSuccess from "../Profile/SaveSuccess";
+import { LoadingModal } from "react-native-loading-modal";
 import axios from 'axios';
 
 const EditProfile = ({ navigation }) => {
@@ -12,6 +12,7 @@ const EditProfile = ({ navigation }) => {
   const [contact, setContact] = useState('');
   const [last_name, setLast_name] = useState('')
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
  
 
   const handleChange = (key, value) => {
@@ -26,8 +27,8 @@ const EditProfile = ({ navigation }) => {
 
   const handleProfileEdit = async () => {
     try {
+      setLoading(true)
       const accessToken = await AsyncStorage.getItem('access');
-  
       if (accessToken) {
         const response = await axios.post(
           'https://cleaningservice.onrender.com/api/profile/update/',
@@ -41,21 +42,23 @@ const EditProfile = ({ navigation }) => {
               Authorization: `Bearer ${accessToken}`, 
             },
           }
-        );
-        await AsyncStorage.setItem("profile_details", first_name)
-        Alert.alert("Success","Profile updated successful")
-        navigation.navigate("Profile")
-  
-      } else {
-        Alert.alert("Not authorized")
-         navigation.navigate('Login');
+        )
+        if(response.status === 200){
+          await AsyncStorage.setItem("profile_details", first_name)
+          Alert.alert("Success","Profile updated successful")
+          navigation.navigate("Profile")
+        }else if (response.status === 403) {
+          Alert.alert('Warning⚠️', 'Not authorized');
+        }
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert("Warning⚠️", "Something went wrong")
+      // console.log(error);
     }finally{
-      setFirst_name('')
-      setLast_name('')
-      setContact('')
+      setFirst_name('');
+      setLast_name('');
+      setContact('');
+      setLoading(false);
     }
   };
  
@@ -142,6 +145,9 @@ const EditProfile = ({ navigation }) => {
             </View>
           </>
         )}
+        <Text style={styles.indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
+       </Text>
       </SafeAreaView>
     </ScrollView>
   );
@@ -231,7 +237,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#B3CDE0",
     flexGrow: 1,
     paddingBottom: 50
-  }
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default EditProfile;

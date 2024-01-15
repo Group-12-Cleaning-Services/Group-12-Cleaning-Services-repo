@@ -4,14 +4,17 @@ import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Ale
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
-import SaveSuccess from "../Profile/SaveSuccess";
+import { LoadingModal } from "react-native-loading-modal";
+import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
 const CreateProfile = ({ navigation }) => {
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
   const [contact, setContact] = useState('');
+  const [profile, setProfile] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
  
 
   const handleChange = (key, value) => {
@@ -24,13 +27,33 @@ const CreateProfile = ({ navigation }) => {
     }
   };
 
- 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  const handleProfileEdit = async () => {
+    if (!result.canceled) {
+      setProfile(result.assets[0].uri);
+    }
+  };
+
+  const handleCreateProfile = async () => {
     try {
+      setLoading(true)
       const accessToken = await AsyncStorage.getItem('access');
-  
       if (accessToken) {
+        const formData = new FormData();
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        formData.append('contact', contact);
+        formData.append('profile', {
+          uri: profile,
+          name: 'profile.jpg',
+          type: 'image/jpeg',
+        });
         const response = await axios.post(
           'https://cleaningservice.onrender.com/api/profile/create/',
           {
@@ -43,18 +66,19 @@ const CreateProfile = ({ navigation }) => {
               Authorization: `Bearer ${accessToken}`, 
             },
           }
-        );
-  
-        await AsyncStorage.setItem('profile_state', 'true');
-        Alert.alert("Profile created successful")
-        navigation.navigate("Profile")
-  
-      } else {
-        console.log('User does not have access token. Redirecting to login or showing an error.');
-         navigation.navigate('Login');
-      }
+        )
+        if(response.status === 200){
+          await AsyncStorage.setItem('profile_state', 'true');
+          Alert.alert("Profile created successful")
+          navigation.navigate("Profile")
+        }else if (response.status === 403) {
+          Alert.alert('Warning⚠️', 'Not authorized');
+        }
+      } 
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
   
@@ -127,12 +151,16 @@ const CreateProfile = ({ navigation }) => {
                   value={contact}
                 />
               </View>
+              <View style={styles.imageContainer}>
+                <Button title="Pick an image " onPress={pickImage} />
+                {profile && <Image source={{ uri: profile }} style={{ width: 200, height: 200 }} />}
+              </View>
             </View>
             <View style={btnsContainer}>
               <Button title={'Save'}
                 buttonContainer={saveCancelBtn}
                 buttonText={buttonText}
-                press={handleProfileEdit}
+                press={handleCreateProfile}
                 // press={()=>navigation.navigate("Profile")}
               />
               <Button title={'Cancel'}
@@ -142,6 +170,9 @@ const CreateProfile = ({ navigation }) => {
             </View>
           </>
         )}
+        <Text style={styles.indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
+       </Text>
       </SafeAreaView>
     </ScrollView>
   );
@@ -192,6 +223,20 @@ const styles = StyleSheet.create({
     color: 'black',
     marginVertical:10
   },
+  imageContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: SIZES.height * 0.02,
+  },
+  imageBtn: {
+    backgroundColor: '#6497B1',
+    borderRadius: 3,
+    padding: SIZES.height * 0.006,
+  },
+  imageBtnText: {
+    color: 'white',
+  },
   btnsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -230,7 +275,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#B3CDE0",
     flexGrow: 1,
     paddingBottom: 50
-  }
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default CreateProfile;

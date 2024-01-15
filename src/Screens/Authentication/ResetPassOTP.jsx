@@ -41,9 +41,10 @@ const OTPVerification = ({navigation}) => {
       } catch (error) {
         Alert.alert("Invalid ❌","Incorrect otp code entered")
       }finally{
-        setPassword('')
-        setOtp('')
-        setConfirm('')
+        setPassword('');
+        setOtp('');
+        setConfirm('');
+        setLoading(false)
       }
     }else{
       Alert.alert("Invalid❌","Password doesn't match")
@@ -119,7 +120,7 @@ const OTPVerification = ({navigation}) => {
       <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
         Resend code
       </Text>
-      <Text style={indicator}>
+      <Text style={styles.indicator}>
           {loading && <LoadingModal modalVisible={true} />} 
       </Text>
     </SafeAreaView>
@@ -251,6 +252,13 @@ const styles = StyleSheet.create({
     color:'#9CADF2',
     borderColor: '#DBE3FF', 
     borderRightWidth: 1,
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
   },
 });
 

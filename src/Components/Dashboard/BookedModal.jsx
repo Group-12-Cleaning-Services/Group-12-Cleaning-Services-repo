@@ -2,69 +2,39 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   Modal,
-  Image,
-  TextInput,
   Pressable,
   Alert,
   StatusBar,
-  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { SIZES } from '../../Constants/Theme';
-import Textarea from 'react-native-textarea';
-import Buttons from '../../Components/Button';
-import { FontAwesome } from '@expo/vector-icons';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal';
 import { useSelector } from 'react-redux';
-import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-import { updateService } from '../../store/services';
+import { dropdownData } from "../../../Data";
+import { serviceActions } from '../../store/services';
 
-const UpdateModal = () => {
+const BookedModal = () => {
+
+  const [status, setStatus] = useState()
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
 
   const dispatch = useDispatch();
-  const modalVisible = useSelector((state) => state.modal.updateModal);
   const update_id = useSelector((state) => state.modal.updateId);
   console.log(update_id);
-
-  const [title, setTitle] = useState();
-  const [price, setPrice] = useState();
-  const [category, setCategory] = useState();
-  const [description, setDescription] = useState();
-  const [thumnail, setThumnail] = useState(null);
-
-  const handleChange = (key, value) => {
-    if (key === 'title') {
-      setTitle(value);
-    } else if (key === 'price') {
-      setPrice(value);
-    } else if (key === 'category') {
-      setCategory(value);
-    } else if (key === 'desc') {
-      setDescription(value);
-    }
-  };
 
   const handleCloseModal = () => {
     dispatch(modalActions.handleUpdateModal());
   };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setThumnail(result.assets[0].uri);
-    }
+  const handleStatus = () => {
+    dispatch(serviceActions.handleServiceStatus({value:value}));
   };
 
   const handleUpdateService = async () => {
@@ -72,15 +42,7 @@ const UpdateModal = () => {
       const accessToken = await AsyncStorage.getItem('access');
       if (accessToken) {
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('category', category);
-        formData.append('thumnail', {
-          uri: thumnail,
-          name: 'thumnail.jpg',
-          type: 'image/jpeg',
-        });
+        formData.append('status', status);
 
         const response = await axios.post(
           `https://cleaningservice.onrender.com/api/service/update/${update_id}/`,
@@ -96,7 +58,7 @@ const UpdateModal = () => {
 
         if (response.status === 200) {
           console.log(response.data);
-          Alert.alert('Success✔️', 'Service Update Successfully');
+          Alert.alert('Success✔️', 'Service Status Updated Successfully');
           dispatch(modalActions.handleUpdateModal());
         } else if (response.status === 403) {
           Alert.alert('Warning⚠️', 'Not authorized');
@@ -125,60 +87,43 @@ const UpdateModal = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={true}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalHeaderText}>Xavier & Co.</Text>
             <View style={styles.inputContainer}>
-              <View style={styles.inputs}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Service type"
-                  onChangeText={(value) => handleChange('title', value)}
-                />
-              </View>
-              <View style={styles.inputs}>
-               <TextInput
-                style={styles.input}
-                placeholder="category"
-                onChangeText={(value) => handleChange('category', value)}
+              <View style={styles.input}>
+                <Dropdown
+                 style={[styles.inputField, isFocus && { borderColor: 'blue' }]}
+                 placeholderStyle={styles.placeholderStyle}
+                 selectedTextStyle={styles.selectedTextStyle}
+                 inputSearchStyle={styles.inputSearchStyle}
+                 iconStyle={styles.iconStyle}
+                 data={dropdownData}
+                 maxHeight={300}
+                 labelField="label"
+                 valueField="value"
+                 placeholder={!isFocus ? 'Change Status' : '...'}
+                 value={value}
+                 onFocus={() => setIsFocus(true)}
+                 onBlur={() => setIsFocus(false)}
+                 onChange={item => {
+                 setValue(item.value);
+                 setIsFocus(false);
+                }}
+                renderLeftIcon={() => (
+                <AntDesign
+                style={styles.icon}
+                color={isFocus ? 'blue' : 'black'}
+                name="Safety"
+                size={20}
+               />
+              )}
               />
-             </View>
-              <View style={styles.inputs}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="price"
-                  keyboardType="numeric"
-                  onChangeText={(value) => handleChange('price', value)}
-                />
-              </View>
-              <Textarea
-                containerStyle={styles.textAreaContainer}
-                maxLength={120}
-                placeholder={'Service description'}
-                placeholderTextColor={'#c7c7c7'}
-                underlineColorAndroid={'transparent'}
-                onChangeText={(value) => handleChange('desc', value)}
-              />
-              <View style={styles.imageContainer}>
-                <Pressable style={styles.imageBtn}>
-                <Text onPress={pickImage} style={styles.imageBtnText}> 
-                  choose image 
-                </Text>
-                </Pressable>
-                {thumnail ? (
-                  <Image
-                    source={{ uri: thumnail }}
-                    style={{ width: 100, height: 50 }}
-                  /> ):(
-                    <Text style={{paddingLeft:SIZES.width*0.03}}>No file chosen</Text>
-                  )
-                  }
-              </View>
+           </View>
             </View>
             <View style={styles.btnsContainer}>
               <Pressable
@@ -189,7 +134,7 @@ const UpdateModal = () => {
               </Pressable>
               <Pressable
                 style={[styles.button, styles.updateBtn]}
-                onPress={handleUpdateService}
+                onPress={handleStatus}
               >
                 <Text style={styles.updateBtnText}>Update</Text>
               </Pressable>
@@ -215,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     width: SIZES.width * 0.8,
-    height: SIZES.height * 0.7,
+    height: SIZES.height * 0.3,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -265,18 +210,31 @@ const styles = StyleSheet.create({
     padding: SIZES.width * 0.003,
     width: SIZES.width * 0.6,
   },
-  imageContainer: {
-    alignItems: 'center',
-    flexDirection:"row",
-    justifyContent: 'center',
+  icon: {
+    marginRight: 5,
   },
-  imageBtn:{
-    backgroundColor:"blue",
-    borderRadius:3,
-    padding:SIZES.height*0.006,
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
   },
-  imageBtnText:{
-    color:"white",
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
   btnsContainer: {
     flexDirection: 'row',
@@ -324,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateModal;
+export default BookedModal;

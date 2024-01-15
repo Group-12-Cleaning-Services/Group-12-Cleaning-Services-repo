@@ -15,12 +15,12 @@ const OrgSingleListItem = ({ item, nav }) => {
       <View style={styles.itemsContainer}>
         <View style={styles.itemInfo}>
           <View style={styles.imageContainer}>
-            <Image style={styles.image} source={item.image} />
+            <Image style={styles.image} source={{uri:'https://cleaningservice.onrender.com'+item.thumnail}} />
           </View>
           <View>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.type}>{item.type}</Text>
-            <Text style={styles.amount}>{item.amount}</Text>
+            <Text style={styles.type}>{item.category}</Text>
+            <Text style={styles.amount}>{item.price}</Text>
           </View>
         </View>
         <View style={styles.arrowIcon}>

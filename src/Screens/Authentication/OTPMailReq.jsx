@@ -6,9 +6,11 @@ import Button from '../../Components/Button';
 import axios from 'axios';
 import { useState } from 'react';
 import { SIZES } from '../../Constants/Theme';
+import { LoadingModal } from "react-native-loading-modal";
 
 const ResetPassword = ({navigation}) => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (key,value) =>{
     if (key === 'mail') {
@@ -18,6 +20,7 @@ const ResetPassword = ({navigation}) => {
 
   const handleReset = async () => {
     try {
+      setLoading(true)
         const response = await axios.post('https://cleaningservice.onrender.com/api/accounts/password-reset/', {
           email
         });
@@ -29,7 +32,8 @@ const ResetPassword = ({navigation}) => {
       } catch (error) {
         Alert.alert("Inavlaid ❌", "Accout doesnt exist")
      }finally{
-      setEmail('')
+      setEmail('');
+      setLoading(false);
      }
   };
   const {
@@ -84,6 +88,9 @@ const ResetPassword = ({navigation}) => {
         buttonText={cancelText}
         />
       </View>
+      <Text style={styles.indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
+      </Text>
       </ScrollView> 
     </SafeAreaView>
   );
@@ -186,7 +193,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom:50,
     paddingTop:Platform.OS === "ios"? 100:0
-  }
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default ResetPassword;

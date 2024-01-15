@@ -99,7 +99,7 @@ const Services = () => {
   // };
   
   const handleDelete = (id) =>{
-    dispatch(removeService({id:id}))
+    dispatch(removeService(id))
   }
 
   return (
@@ -148,7 +148,7 @@ const Services = () => {
                   />
                 ))}
               </Table>
-              {/* {modalVisible && <UpdateModal/>} */}
+              {modalVisible && <UpdateModal/>}
             </ScrollView>
           </View>
         </ScrollView>

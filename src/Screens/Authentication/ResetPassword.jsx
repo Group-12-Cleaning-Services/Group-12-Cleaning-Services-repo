@@ -4,12 +4,14 @@ import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import axios from 'axios';
 import { useState } from 'react';
+import { LoadingModal } from "react-native-loading-modal";
 import { SIZES } from '../../Constants/Theme';
 
 const ResetPassword = ({navigation}) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [err, setErr] = useState('')
+  const [err, setErr] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (key,value) =>{
     if (key === 'newPassword') {
@@ -21,6 +23,7 @@ const ResetPassword = ({navigation}) => {
 
   const handleReset = async () => {
     try {
+      setLoading(true)
       if(newPassword === confirm){
         const response = await axios.post('https://cleaningservice.onrender.com/api/', {
           newPassword,
@@ -31,6 +34,8 @@ const ResetPassword = ({navigation}) => {
       }
     } catch (error) {
       setErr(error.message)
+    }finally{
+      setLoading(false)
     }
   };
   const {
@@ -97,6 +102,9 @@ const ResetPassword = ({navigation}) => {
         buttonText={cancelText}
         />
       </View>
+      <Text style={styles.indicator}>
+          {loading && <LoadingModal modalVisible={true} />} 
+      </Text>
       </ScrollView> 
     </SafeAreaView>
   );
@@ -198,7 +206,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom:50,
     paddingTop:Platform.OS === "ios"? 100:0
-  }
+  },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default ResetPassword;

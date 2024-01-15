@@ -11,34 +11,7 @@ import ListItem from '../../Components/ListItems';
 const LandingScreen = ({ navigation }) => {
 
   const[organizationss, setOrganizations] = useState([]);
-  const[horizontal, setHorizontal] = useState(true)
-
-  // useEffect(() => {
-  //   const getServices = async () => {
-  //     try {
-  //       const accessToken = await AsyncStorage.getItem('access');
-  //       if (accessToken) {
-  //         const response = await axios.get(
-  //           `https://cleaningservice.onrender.com/api/service/providers/`,
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${accessToken}`, 
-  //             },
-  //           }
-  //         );
-  //         if(response.status === 200){
-  //           setOrganizations(response.data)
-  //         }
-  //         else{
-  //           Alert.alert("Error⚠️", 'Something went wrong!')
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Something went wrong!', error);
-  //     }
-  //   };
-  //   getServices();
-  // }, []); 
+  const[horizontal, setHorizontal] = useState(true) 
 
   useEffect(() => {
     const getServices = async () => {
@@ -53,14 +26,12 @@ const LandingScreen = ({ navigation }) => {
               },
             }
           );
+          console.log(response.data)
           if (response.status === 200) {
             const responseData = response.data;
-  
-            // Ensure responseData has a data property and it is an array
             if (responseData && Array.isArray(responseData.data)) {
               const sections = [
                 {
-                  organization_name: null,
                   data: responseData.data,
                 },
               ];
@@ -118,6 +89,7 @@ const LandingScreen = ({ navigation }) => {
               <Text style={styles.sectionHeader}>Available Organizations</Text>
               {horizontal ? (
                 <FlatList
+                 key={section.data.user_id}
                   horizontal
                   data={section.data}
                   renderItem={({ item }) => <ListItem item={item} nav={() => handleNavigate(item.user_id)}/>}
