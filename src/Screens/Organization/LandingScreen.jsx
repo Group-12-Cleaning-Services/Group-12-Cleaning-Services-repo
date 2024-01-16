@@ -91,7 +91,7 @@ const LandingScreen = ({ navigation }) => {
                  key={section.data.user_id}
                   horizontal
                   data={section.data}
-                  renderItem={({ item }) => <ListItem item={item} nav={() => handleNavigate(item.user_id)}/>}
+                  renderItem={({ item }) => <ListItem item={item} key={item.user_id} nav={() => handleNavigate(item.user_id)}/>}
                   showsHorizontalScrollIndicator={false}
                 />
               ) : null}

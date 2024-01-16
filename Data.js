@@ -569,7 +569,7 @@ delete: "Delete",
 ]
 
 export const dropdownData = [
-  { label: 'Ongoing', value: 'Ongoing' },
-  { label: 'Completed', value: 'Completed' },
-  { label: 'Not Started', value: 'Not Started' },
+  { label: 'ongoing', value: 'ongoing' },
+  { label: 'completed', value: 'completed' },
+  { label: 'booked', value: 'booked' },
 ];

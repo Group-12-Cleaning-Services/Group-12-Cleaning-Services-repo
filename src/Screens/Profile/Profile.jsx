@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { SIZES } from '../../Constants/Theme';
 
 
 export default function ProfileScreen({navigation}) {
@@ -12,6 +14,8 @@ export default function ProfileScreen({navigation}) {
   const [first_name, setFirst_name] = useState('')
   const [last_name, setLast_name] = useState('')
   const [profile_image, setProfile_image] = useState('')
+  const [notification, setNotification] = useState('');
+  const [count, setCount] = useState();
 
   useEffect(() => {
     const getItemFromStorage = async () => {
@@ -44,6 +48,35 @@ export default function ProfileScreen({navigation}) {
     getItemFromStorage();
   }, []); 
 
+
+  useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('access');
+        if (accessToken) {
+          const response = await axios.get(
+            'https://cleaningservice.onrender.com/api/notification/all/',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            setNotification(response.data.notifications);
+            const notificationCount = response.data.notifications.flat().length;
+            setCount(notificationCount);
+          } else {
+            Alert.alert('Error⚠️', 'Something went wrong!');
+          }
+        }
+      } catch (error) {
+        console.error('Something went wrong!', error);
+      }
+    };
+
+    getNotifications();
+  }, []);
   
 
   const handleLogout = async() =>{
@@ -62,6 +95,10 @@ export default function ProfileScreen({navigation}) {
        style={styles.mirroredIcon} 
        onPress={() => navigation.goBack()}
       />
+       <View style={styles.notificationContainer}>
+        <Ionicons style={styles.notfiIcon} name="notifications" size={24} color="black" />
+        {count > 0 && <Text style={styles.notificationCount}>{count}</Text>}
+        </View>
       </View>
       <View style={styles.profileSection}>
         {profile_image && 
@@ -129,7 +166,7 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: -1 }],
   },
   header: {
-    marginTop: 50,
+    marginTop: SIZES.height*0.03,
     marginHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -184,5 +221,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20,
     fontSize: 18,
+  },
+  notfiIcon: {
+    paddingRight: SIZES.width * 0.02,
+  },
+  notificationContainer:{
+    alignItems:"flex-end",
+    justifyContent:"center"
+  },
+  notificationCount: {
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: 200,
+    width:SIZES.width*0.075,
+    paddingVertical: SIZES.height*0.003,
+    bottom:SIZES.height*0.065,
+    textAlign:"center" 
   },
 });

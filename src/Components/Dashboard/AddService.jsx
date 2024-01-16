@@ -7,10 +7,15 @@ import { SIZES } from '../../Constants/Theme';
 import Textarea from 'react-native-textarea';
 import Buttons from '../../Components/Button';
 import { FontAwesome } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
 import { LoadingModal } from "react-native-loading-modal";
 import { nanoid } from "@reduxjs/toolkit";
+import { addService } from '../../store/services';
+
+
 
 const AddService = () => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
@@ -95,7 +100,7 @@ const AddService = () => {
   };
 
   // const handleAddService = () =>{
-  //   dispatch(updateService(
+  //   dispatch(addService(
   //     {
   //       id:nanoid(), 
   //       title:title, 

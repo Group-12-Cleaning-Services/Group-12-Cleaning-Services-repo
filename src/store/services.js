@@ -128,6 +128,8 @@ export const removeService = createAsyncThunk("remove", async(id)=>{
         }
       } catch (error) {
         console.error("Something went wrong!", error);
+      }finally{
+        return id
       }
 });
 
@@ -139,21 +141,21 @@ export const serviceSlice = createSlice({
     initialState:{
         services:[],
         serviceStatus:[],
-        moneyToWithdraw:[]
+        moneyToWithdraw:[],
+        statusValue:[],
     },
     reducers:{
       handleServiceStatus:(state, action) =>{
-        state.serviceStatus = action.payload
+        state.statusValue = action.payload
       },
       handleMoneyWithdraw:(state, action) =>{
         state.money = action.payload
-      }    
+      },  
     },
 
     extraReducers:(builder)=>{
         builder
         .addCase(addService.fulfilled, (state, action)=>{
-          console.log(action.payload)
           state.services.push(action.payload)
       })
         .addCase(fetchServices.fulfilled, (state, action)=>{

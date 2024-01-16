@@ -14,22 +14,30 @@ import BookedModal from "./BookedModal";
 const BookedServices = () => {
 
   const dispatch = useDispatch()
-  const statusValue = useSelector((state)=>state.service.serviceStatus)
   const modalVisible = useSelector((state) => state.modal.serviceStatusModal)
+  const statusValue = useSelector((state) => state.service.statusValue)
   
   const [services, setServices] = useState()
   const [tableHeader, setTableHeader] = useState({
     tableHead: ["Service type", "Date", "Amount", "Status", "Delete"],
     widthArr: [100, 100, 100, 100, 100],
   });
-  const [status, setStatus] = useState("h")
-
-  console.log(status)
 
   
-  const handleStatus = () =>{
-    dispatch(modalActions.handleServiceStatusModal())
-  } 
+  const handleStatus = async(id) => {
+    await AsyncStorage.setItem("status_id",id)
+    const updatedServices = services.map(service => {
+      if (service.id === id) {
+        return {
+          ...service,
+          statusValue: statusValue, 
+        };
+      }
+      return service;
+    });
+    setServices(updatedServices);
+    dispatch(modalActions.handleServiceStatusModal());
+  };
 
   useEffect(() => {
     const getServices = async () => {
@@ -45,14 +53,7 @@ const BookedServices = () => {
             }
           );
           if(response.status === 200){
-            const bookedServices = response.data.data;
-            if (bookedServices && Array.isArray(bookedServices)) {
-              const serviceDataArray = bookedServices.map(service => service.service);
-              console.log(serviceDataArray);
-              setServices(serviceDataArray)
-            } else {
-              console.log('Invalid or empty response data.');
-            }
+            setServices(response.data.services)
           } else {
             Alert.alert("Error⚠️", 'Something went wrong!')
           }
@@ -63,7 +64,7 @@ const BookedServices = () => {
     };
   
     getServices();
-  }, []);
+  }, [services]);
   
  
 
@@ -114,17 +115,17 @@ const BookedServices = () => {
                   key={index}
                   data={[
                     item?.title,
-                    item?.created_at,
+                    item?.date,
                     item?.price,
                     <Pressable 
                      style={styles.updateDeleteContainer}
-                     onPress={handleStatus}
+                     onPress={()=>handleStatus(item?.id)}
                      >
-                      <Text style={styles.updateText}>{status}</Text>
+                      <Text style={styles.updateText}>{item?.status}</Text>
                     </Pressable>,
                     <Pressable 
                      style={styles.updateDeleteContainer}
-                     onPress={()=>handleDelete(item?.service_id)}
+                     onPress={()=>handleDelete(item?.id)}
                      >
                     <Text style={styles.deleteText}>Delete</Text>
                    </Pressable>,

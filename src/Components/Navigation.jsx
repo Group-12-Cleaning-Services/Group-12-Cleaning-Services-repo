@@ -25,6 +25,7 @@ import paymentMethod  from '../Screens/Booking/PaymentMethod';
 import BookingSummary from "../Screens/Booking/BookingSummary";
 import Dashboard from '../Screens/Organization/Dashboard';
 import ProfileModal from './Dashboard/ProfileModal';
+import Notification from "../Components/Notification"
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -58,6 +59,7 @@ const Tabs = () => {
             <Stack.Screen name='BookingSummary' component={BookingSummary} options={{ statusBarColor:"#040268"  }}/>
             <Stack.Screen name='Dashboard' component={Dashboard} options={{ statusBarStyle:"dark"  }}/>
             <Stack.Screen name='ModalProfile' component={ProfileModal} />
+            <Stack.Screen name='Notification' component={Notification} options={{ statusBarStyle:"dark"  }}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

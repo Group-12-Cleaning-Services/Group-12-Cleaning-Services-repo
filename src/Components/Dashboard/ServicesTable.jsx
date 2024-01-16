@@ -20,7 +20,7 @@ import UpdateModal from "./UpdateModal";
 import { serviceActions } from "../../store/services";
 
 const Services = () => {
-  const [service, setServices] = useState([]);
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [tableHeader, setTableHeader] = useState({
@@ -36,71 +36,71 @@ const Services = () => {
 
   const modalVisible = useSelector((state) => state.modal.updateModal);
 
-  // useEffect(() => {
-  //   const getServices = async () => {
-  //     try {
-  //       const accessToken = await AsyncStorage.getItem("access");
-  //       if (accessToken) {
-  //         const response = await axios.get(
-  //           "https://cleaningservice.onrender.com/api/service/provider-services/",
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${accessToken}`,
-  //             },
-  //           }
-  //         );
-
-  //         if (response.status === 200) {
-  //           setServices(response.data.services);
-  //         } else {
-  //           Alert.alert("Error⚠️", "Something went wrong!");
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Something went wrong!", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getServices();
-  // }, []);
-
   useEffect(() => {
-    dispatch(fetchServices());
-    setLoading(false)
-  }, [dispatch]);
+    const getServices = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem("access");
+        if (accessToken) {
+          const response = await axios.get(
+            "https://cleaningservice.onrender.com/api/service/list-provider-services",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
 
-  const services = useSelector((state) => state.service.services);
- console.log(services)
+          if (response.status === 200) {
+            setServices(response.data.services);
+          } else {
+            Alert.alert("Error⚠️", "Something went wrong!");
+          }
+        }
+      } catch (error) {
+        console.error("Something went wrong!", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getServices();
+  }, [services]);
+
+  // useEffect(() => {
+  //   dispatch(fetchServices());
+  //   setLoading(false)
+  // }, [dispatch]);
+
+//   const services = useSelector((state) => state.service.services);
+//  console.log(services)
  
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     console.log(id)
-  //     const accessToken = await AsyncStorage.getItem("access");
-  //     if (accessToken) {
-  //       const response = await axios.delete(
-  //         `https://cleaningservice.onrender.com/api/service/delete/${id}/`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${accessToken}`,
-  //           },
-  //         }
-  //       );
-  //       if (response.status === 200) {
-  //         Alert.alert("Success✔️", "Successfully Deleted");
-  //       } else {
-  //         Alert.alert("Error⚠️", "Not authorized!");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Something went wrong!", error);
-  //   }
-  // };
+  const handleDelete = async (id) => {
+    try {
+      console.log(id)
+      const accessToken = await AsyncStorage.getItem("access");
+      if (accessToken) {
+        const response = await axios.delete(
+          `https://cleaningservice.onrender.com/api/service/delete/${id}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          Alert.alert("Success✔️", "Successfully Deleted");
+        } else {
+          Alert.alert("Error⚠️", "Not authorized!");
+        }
+      }
+    } catch (error) {
+      console.error("Something went wrong!", error);
+    }
+  };
   
-  const handleDelete = (id) =>{
-    dispatch(removeService(id))
-  }
+  // const handleDelete = (id) =>{
+  //   dispatch(removeService(id))
+  // }
 
   return (
     <View style={styles.container}>

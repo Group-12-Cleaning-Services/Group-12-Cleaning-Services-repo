@@ -1,43 +1,76 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, SafeAreaView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { bookings } from '../../../Data';
+import { nanoid } from "@reduxjs/toolkit";
 import { SIZES } from '../../Constants/Theme';
 
-export default function MyBookings({navigation}) {
+export default function MyBookings({ navigation }) {
 
+  const [bookingss, setBookings] = useState('');
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getBookings = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem("access");
+        if (accessToken) {
+          const response = await axios.get(
+            "https://cleaningservice.onrender.com/api/service/user-booked-service/",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          if (response.status === 200) {
+            const bookingData = response.data.services;
+            setBookings(bookingData);
+            setStatus(response.data.status);
+          }
+        }
+      } catch (error) {
+        console.error("Something went wrong!", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getBookings();
+  }, []);
+
+  console.log(bookingss)
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Fetching Bookings...</Text>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.gobackArrow}>
-        <Feather name="arrow-left" size={24}
-         color="black" onPress={()=>navigation.goBack()} />
+        <Feather name="arrow-left" size={24} color="black" onPress={() => navigation.goBack()} />
       </View>
-      {/* <View style={styles.tabContainer}>
-        <TouchableOpacity style={styles.activeButtonContainer}>
-          <Text style={styles.tabButtonText}>Active</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.successButtonContainer}>
-          <Text style={styles.tabButtonText}>Success</Text>
-        </TouchableOpacity>
-      </View> */}
       <View style={styles.MyBookingsTextContainer}>
         <Text style={styles.MyBookingsText}>My Bookings</Text>
       </View>
       <ScrollView style={styles.bookingList}>
-        {bookings.map((booking, index) => (
+        {bookingss?.map((booking, index) => (
           <View key={index} style={styles.bookingCard}>
-            <Text style={styles.bookingId}>{booking.id}</Text>
-            <Text style={[{color:booking.color},styles.bookingStatus]}>{booking.status}</Text>
-            <Text style={styles.bookingName}>{booking.name}</Text>
-            <Text style={styles.bookingDate}>{booking.date}</Text>
-            <Text style={styles.bookingPrice}>{booking.price}</Text>
+            <Text style={styles.bookingId}>{nanoid()}</Text>
+            <Text style={[{ color: booking.color }, styles.bookingStatus]}>{booking.status}</Text>
+            <Text style={styles.bookingName}>{booking?.title}</Text>
+            <Text style={styles.bookingDate}>{booking?.date}</Text>
+            <Text style={styles.bookingPrice}>{booking?.price}</Text>
             <View style={styles.border}></View>
-            <Text style={styles.bookingCompany}>{booking.company}</Text>
-            {booking.action && (
-              <TouchableOpacity style={styles.bookingActionButton}>
-                <Text style={styles.bookingActionButtonText}>{booking.action}</Text>
-              </TouchableOpacity>
-            )}
+            <Text style={styles.bookingCompany}>{booking?.organization_name}</Text>
           </View>
         ))}
       </ScrollView>
@@ -57,40 +90,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop:SIZES.height*0.05,
-    paddingLeft:SIZES.height*0.03
+    paddingTop: SIZES.height * 0.05,
+    paddingLeft: SIZES.height * 0.03,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  MyBookingsTextContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: SIZES.height * 0.02,
   },
-  tabContainer: {
-    flexDirection: 'row',
-    paddingBottom:10,
-    backgroundColor:"rgba(32, 35, 37, 1)",
-    borderRadius:15,
-    margin:10,
-    justifyContent:"space-around",
-    alignItems:"center"
-  },
-  MyBookingsTextContainer:{
-    alignItems:"center",
-    justifyContent:"center",
-    paddingBottom:SIZES.height*0.02
-  },
-  MyBookingsText:{
-    fontSize:SIZES.width*0.07
-  },
-  activeButton: {
-    backgroundColor: '#d1d1d1',
-    width:120,
-    padding:7,
-    borderRadius: 20,
-    marginHorizontal: 5,
-    alignItems:'center'
-  },
-  tabButtonText: {
-    color: '#ffffff',
+  MyBookingsText: {
+    fontSize: SIZES.width * 0.07,
   },
   bookingList: {
     flex: 1,
@@ -126,21 +135,11 @@ const styles = StyleSheet.create({
     color: '#555',
     marginBottom: 10,
   },
-  border:{
-    borderTopWidth:0.5,
+  border: {
+    borderTopWidth: 0.5,
     borderColor: 'rgba(100, 151, 177, 1)',
-    marginTop:10,
-    marginBottom:10  
-},
-  bookingActionButton: {
-    borderWidth: 1,
-    borderColor: 'red',
-    padding: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  bookingActionButtonText: {
-    color: 'red',
+    marginTop: 10,
+    marginBottom: 10,
   },
   homeButton: {
     position: 'absolute',
@@ -153,5 +152,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

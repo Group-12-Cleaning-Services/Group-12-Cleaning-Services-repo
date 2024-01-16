@@ -25,27 +25,27 @@ const BookedModal = () => {
   const [isFocus, setIsFocus] = useState(false);
 
   const dispatch = useDispatch();
-  const modalVisible = useSelector((state) => state.modal.incomeModal)
-  console.log(modalVisible)
+  const modalVisible = useSelector((state) => state.modal.serviceStatusModal)
   
   const handleCloseModal = () => {
     dispatch(modalActions.handleServiceStatusModal());
   };
 
   const handleStatus = () => {
-    dispatch(serviceActions.handleServiceStatus({value:value}));
     dispatch(modalActions.handleServiceStatusModal());
+    dispatch(serviceActions.handleServiceStatus(value));
   };
 
-  const handleUpdateService = async () => {
+  const handleUpdateServiceStatus = async () => {
     try {
       const accessToken = await AsyncStorage.getItem('access');
+      const status_id = await AsyncStorage.getItem("status_id")
       if (accessToken) {
         const formData = new FormData();
-        formData.append('value', value);
+        formData.append('status', value);
 
         const response = await axios.post(
-          `https://cleaningservice.onrender.com/api/service/update/`,
+          `https://cleaningservice.onrender.com/api/service/update-booked-service/${status_id}/`,
           formData,
           {
             headers: {
@@ -54,12 +54,12 @@ const BookedModal = () => {
             },
           }
         );
-        console.log(response)
-
+        
         if (response.status === 200) {
           console.log(response.data);
           Alert.alert('Success✔️', 'Service Status Updated Successfully');
-          dispatch(modalActions.handleUpdateModal());
+          dispatch(modalActions.handleServiceStatusModal());
+          dispatch(serviceActions.handleServiceStatus(value));
         } else if (response.status === 403) {
           Alert.alert('Warning⚠️', 'Not authorized');
         }
@@ -134,7 +134,7 @@ const BookedModal = () => {
               </Pressable>
               <Pressable
                 style={[styles.button, styles.updateBtn]}
-                onPress={handleStatus}
+                onPress={handleUpdateServiceStatus}
               >
                 <Text style={styles.updateBtnText}>Update</Text>
               </Pressable>
