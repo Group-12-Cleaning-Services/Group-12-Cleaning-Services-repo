@@ -40,13 +40,13 @@ const OTPVerification = ({navigation}) => {
       email
       });
 
-      if(response.data === 200){
-       Alert.alert("Success", "Your account has been verified");
+      if(response.status === 200){
+       Alert.alert("Success✔️", "Your account has been verified");
         navigation.navigate('Login');
       }
     } catch (error) {
       console.log(error)
-      Alert.alert("Warning","Something went wrong! try again")
+      Alert.alert("Warning⚠️","Something went wrong! try again")
     }finally{
       setLoading(false)
     }
@@ -60,12 +60,12 @@ const OTPVerification = ({navigation}) => {
       email
       });
       if(response.status === 200){
-       Alert.alert("Success", "Code sent again");
+       Alert.alert("Success✔️", "Code sent again");
         navigation.navigate('OTP');
       }
     } catch (error) {
       console.log(error)
-      Alert.alert("Warning","Something went wrong! try again")
+      Alert.alert("Warning⚠️","Something went wrong!")
     }finally{
       setResendLoading(false)
     }
@@ -104,7 +104,7 @@ const OTPVerification = ({navigation}) => {
         </Text>
       </View>
       <Text style={styles.indicator}>
-          {loading && <LoadingModal task='Veryfying' modalVisible={true} />}
+          {loading && <LoadingModal task='Veryfying..' modalVisible={true} />}
           {resendLoading && <LoadingModal task='Resending Code..' modalVisible={true} />}  
       </Text>
     </SafeAreaView>

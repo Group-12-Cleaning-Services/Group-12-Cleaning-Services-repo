@@ -235,6 +235,13 @@ const styles = StyleSheet.create({
   uploadText: {
     paddingLeft: 10,
   },
+  indicator: {
+    alignItems: 'center',
+    textAlign: 'center',
+    position: 'absolute',
+    top: SIZES.height * 0.78,
+    left: SIZES.width * 0.43,
+  },
 });
 
 export default AddService;

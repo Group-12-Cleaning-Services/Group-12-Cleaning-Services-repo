@@ -12,18 +12,21 @@ import BookedModal from "./BookedModal";
 
 
 const BookedServices = () => {
+
+  const dispatch = useDispatch()
+  const statusValue = useSelector((state)=>state.service.serviceStatus)
+  const modalVisible = useSelector((state) => state.modal.serviceStatusModal)
   
   const [services, setServices] = useState()
   const [tableHeader, setTableHeader] = useState({
     tableHead: ["Service type", "Date", "Amount", "Status", "Delete"],
     widthArr: [100, 100, 100, 100, 100],
   });
+  const [status, setStatus] = useState("h")
 
-  const status = useSelector((state)=>state.service.serviceStatus)
-  const modalVisible = useSelector((state.modal.serviceStatusModal))
-  console.log(modalVisible)
+  console.log(status)
 
-  const dispatch = useDispatch()
+  
   const handleStatus = () =>{
     dispatch(modalActions.handleServiceStatusModal())
   } 
@@ -117,7 +120,7 @@ const BookedServices = () => {
                      style={styles.updateDeleteContainer}
                      onPress={handleStatus}
                      >
-                      <Text style={styles.updateText}>Status</Text>
+                      <Text style={styles.updateText}>{status}</Text>
                     </Pressable>,
                     <Pressable 
                      style={styles.updateDeleteContainer}
@@ -135,10 +138,10 @@ const BookedServices = () => {
                 />
               ))}
             </Table>
-            {modalVisible && BookedModal}
           </ScrollView>
         </View>
       </ScrollView>
+      {modalVisible && <BookedModal/>}
     </View>
   );
 };

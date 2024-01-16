@@ -287,7 +287,7 @@ const Booking = ({ navigation }) => {
         />
       </View> 
          }
-        <Text style={indicator}>
+        <Text style={styles.indicator}>
           {loading && <LoadingModal modalVisible={true} />} 
        </Text>
         <ModalScreen

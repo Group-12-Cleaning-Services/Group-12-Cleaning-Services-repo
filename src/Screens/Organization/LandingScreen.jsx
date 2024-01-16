@@ -26,7 +26,6 @@ const LandingScreen = ({ navigation }) => {
               },
             }
           );
-          console.log(response.data)
           if (response.status === 200) {
             const responseData = response.data;
             if (responseData && Array.isArray(responseData.data)) {

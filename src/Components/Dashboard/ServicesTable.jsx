@@ -148,11 +148,11 @@ const Services = () => {
                   />
                 ))}
               </Table>
-              {modalVisible && <UpdateModal/>}
             </ScrollView>
           </View>
         </ScrollView>
       )}
+      {modalVisible && <UpdateModal/>}
     </View>
   );
 };

@@ -12,6 +12,7 @@ import MyBookings from './src/Screens/Profile/MyBookings';
 import Booking from './src/Screens/Booking/Booking';
 import OTPVerification from './src/Screens/Authentication/OTPVerification';
 import BookedModal from "./src/Components/Dashboard/BookedModal"
+import WithdrawModal from "./src/Components/Dashboard/WithdrawModal"
 
 const App = () => {
   return (

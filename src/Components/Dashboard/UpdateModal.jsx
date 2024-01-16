@@ -206,16 +206,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingTop: SIZES.height * 0.15,
+    alignItems:'center',
     height:SIZES.height,
-    marginTop: -StatusBar.currentHeight,
   },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
     width: SIZES.width * 0.8,
-    height: SIZES.height * 0.7,
+    height: SIZES.height * 0.8,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {

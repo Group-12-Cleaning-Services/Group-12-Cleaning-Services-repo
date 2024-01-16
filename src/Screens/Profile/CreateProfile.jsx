@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Alert } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Pressable, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
@@ -12,7 +12,7 @@ const CreateProfile = ({ navigation }) => {
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
   const [contact, setContact] = useState('');
-  const [profile, setProfile] = useState(null)
+  const [profile_image, setProfile_image] = useState(null)
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
  
@@ -36,7 +36,7 @@ const CreateProfile = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setProfile(result.assets[0].uri);
+      setProfile_image(result.assets[0].uri);
     }
   };
 
@@ -49,26 +49,24 @@ const CreateProfile = ({ navigation }) => {
         formData.append('first_name', first_name);
         formData.append('last_name', last_name);
         formData.append('contact', contact);
-        formData.append('profile', {
-          uri: profile,
-          name: 'profile.jpg',
+        formData.append('profile_image', {
+          uri: profile_image,
+          name: 'profile_image.jpg',
           type: 'image/jpeg',
         });
+
         const response = await axios.post(
           'https://cleaningservice.onrender.com/api/profile/create/',
-          {
-            first_name,
-            last_name,
-            contact,
-          },
+          formData,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`, 
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data', 
             },
           }
         )
-        if(response.status === 200){
-          await AsyncStorage.setItem('profile_state', 'true');
+
+        if(response.status === 201){
           Alert.alert("Profile created successful")
           navigation.navigate("Profile")
         }else if (response.status === 403) {
@@ -152,16 +150,26 @@ const CreateProfile = ({ navigation }) => {
                 />
               </View>
               <View style={styles.imageContainer}>
-                <Button title="Pick an image " onPress={pickImage} />
-                {profile && <Image source={{ uri: profile }} style={{ width: 200, height: 200 }} />}
-              </View>
+                 <Pressable style={styles.imageBtn} onPress={pickImage}>
+                   <Text style={styles.imageBtnText}>Choose Logo</Text>
+                 </Pressable>
+                  {profile_image ? (
+                 <Image
+                  source={{ uri: profile_image }}
+                  style={{ width: 100, height: 50 }}
+                 />
+                  ) : (
+                 <Text style={{ paddingLeft: SIZES.width * 0.03 }}>
+                   No file chosen
+                </Text>
+                 )}
+            </View>
             </View>
             <View style={btnsContainer}>
               <Button title={'Save'}
                 buttonContainer={saveCancelBtn}
                 buttonText={buttonText}
                 press={handleCreateProfile}
-                // press={()=>navigation.navigate("Profile")}
               />
               <Button title={'Cancel'}
                 buttonContainer={saveCancelBtn}
@@ -240,6 +248,9 @@ const styles = StyleSheet.create({
   btnsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection:'row',
+    paddingTop:SIZES.height*0.02,
+    paddingBottom:SIZES.height*0.02
   },
   saveCancelBtn: {
     alignItems: 'center',

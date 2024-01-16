@@ -7,6 +7,7 @@ import {
   Pressable,
   Alert,
   StatusBar,
+  TextInput
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -21,45 +22,40 @@ import { serviceActions } from '../../store/services';
 
 const BookedModal = () => {
 
-  const [value, setValue] = useState('');
-  const [isFocus, setIsFocus] = useState(false);
+  const [amount, setAmount] = useState(null);
 
   const dispatch = useDispatch();
   const modalVisible = useSelector((state) => state.modal.incomeModal)
-  console.log(modalVisible)
-  
+
   const handleCloseModal = () => {
-    dispatch(modalActions.handleServiceStatusModal());
+    dispatch(modalActions.handleIncomeModal());
   };
 
-  const handleStatus = () => {
-    dispatch(serviceActions.handleServiceStatus({value:value}));
-    dispatch(modalActions.handleServiceStatusModal());
+  const handleChange = (key, value) => {
+    if (key === 'value') {
+      setAmount(value);
+    }
   };
 
-  const handleUpdateService = async () => {
+
+  const handleWithdraw = async () => {
     try {
       const accessToken = await AsyncStorage.getItem('access');
       if (accessToken) {
-        const formData = new FormData();
-        formData.append('value', value);
-
         const response = await axios.post(
-          `https://cleaningservice.onrender.com/api/service/update/`,
-          formData,
+          `https://cleaningservice.onrender.com/api/transaction/transfer/`,
+          {amount},
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'multipart/form-data',
             },
           }
         );
         console.log(response)
 
         if (response.status === 200) {
-          console.log(response.data);
-          Alert.alert('Success✔️', 'Service Status Updated Successfully');
-          dispatch(modalActions.handleUpdateModal());
+          Alert.alert('Success✔️', 'Money Withdraw Successfully');
+          dispatch(modalActions.handleIncomeModal());
         } else if (response.status === 403) {
           Alert.alert('Warning⚠️', 'Not authorized');
         }
@@ -95,35 +91,15 @@ const BookedModal = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.inputContainer}>
-              <View style={styles.input}>
-                <Dropdown
-                 style={[styles.inputField, isFocus && { borderColor: 'blue' }]}
-                 placeholderStyle={styles.placeholderStyle}
-                 selectedTextStyle={styles.selectedTextStyle}
-                 inputSearchStyle={styles.inputSearchStyle}
-                 iconStyle={styles.iconStyle}
-                 data={dropdownData}
-                 maxHeight={300}
-                 labelField="label"
-                 valueField="value"
-                 placeholder={!isFocus ? 'Change Status' : '...'}
-                 value={value}
-                 onFocus={() => setIsFocus(true)}
-                 onBlur={() => setIsFocus(false)}
-                 onChange={item => {
-                 setValue(item.value);
-                 setIsFocus(false);
-                }}
-                renderLeftIcon={() => (
-                <AntDesign
-                style={styles.icon}
-                color={isFocus ? 'blue' : 'black'}
-                name="Safety"
-                size={20}
-               />
-              )}
-              />
-           </View>
+            <View style={styles.inputs}>
+            <TextInput
+              style={styles.input}
+              keyboardType='numeric'
+              placeholder="Enter amount to withdrw.."
+              onChangeText={(value) => handleChange('value', value)}
+              value={amount}
+            />
+          </View>
             </View>
             <View style={styles.btnsContainer}>
               <Pressable
@@ -134,9 +110,9 @@ const BookedModal = () => {
               </Pressable>
               <Pressable
                 style={[styles.button, styles.updateBtn]}
-                onPress={handleStatus}
+                onPress={handleWithdraw}
               >
-                <Text style={styles.updateBtnText}>Update</Text>
+                <Text style={styles.updateBtnText}>Cash out</Text>
               </Pressable>
             </View>
           </View>
@@ -150,8 +126,8 @@ const styles = StyleSheet.create({
   centeredView: {
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems:'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     height:SIZES.height,
   },
   modalView: {
@@ -159,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     width: SIZES.width * 0.8,
-    height: SIZES.height * 0.27,
+    height: SIZES.height * 0.25,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -180,6 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     flexGrow: 1,
+    paddingTop:SIZES.height*0.03
   },
   inputs: {
     borderRadius: 6,
@@ -249,7 +226,7 @@ const styles = StyleSheet.create({
   updateBtn: {
     backgroundColor: 'mediumseagreen',
     flexDirection: 'row',
-    width:SIZES.width*0.23,
+    width:SIZES.width*0.25,
     margin:SIZES.width*0.03,
     alignItems:'center',
     justifyContent:"center"

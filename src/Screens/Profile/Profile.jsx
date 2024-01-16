@@ -11,6 +11,7 @@ export default function ProfileScreen({navigation}) {
   const [profileState, setProfileState] = useState('');
   const [first_name, setFirst_name] = useState('')
   const [last_name, setLast_name] = useState('')
+  const [profile_image, setProfile_image] = useState('')
 
   useEffect(() => {
     const getItemFromStorage = async () => {
@@ -24,20 +25,16 @@ export default function ProfileScreen({navigation}) {
                 Authorization: `Bearer ${accessToken}`, 
               },
             }
-          ); console.log(response.data)
+          ); 
 
-          setFirst_name(response.data.profile.first_name);
-          setLast_name(response.data.profile.last_name)
-          // setUser_type(response.data.user_type)
           const value = await AsyncStorage.getItem('user');
           const user_typeValue = await AsyncStorage.getItem('user_type');
-          if (value !== null) {
-            setUser(value);
-          }if(user_typeValue !== null){
-            setUserType(user_typeValue)
-          } else {
-            console.log('Item not found in AsyncStorage');
-          }
+
+          setFirst_name(response.data.profile?.first_name);
+          setLast_name(response.data.profile?.last_name);
+          setProfile_image(response.data.profile?.profile_image)
+          setUser(value || '');
+          setUserType(user_typeValue || '');
         }
       } catch (error) {
         console.error(error);
@@ -51,7 +48,8 @@ export default function ProfileScreen({navigation}) {
 
   const handleLogout = async() =>{
     await AsyncStorage.removeItem("access");
-    await AsyncStorage.removeItem("user")
+    await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("user_type")
     navigation.navigate("Home")
   }
 
@@ -66,11 +64,21 @@ export default function ProfileScreen({navigation}) {
       />
       </View>
       <View style={styles.profileSection}>
+        {profile_image && 
         <Image
-        source={require("../../../assets/profile.png")}
+         source={{uri:'https://cleaningservice.onrender.com'+profile_image}}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>{first_name || ''} {last_name || ''}</Text>
+        }
+         {!profile_image && 
+        <Image
+         source={require("../../../assets/profile.png")}
+          style={styles.profileImage}
+        />
+        }
+        {first_name &&
+        <Text style={styles.name}>{first_name || ''} {last_name || ''}</Text> 
+        }
         <Text style={styles.email}>{user || ''}</Text>
         {!first_name &&
         <TouchableOpacity style={styles.editButton} onPress={()=>navigation.navigate("CreateProfile")}>

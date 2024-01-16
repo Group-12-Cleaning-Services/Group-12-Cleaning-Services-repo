@@ -138,12 +138,16 @@ export const serviceSlice = createSlice({
     statuse:"idle",
     initialState:{
         services:[],
-        serviceStatus:[]
+        serviceStatus:[],
+        moneyToWithdraw:[]
     },
     reducers:{
       handleServiceStatus:(state, action) =>{
         state.serviceStatus = action.payload
-      }   
+      },
+      handleMoneyWithdraw:(state, action) =>{
+        state.money = action.payload
+      }    
     },
 
     extraReducers:(builder)=>{

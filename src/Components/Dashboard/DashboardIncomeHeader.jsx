@@ -1,10 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text} from 'react-native'
 import { FontAwesome5} from '@expo/vector-icons';
+import axios from 'axios';
 import { SIZES } from '../../Constants/Theme';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../Components/Button';
+import WithdrawModal from "./WithdrawModal"
+import { useSelector } from 'react-redux';
+import { modalActions } from '../../store/modal';
 
 const DashboardIncomeHeader = () => {
+
+  const[income, setIncome] = useState('')
+  
+  const dispatch = useDispatch();
+  const modalVisible = useSelector((state) => state.modal.incomeModal)
+
+  const handleWithdrawalState = () =>{
+    dispatch(modalActions.handleIncomeModal())
+  }
+
+  useEffect(() => {
+    const getBalance = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem("access");
+        if (accessToken) {
+          const response = await axios.get(
+            "https://cleaningservice.onrender.com/api/transaction/all/",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          if (response.status === 200 && response.data.length > 0) {
+            const balance = response.data[0].balance;
+            setIncome(balance);
+          } else {
+            setIncome('0.00'); 
+            Alert.alert("Error⚠️", "Something went wrong!");
+          }
+        }
+      } catch (error) {
+        console.error("Something went wrong!", error);
+      }
+    };
+
+    getBalance();
+  }, []);
+
+
+
   return (
 <View>
     <View style={styles.incomeContainer}>
@@ -20,16 +68,18 @@ const DashboardIncomeHeader = () => {
       <FontAwesome5 name="users" size={24} color="#005B96" />
       <Text style={styles.incomeText}>Income</Text>
     </View>
-    <Text style={styles.value}>159.95</Text>
+    <Text style={styles.value}>{income}</Text>
   </View>
   <View style={styles.withdraw}>
     <Button
       title={"Withdraw"}
       buttonContainer={styles.buttonContainer}
       buttonText={styles.buttonText}
+      press={handleWithdrawalState}
     />
   </View>
 </View>
+{modalVisible && <WithdrawModal/>}
 </View>
   )
 }
