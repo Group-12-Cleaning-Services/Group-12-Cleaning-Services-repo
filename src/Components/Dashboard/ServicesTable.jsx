@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { fetchServices, removeService } from "../../store/services";
 import UpdateModal from "./UpdateModal";
 import { serviceActions } from "../../store/services";
+import WithdrawModal from './WithdrawModal';
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -29,12 +30,13 @@ const Services = () => {
   });
 
   const dispatch = useDispatch();
+  const modalVisibleW = useSelector((state) => state.modal.incomeModal);
+  const modalVisible = useSelector((state) => state.modal.updateModal);
+
   const handleShowUpdate = async (id) => {
     dispatch(modalActions.handleUpdateModal());
     dispatch(modalActions.handleUpdateId(id));
   };
-
-  const modalVisible = useSelector((state) => state.modal.updateModal);
 
   useEffect(() => {
     const getServices = async () => {
@@ -153,6 +155,7 @@ const Services = () => {
         </ScrollView>
       )}
       {modalVisible && <UpdateModal/>}
+      {modalVisibleW && <WithdrawModal />}
     </View>
   );
 };

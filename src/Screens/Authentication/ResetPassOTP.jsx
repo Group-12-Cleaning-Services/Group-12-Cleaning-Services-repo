@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text,TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar, Platform } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SIZES } from '../../Constants/Theme';
@@ -64,6 +64,7 @@ const OTPVerification = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <View style={headerContainer}>
         <Text style={headerTitle}>Enter Verification Code</Text>
         <Text style={headerMessage}>Enter the 4-digit we sent via email</Text>
@@ -120,9 +121,10 @@ const OTPVerification = ({navigation}) => {
       <Text style={resendText} onPress={()=>navigation.navigate("OTP")}>
         Resend code
       </Text>
-      <Text style={styles.indicator}>
+      {/* <Text style={styles.indicator}>
           {loading && <LoadingModal modalVisible={true} />} 
-      </Text>
+      </Text> */}
+      {loading && <LoadingModal modalVisible={true} />} 
     </SafeAreaView>
   );
 };
@@ -153,8 +155,8 @@ const styles = StyleSheet.create({
     width: SIZES.width*0.7,
   },
   codeInput: {
-    height: SIZES.height*0.08,
-    width: SIZES.width*0.145,
+    height: Platform.OS === "ios"? SIZES.height*0.06 : SIZES.height*0.08,
+    width: Platform.OS === "ios"? SIZES.width*0.128 : SIZES.width*0.145,
     borderColor: 'gray',
     borderWidth: 1,
     textAlign: 'center',

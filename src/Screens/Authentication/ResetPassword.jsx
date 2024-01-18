@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, Dimensions, ScrollView, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar, Image, Text, View, TextInput, Dimensions, ScrollView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import axios from 'axios';
@@ -58,6 +58,7 @@ const ResetPassword = ({navigation}) => {
 
   return (
     <SafeAreaView style={container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../../assets/logo.png")} style={image} />

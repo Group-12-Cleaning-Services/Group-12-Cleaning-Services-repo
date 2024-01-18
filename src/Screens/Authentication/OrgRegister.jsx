@@ -9,9 +9,10 @@ import {
   TextInput,
   Pressable,
   ScrollView,
+  StatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Octicons } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from '../../Constants/Theme';
 import { useState } from 'react';
@@ -53,6 +54,12 @@ const OrgRegister = ({ navigation }) => {
   const handleCreateAccount = async () => {
     try {
       setLoading(true);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        Alert.alert('Warning ⚠️', 'Please enter a valid email address');
+        setLoading(false);
+        return;
+      }
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
@@ -72,17 +79,20 @@ const OrgRegister = ({ navigation }) => {
           },
         }
       );
-      if (response.status === 201) {
+      if(email === '' && password === ''){
+        Alert.alert("Warning⚠️", "Please email and password are required")
+      }
+      else if (response.status === 201) {
         await AsyncStorage.setItem('userRegistered', email);
         await AsyncStorage.setItem('user_type', user_type);
         Alert.alert('Success ✔️', 'Organization created successful');
         navigation.navigate('OTP');
       }
-      if (response.status === 208) {
+      else if (response.status === 208) {
         Alert.alert('Warning ⚠️', 'User already exists');
       }
     } catch (error) {
-      // Alert.alert("Warning ⚠️", "Something went wrong")
+      Alert.alert("Warning ⚠️", "Something went wrong")
       console.log(error);
       setLoading(false);
       setEmail('');
@@ -120,6 +130,7 @@ const OrgRegister = ({ navigation }) => {
 
   return (
     <SafeAreaView style={container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <ScrollView style={scrollContainer} 
         contentContainerStyle={scrollContent}
         showsVerticalScrollIndicator={false}
@@ -139,7 +150,7 @@ const OrgRegister = ({ navigation }) => {
         <View style={inputContainer}>
           <View style={input}>
             <Feather
-              name={'lock'}
+              name={'mail'}
               size={20}
               color={'black'}
               style={iconUser}
@@ -153,7 +164,7 @@ const OrgRegister = ({ navigation }) => {
           </View>
           <View style={input}>
             <Feather
-              name={'mail'}
+              name={'lock'}
               size={20}
               color={'black'}
               style={iconUser}
@@ -167,12 +178,12 @@ const OrgRegister = ({ navigation }) => {
             />
           </View>
           <View style={input}>
-            <Feather
-              name={'user'}
-              size={20}
-              color={'black'}
-              style={iconUser}
-            />
+            <Octicons 
+              name="organization" 
+              size={20} 
+              color="black"
+              style={iconUser} 
+              />
             <TextInput
               style={inputField}
               placeholder="Organization name"
@@ -202,12 +213,10 @@ const OrgRegister = ({ navigation }) => {
           buttonText={buttonText}
           press={handleCreateAccount}
         />
-        <Text style={indicator}>
-          {loading && <LoadingModal task='Registring..' modalVisible={true} />}
-        </Text>
         <Text style={styles.haveAccountText} onPress={()=>navigation.navigate("Login")}>
          Already have an account?
         </Text>
+        {loading && <LoadingModal modalVisible={true} />} 
       </ScrollView>
     </SafeAreaView>
   );

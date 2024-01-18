@@ -8,6 +8,9 @@ import {
   TextInput,
   Pressable,
   ScrollView,
+  Platform,
+  StatusBar,
+  TouchableOpacity
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -68,7 +71,9 @@ const Booking = ({ navigation }) => {
     if (type == "set") {
       const currentDate = selectedDate;
       setDate(currentDate);
-      setBookingDate(currentDate.toDateString());
+      if(Platform.OS === "android"){
+        setBookingDate(currentDate.toDateString());
+      }
     }
   };
 
@@ -82,8 +87,15 @@ const Booking = ({ navigation }) => {
       const currentTime = selectedTime;
       const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
       setTime(formattedTime);
-      setBookingTime(currentTime.toTimeString());
+      if(Platform.OS==='android'){
+        setBookingTime(currentTime.toTimeString());
+      }
     }
+  };
+
+  const handleIosDateConfirm = () => {
+    setBookingDate(date.toDateString());
+    handleShowPicker();
   };
 
   const handleCheck = () => {
@@ -147,6 +159,7 @@ const Booking = ({ navigation }) => {
 
   return (
     <SafeAreaView style={container}>
+        <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
         <View style={styles.gobackIcon}>
           <Feather
             name="log-out"
@@ -189,25 +202,47 @@ const Booking = ({ navigation }) => {
           </View>
           <View style={input}>
             <Fontisto name="date" size={20} color="black" style={iconUser} />
-            {showPicker && (
+            {showPicker && Platform.OS === 'android' (
               <DateTimePicker
                 mode="date"
                 display="spinner"
                 value={date}
                 onChange={handleDateChange}
                 animation={""}
+                style={Platform.OS==="ios" && styles.datePicker}
               />
             )}
             <Pressable onPress={handleShowPicker}>
               <TextInput
                 style={inputField}
-                placeholder="Choose a date"
+                placeholder={Platform.OS === 'ios'? "Wed Jun 28 2024": "Choose a date"}
                 onChangeText={(value) => handleChange("date", value)}
-                value={bookingDate}
-                editable={false}
+                value={showPicker && Platform.OS === "ios"? "" : bookingDate}
+                editable={Platform.OS === 'ios'? true : false}
               />
             </Pressable>
           </View>
+          {showPicker && Platform.OS === "ios"
+            && (
+             <View
+              style={{flexDirection:'row',
+              justifyContent:'space-around',
+              }}
+              >
+                <TouchableOpacity 
+                 style={styles.pickerButton}
+                 onPress={handleShowPicker}
+                 >
+                  <Text style={styles.buttonTextDateCancel}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                 style={styles.pickerButton}
+                 onPress={handleIosDateConfirm}
+                 >
+                  <Text style={styles.buttonTextDateConfirm}>Confirm</Text>
+                </TouchableOpacity>
+             </View>
+            )}
           <View style={input}>
             <MaterialIcons
               name="av-timer"
@@ -215,7 +250,7 @@ const Booking = ({ navigation }) => {
               color="black"
               style={iconUser}
             />
-            {showTimePicker && (
+            {showPicker && Platform.OS === 'android' (
               <DateTimePicker
                 mode="time"
                 display="spinner"
@@ -227,42 +262,13 @@ const Booking = ({ navigation }) => {
             <Pressable onPress={handleShowTimePicker}>
               <TextInput
                 style={inputField}
-                placeholder="Choose a time"
+                placeholder={Platform.OS === 'ios'? "11:07:39 GMT+000": "Choose a date"}
                 onChangeText={(value) => handleChange("time", value)}
                 value={bookingTime}
-                editable={false}
+                editable={Platform.OS === 'ios'? true : false}
               />
             </Pressable>
           </View>
-          {/* <View style={styles.input}>
-         <Dropdown
-           style={[styles.inputField, isFocus && { borderColor: 'blue' }]}
-           placeholderStyle={styles.placeholderStyle}
-           selectedTextStyle={styles.selectedTextStyle}
-           inputSearchStyle={styles.inputSearchStyle}
-           iconStyle={styles.iconStyle}
-           data={dropdownData}
-           maxHeight={300}
-           labelField="label"
-           valueField="value"
-           placeholder={!isFocus ? 'Select item' : '...'}
-           value={value}
-           onFocus={() => setIsFocus(true)}
-           onBlur={() => setIsFocus(false)}
-           onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
-          renderLeftIcon={() => (
-            <AntDesign
-              style={styles.icon}
-              color={isFocus ? 'blue' : 'black'}
-              name="Safety"
-              size={20}
-            />
-          )}
-        />
-      </View> */}
         </View>
         <View style={styles.checkboxContainer}>
           <CheckBox
@@ -287,13 +293,12 @@ const Booking = ({ navigation }) => {
         />
       </View> 
          }
-        <Text style={styles.indicator}>
-          {loading && <LoadingModal modalVisible={true} />} 
-       </Text>
+       {loading && <LoadingModal modalVisible={true} />}
         <ModalScreen
         time={bookingTime}
         location={address}
         date={bookingDate}
+        name={FullName}
         paymentNav={()=> navigation.navigate('PaymentMethods')}
         />
       </ScrollView>
@@ -356,6 +361,28 @@ const styles = StyleSheet.create({
     padding: SIZES.height * 0.02,
     textAlign: "center",
     borderRadius: 15,
+    overflow: "hidden",
+  },
+  buttonTextDateConfirm: {
+    color: "white",
+    backgroundColor: "#03396C",
+    width: SIZES.width * 0.25,
+    padding: SIZES.width * 0.015,
+    textAlign: "center",
+    borderRadius: 15,
+    paddingTop: 10,
+    overflow: "hidden",
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  buttonTextDateCancel: {
+    color: "white",
+    backgroundColor: "#005B96",
+    width: SIZES.width * 0.25,
+    padding: SIZES.width * 0.015,
+    textAlign: "center",
+    borderRadius: 15,
+    paddingTop: 10,
     overflow: "hidden",
   },
   btnsContainer: {
@@ -467,6 +494,17 @@ const styles = StyleSheet.create({
     top: SIZES.height * 0.78,
     left: SIZES.width * 0.43,
   },
+  datePicker:{
+    height:120,
+    paddingTop:100,
+    alignItems:'center',
+    justifyContent:'center',
+    position:'absolute',
+    backgroundColor:'white',
+  },
+  pickerButton:{
+    paddingHorizontal:20,
+  }
 });
 
 export default Booking;

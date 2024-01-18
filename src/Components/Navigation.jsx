@@ -25,7 +25,8 @@ import paymentMethod  from '../Screens/Booking/PaymentMethod';
 import BookingSummary from "../Screens/Booking/BookingSummary";
 import Dashboard from '../Screens/Organization/Dashboard';
 import ProfileModal from './Dashboard/ProfileModal';
-import Notification from "../Components/Notification"
+import Notification from "./Notification"
+
 
 const Tabs = () => {
     const Stack = createNativeStackNavigator()
@@ -36,30 +37,30 @@ const Tabs = () => {
             headerShown:false
         }}
         >
-            <Stack.Screen name='Welcome' component={WelcomeScreen} options={{statusBarColor:"#756F69"}}/>
-            <Stack.Screen name='onboard' component={OnBoarding} options={{statusBarColor:"#171717", statusBarStyle:"#FFFFF"}}/>
-            <Stack.Screen name='Home' component={Home} options={{statusBarColor:"#42322E"}}/>
-            <Stack.Screen name='Register' component={Register} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='Login' component={Login} options={{statusBarColor:"#040268" }}/>
-            <Stack.Screen name='OrgRegister' component={OrgRegister} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='ResetPassword' component={ResetPassword} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='Bookings' component={BookingsScreen} options={{ statusBarColor: '#FF5733' }}/>
-            <Stack.Screen name='OTP' component={OTPVerification} options={{ statusBarColor: 'black', statusBarStyle:"white" }}/>
-            <Stack.Screen name='Profile' component={ProfileScreen} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='MyBookings' component={MyBookings} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='Organizations' component={LandingScreen} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='EditProfile' component={EditProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='CreateProfile' component={CreateProfile} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='OTPMail' component={OTPMailReq} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='ResetPasswordOTP' component={ResetPasswordOTP} options={{ statusBarColor: '#171717', }}/>
-            <Stack.Screen name='SingleOrg' component={SingleOrgScreen} options={{ statusBarStyle:"dark" }}/>
-            <Stack.Screen name='OrgSigleListItem' component={OrgSingleListItem} options={{ statusBarColor: '#fff', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='Booking' component={Booking} options={{  statusBarColor: '#B3CDE0', statusBarStyle:"dark"  }}/>
-            <Stack.Screen name='PaymentMethods' component={paymentMethod} options={{ statusBarColor: '#B3CDE0', statusBarStyle:"dark" }}/>
-            <Stack.Screen name='BookingSummary' component={BookingSummary} options={{ statusBarColor:"#040268"  }}/>
-            <Stack.Screen name='Dashboard' component={Dashboard} options={{ statusBarStyle:"dark"  }}/>
+            <Stack.Screen name='Welcome' component={WelcomeScreen} />
+            <Stack.Screen name='onboard' component={OnBoarding}/>
+            <Stack.Screen name='Home' component={Home}/>
+            <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='Login' component={Login}/>
+            <Stack.Screen name='OrgRegister' component={OrgRegister} />
+            <Stack.Screen name='ResetPassword' component={ResetPassword} />
+            <Stack.Screen name='Bookings' component={BookingsScreen} />
+            <Stack.Screen name='OTP' component={OTPVerification}/>
+            <Stack.Screen name='Profile' component={ProfileScreen} />
+            <Stack.Screen name='MyBookings' component={MyBookings} />
+            <Stack.Screen name='Organizations' component={LandingScreen} />
+            <Stack.Screen name='EditProfile' component={EditProfile} />
+            <Stack.Screen name='CreateProfile' component={CreateProfile} />
+            <Stack.Screen name='OTPMail' component={OTPMailReq} />
+            <Stack.Screen name='ResetPasswordOTP' component={ResetPasswordOTP}/>
+            <Stack.Screen name='SingleOrg' component={SingleOrgScreen}/>
+            <Stack.Screen name='OrgSigleListItem' component={OrgSingleListItem}/>
+            <Stack.Screen name='Booking' component={Booking}/>
+            <Stack.Screen name='PaymentMethods' component={paymentMethod} />
+            <Stack.Screen name='BookingSummary' component={BookingSummary}/>
+            <Stack.Screen name='Dashboard' component={Dashboard}/>
             <Stack.Screen name='ModalProfile' component={ProfileModal} />
-            <Stack.Screen name='Notification' component={Notification} options={{ statusBarStyle:"dark"  }}/>
+            <Stack.Screen name='Notifications' component={Notification} />
         </Stack.Navigator>
     </NavigationContainer>
   )

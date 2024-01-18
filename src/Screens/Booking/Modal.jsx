@@ -8,7 +8,7 @@ import { modalActions } from "../../store/modal";
 import { useRoute } from '@react-navigation/native';
 
 
-const ModalScreen = ({time, location, date, paymentNav}) => {
+const ModalScreen = ({time, location, date, name, paymentNav}) => {
   const dispatch = useDispatch()
 
   const handleCancelModalState =()=>{
@@ -46,6 +46,7 @@ const ModalScreen = ({time, location, date, paymentNav}) => {
           <View style={styles.modalView}>
            <View style={styles.modalText}>
            <Text style={styles.title}>Confirmation</Text>
+           <Text style={styles.desc}>{name}</Text>
             <Text style={styles.desc}>{location}</Text>
             <Text style={styles.desc}>{date}</Text>
             <Text style={styles.desc}>{time}</Text>

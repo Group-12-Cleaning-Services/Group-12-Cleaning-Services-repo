@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, ScrollView, Alert, Button } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Image, TextInput, ScrollView, Alert, Button, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -167,9 +167,7 @@ const AddService = () => {
             press={handleAddService}
           />
         </ScrollView>
-        <Text style={styles.indicator}>
-          {loading && <LoadingModal task='Adding Service..' modalVisible={true} />} 
-       </Text>
+        {loading && <LoadingModal modalVisible={true} />} 
       </View>
     </SafeAreaView>
   );
@@ -206,7 +204,7 @@ const styles = StyleSheet.create({
     color: 'black',
     borderWidth: 1,
     borderColor: 'rgba(144, 137, 137, 1)',
-    padding: SIZES.width * 0.0095,
+    padding: Platform.OS === "ios"? SIZES.width * 0.035 :SIZES.width * 0.0095,
     width: SIZES.width * 0.7,
     margin: SIZES.width * 0.03,
     flexDirection: 'row',

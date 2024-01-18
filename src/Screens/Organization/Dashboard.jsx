@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View, useWindowDimensions, StyleSheet } from 'react-native';
+import { View, useWindowDimensions, StyleSheet, StatusBar } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Services from '../../Components/Dashboard/Services';
 import AddService from '../../Components/Dashboard/AddService';
@@ -48,7 +48,10 @@ export default function Dashboard({navigation}) {
 
   return (
     <View style={styles.container}>
-     <DashboardNavIcons/>
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'}/>
+     <DashboardNavIcons
+     viewNotification={()=> navigation.navigate('Notifications')}
+     />
      <ProfileModal
      viewNav={()=> navigation.navigate('Profile')}
      logoutNav={()=> navigation.navigate('Home')}

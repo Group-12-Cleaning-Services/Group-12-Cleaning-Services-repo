@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, StatusBar } from 'react-native';
 import axios from 'axios';
 import { LoadingModal } from "react-native-loading-modal";
@@ -70,9 +70,10 @@ const OTPVerification = ({navigation}) => {
       setResendLoading(false)
     }
   };
-
+  const inputRefs = useRef([]);
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'black'} barStyle={'light-content'}/>
       <View style={headerContainer}>
         <Text style={headerTitle}>Enter Verification Code</Text>
         <Text style={headerMessage}>Enter the 4-digit we sent via email</Text>
@@ -86,11 +87,16 @@ const OTPVerification = ({navigation}) => {
             maxLength={1}
             value={otp[index - 1]}
             onChangeText={(text) => {
-            let updatedCode = otp;
-            updatedCode = updatedCode.split('');
-            updatedCode[index - 1] = text;
-            setOtp(updatedCode.join(''));
+              let updatedCode = otp.split('');
+              updatedCode[index - 1] = text;
+              setOtp(updatedCode.join(''));
+
+              // Move to the next input field
+              if (text && inputRefs.current[index]) {
+                inputRefs.current[index].focus();
+              }
             }}
+            ref={(input) => (inputRefs.current[index] = input)}
           />
         ))}
       </View>
@@ -103,10 +109,7 @@ const OTPVerification = ({navigation}) => {
            Resend code
         </Text>
       </View>
-      <Text style={styles.indicator}>
-          {loading && <LoadingModal task='Veryfying..' modalVisible={true} />}
-          {resendLoading && <LoadingModal task='Resending Code..' modalVisible={true} />}  
-      </Text>
+        {loading && <LoadingModal modalVisible={true} />} 
     </SafeAreaView>
   );
 };

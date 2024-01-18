@@ -71,9 +71,10 @@ const BookedServices = () => {
   const handleDelete = async (id) => {
     try {
       const accessToken = await AsyncStorage.getItem('access');
+      console.log(id)
       if (accessToken) {
         const response = await axios.delete(
-          `https://cleaningserve.pythonanywhere.com/api/service/delete/${id}`,
+          `https://cleaningservice.onrender.com/api/service/delete-booked-service/${id}/`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`, 

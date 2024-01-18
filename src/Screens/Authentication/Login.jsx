@@ -8,16 +8,17 @@ import {
   View,
   TextInput,
   Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { LoadingModal } from "react-native-loading-modal";
 import Button from '../../Components/Button';
 import axios from 'axios';
 import { SIZES } from '../../Constants/Theme';
+import { height } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -54,7 +55,7 @@ const Login = ({ navigation }) => {
         navigation.navigate('Organizations');
       }
     } catch (error) {
-      // Alert.alert('Invalid⚠️', 'Incorrect password or username');
+      Alert.alert('Invalid⚠️', 'Incorrect password or username');
       console.log(error)
     } finally {
       setLoading(false);
@@ -85,10 +86,11 @@ const Login = ({ navigation }) => {
       locations={[0.36, 0.4889, 0.9948]}
       style={linearGradientBackground}
     >
+      <StatusBar backgroundColor={'#040268'} barStyle={'light-content'} />
       <ScrollView>
       <SafeAreaView style={container}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : '100%'}
+          // behavior={Platform.OS === 'ios' ? 'padding' : '100%'}
           style={container}
         >
           <View style={imageContainer}>
@@ -121,16 +123,16 @@ const Login = ({ navigation }) => {
             buttonText={buttonText}
             press={handleLogin}
           />
-          <Text style={indicator}>
-            {loading && <LoadingModal task='Logging in..' modalVisible={true} />}
-          </Text>
           <View style={forgotPass}>
             <Text style={forgotPassText}>Forgot Password?</Text>
             <Text style={clickHere} onPress={() => navigation.navigate('OTPMail')}>
               Click Here
             </Text>
           </View>
+          <Text style={indicator}>
+          </Text>
         </KeyboardAvoidingView>
+        {loading && <LoadingModal task='Logging in..' modalVisible={true} />}
       </SafeAreaView>
       </ScrollView>
     </LinearGradient>
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     position: 'absolute',
-    top: SIZES.height * 0.78,
+    top: SIZES.height,
     left: SIZES.width * 0.43,
   },
 });

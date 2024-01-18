@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Pressable, Alert } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Image, Text, View, TextInput, ScrollView, Pressable, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
@@ -102,6 +102,7 @@ const CreateProfile = ({ navigation }) => {
 
   return (
     <ScrollView style={scrollContainer}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <SafeAreaView style={container}>
         {showSuccess ? (
           <SaveSuccess />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, View, Dimensions,TextInput, StatusBar, TouchableOpacity, ImageBackground } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, Text, View, StatusBar, TouchableOpacity, ImageBackground } from 'react-native';
 import Button from '../../Components/Button';
 import {useNavigation} from '@react-navigation/native'
 import { SIZES } from '../../Constants/Theme';
@@ -25,6 +25,7 @@ const Home = ({navigation}) => {
 
   return (
       <SafeAreaView style={container}>
+        <StatusBar backgroundColor={'#42322E'} barStyle={'light-content'} />
         <ImageBackground
         style={backgroundImage}
         source={require("../../../assets/landing.png")}

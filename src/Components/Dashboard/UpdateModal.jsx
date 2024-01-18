@@ -22,6 +22,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal';
 import { useSelector } from 'react-redux';
+import { LoadingModal } from "react-native-loading-modal";
 import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 import { updateService } from '../../store/services';
 
@@ -37,6 +38,7 @@ const UpdateModal = () => {
   const [category, setCategory] = useState();
   const [description, setDescription] = useState();
   const [thumnail, setThumnail] = useState(null);
+  const[loading, setLoading] = useState(false)
 
   const handleChange = (key, value) => {
     if (key === 'title') {
@@ -69,6 +71,7 @@ const UpdateModal = () => {
 
   const handleUpdateService = async () => {
     try {
+      setLoading(true)
       const accessToken = await AsyncStorage.getItem('access');
       if (accessToken) {
         const formData = new FormData();
@@ -104,6 +107,8 @@ const UpdateModal = () => {
       }
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -197,6 +202,7 @@ const UpdateModal = () => {
           </View>
         </View>
       </Modal>
+      {loading && <LoadingModal task='Saving Changes..' modalVisible={true} />}
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, Dimensions, ScrollView, Platform, Alert } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Image, Text, View, TextInput, Dimensions, ScrollView, Platform, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
 import axios from 'axios';
@@ -56,6 +56,7 @@ const ResetPassword = ({navigation}) => {
 
   return (
     <SafeAreaView style={container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../../assets/logo.png")} style={image} />
@@ -88,9 +89,10 @@ const ResetPassword = ({navigation}) => {
         buttonText={cancelText}
         />
       </View>
-      <Text style={styles.indicator}>
+      {/* <Text style={styles.indicator}>
           {loading && <LoadingModal modalVisible={true} />} 
-      </Text>
+      </Text> */}
+      {loading && <LoadingModal modalVisible={true} />} 
       </ScrollView> 
     </SafeAreaView>
   );
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: SIZES.width*0.5,
-    height: SIZES.height*0.37,
+    height: Platform.OS === "ios"? SIZES.height*0.27: SIZES.height*0.37,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -142,14 +144,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: 240,
-    padding: 7,
     borderRadius: 10,
     margin: 7,
     backgroundColor: 'white',
     color: 'black',
     marginVertical:10,
     width:SIZES.width*0.8,
-    padding: SIZES.height*0.013,
+    padding: Platform.OS === "ios"? SIZES.height*0.0075: SIZES.height*0.013,
   },
   btnsContainer:{
     alignItems:'center',

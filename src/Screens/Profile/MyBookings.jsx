@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { bookings } from '../../../Data';
 import { nanoid } from "@reduxjs/toolkit";
 import { SIZES } from '../../Constants/Theme';
+import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
 
 export default function MyBookings({ navigation }) {
 
@@ -48,6 +49,7 @@ export default function MyBookings({ navigation }) {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
         <ActivityIndicator size="large" color="#0000ff" />
         <Text>Fetching Bookings...</Text>
       </View>
@@ -55,25 +57,30 @@ export default function MyBookings({ navigation }) {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <View style={styles.gobackArrow}>
         <Feather name="arrow-left" size={24} color="black" onPress={() => navigation.goBack()} />
       </View>
       <View style={styles.MyBookingsTextContainer}>
         <Text style={styles.MyBookingsText}>My Bookings</Text>
       </View>
-      <ScrollView style={styles.bookingList}>
-        {bookingss?.map((booking, index) => (
-          <View key={index} style={styles.bookingCard}>
-            <Text style={styles.bookingId}>{nanoid()}</Text>
-            <Text style={[{ color: booking.color }, styles.bookingStatus]}>{booking.status}</Text>
-            <Text style={styles.bookingName}>{booking?.title}</Text>
-            <Text style={styles.bookingDate}>{booking?.date}</Text>
-            <Text style={styles.bookingPrice}>{booking?.price}</Text>
-            <View style={styles.border}></View>
-            <Text style={styles.bookingCompany}>{booking?.organization_name}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      {bookings === ''?(
+         <ScrollView style={styles.bookingList}>
+         {bookingss?.map((booking, index) => (
+           <View key={index} style={styles.bookingCard}>
+             <Text style={styles.bookingId}>{nanoid()}</Text>
+             <Text style={[{ color: booking.color }, styles.bookingStatus]}>{booking.status}</Text>
+             <Text style={styles.bookingName}>{booking?.title}</Text>
+             <Text style={styles.bookingDate}>{booking?.date}</Text>
+             <Text style={styles.bookingPrice}>{booking?.price}</Text>
+             <View style={styles.border}></View>
+             <Text style={styles.bookingCompany}>{booking?.organization_name}</Text>
+           </View>
+         ))}
+       </ScrollView>
+      ):(
+        <Text style={styles.bookingInfoText}>No Booking information found</Text>
+      )}
       <TouchableOpacity style={styles.homeButton}>
         <Feather name="home" size={24} color="black" onPress={() => navigation.navigate("Home")} />
       </TouchableOpacity>
@@ -158,4 +165,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  bookingInfoText:{
+    textAlign:'center',
+    paddingTop:SIZES.height*0.03
+  }
 });

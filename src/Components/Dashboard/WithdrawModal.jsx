@@ -7,7 +7,8 @@ import {
   Pressable,
   Alert,
   StatusBar,
-  TextInput
+  TextInput,
+  Platform
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     // backgroundColor: 'rgba(0, 0, 0, 0.5)',
     height:SIZES.height,
+    position:'absolute'
   },
   modalView: {
     margin: 20,
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     color: 'black',
     borderWidth: 1,
     borderColor: 'rgba(144, 137, 137, 1)',
-    padding: SIZES.width * 0.0095,
+    padding: Platform.OS === "ios"? SIZES.width * 0.03:SIZES.width * 0.0095,
     width: SIZES.width * 0.7,
     margin: SIZES.width * 0.03,
     flexDirection: 'row',

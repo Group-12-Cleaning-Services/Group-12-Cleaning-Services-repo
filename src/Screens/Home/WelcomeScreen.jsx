@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, View, SafeAreaView, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import { ImageBackground, StatusBar, View, SafeAreaView, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import { COLORS, SIZES } from '../../Constants/Theme';
 import { Feather } from '@expo/vector-icons';
 
@@ -19,6 +19,7 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={container}>
+      <StatusBar backgroundColor={'#756F69'} barStyle={'light-content'} />
       <ImageBackground
         style={background}
         source={require("../../../assets/welcome.png")}

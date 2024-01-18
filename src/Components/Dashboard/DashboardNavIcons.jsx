@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, Text, Pressable, Alert, Platform } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
@@ -8,7 +8,8 @@ import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal';
 import { useSelector } from 'react-redux';
 
-const DashboardNavIcons = ({ servicesNav, uploadNav, bookingsNav }) => {
+const DashboardNavIcons = ({ viewNotification }) => {
+
   const [notification, setNotification] = useState('');
   const [count, setCount] = useState();
   const dispatch = useDispatch();
@@ -17,6 +18,10 @@ const DashboardNavIcons = ({ servicesNav, uploadNav, bookingsNav }) => {
   const handleProfileModal = () => {
     dispatch(modalActions.handleProfileModal());
   };
+
+  const handleNavigation = () =>{
+    viewNotification()
+  }
 
   useEffect(() => {
     const getNotifications = async () => {
@@ -55,8 +60,19 @@ const DashboardNavIcons = ({ servicesNav, uploadNav, bookingsNav }) => {
           <Text style={styles.headerText}>Xavier&Co.</Text>
         </View>
         <View style={styles.headerIconsContainer}>
-          <Ionicons style={styles.notfiIcon} name="notifications" size={24} color="black" />
-          {count > 0 && <Text style={styles.notificationCount}>{count}</Text>}
+          <Ionicons 
+            style={styles.notfiIcon} 
+            name="notifications" 
+            size={24} 
+            color="black"
+            onPress={handleNavigation} 
+            />
+          {count > 0 && 
+           <Text
+            onPress={handleNavigation} 
+            style={styles.notificationCount}>
+              {count}
+            </Text>}
           <FontAwesome
             style={styles.userIcon}
             name="user-circle" size={24} color="black"
@@ -73,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    paddingTop: SIZES.height * 0.03,
+    paddingTop: Platform.OS === "ios" ? SIZES.height * 0.07 : SIZES.height * 0.03,
   },
   headerIconsContainer: {
     display: "flex",
@@ -89,20 +105,20 @@ const styles = StyleSheet.create({
     fontSize: SIZES.width * 0.06,
   },
   notfiIcon: {
-    paddingRight: SIZES.width * 0.02,
+    paddingRight: SIZES.width * 0.04,
   },
   userIcon: {
-    paddingRight: SIZES.width * 0.01,
+    paddingRight: SIZES.width * 0.04,
   },
   notificationCount: {
     backgroundColor: 'red',
     color: 'white',
     borderRadius: 100,
-    paddingHorizontal: SIZES.width*0.01,
-    paddingVertical: SIZES.height*0.002,
-    marginLeft: -SIZES.width*0.03,
-    bottom:SIZES.height*0.02,
-    right:SIZES.width*0.04
+    paddingHorizontal: SIZES.width * 0.01,
+    paddingVertical: SIZES.height * 0.002,
+    marginLeft: -SIZES.width * 0.03,
+    bottom: SIZES.height * 0.02,
+    right: SIZES.width * 0.04,
   },
 });
 

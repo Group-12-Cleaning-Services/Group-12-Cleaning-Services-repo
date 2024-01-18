@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Image, TouchableOpacity, SafeAreaView, ScrollView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,7 @@ import { SIZES } from '../../Constants/Theme';
 
 
 export default function ProfileScreen({navigation}) {
+
   const [user, setUser] = useState('')
   const [userType, setUserType] = useState();
   const [profileState, setProfileState] = useState('');
@@ -17,8 +18,19 @@ export default function ProfileScreen({navigation}) {
   const [notification, setNotification] = useState('');
   const [count, setCount] = useState();
 
+  const handleNavigation = () =>{
+    navigation.navigate("Notifications")
+  }
+
+  const handleLogout = async() =>{
+    await AsyncStorage.removeItem("access");
+    await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("user_type")
+    navigation.navigate("Home")
+  }
+
   useEffect(() => {
-    const getItemFromStorage = async () => {
+    const getProfile = async () => {
       try {
         const accessToken = await AsyncStorage.getItem('access');
         if (accessToken) {
@@ -34,19 +46,21 @@ export default function ProfileScreen({navigation}) {
           const value = await AsyncStorage.getItem('user');
           const user_typeValue = await AsyncStorage.getItem('user_type');
 
-          setFirst_name(response.data.profile?.first_name);
-          setLast_name(response.data.profile?.last_name);
-          setProfile_image(response.data.profile?.profile_image)
-          setUser(value || '');
-          setUserType(user_typeValue || '');
+          if(response.status === 200){
+            setFirst_name(response.data.profile?.first_name);
+            setLast_name(response.data.profile?.last_name);
+            setProfile_image(response.data.profile?.profile_image)
+            setUser(value || '');
+            setUserType(user_typeValue || '');
+          }
         }
       } catch (error) {
         console.error(error);
       }
     };
 
-    getItemFromStorage();
-  }, []); 
+    getProfile();
+  }, [first_name || last_name]); 
 
 
   useEffect(() => {
@@ -76,19 +90,15 @@ export default function ProfileScreen({navigation}) {
     };
 
     getNotifications();
-  }, []);
+  }, [count]);
   
 
-  const handleLogout = async() =>{
-    await AsyncStorage.removeItem("access");
-    await AsyncStorage.removeItem("user");
-    await AsyncStorage.removeItem("user_type")
-    navigation.navigate("Home")
-  }
 
   return (
     <SafeAreaView style={styles.container}>
+       <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <ScrollView style={{flex:1}}>
+        <View style={styles.itemsContainer}>
       <View style={styles.header}>
       <Feather name="log-out" 
        size={24} color="black" 
@@ -96,8 +106,19 @@ export default function ProfileScreen({navigation}) {
        onPress={() => navigation.goBack()}
       />
        <View style={styles.notificationContainer}>
-        <Ionicons style={styles.notfiIcon} name="notifications" size={24} color="black" />
-        {count > 0 && <Text style={styles.notificationCount}>{count}</Text>}
+          <Ionicons 
+            style={styles.notfiIcon} 
+            name="notifications" 
+            size={24} 
+            color="black"
+            onPress={handleNavigation} 
+            />
+          {count > 0 && 
+           <Text
+            onPress={handleNavigation} 
+            style={styles.notificationCount}>
+              {count}
+            </Text>}
         </View>
       </View>
       <View style={styles.profileSection}>
@@ -136,21 +157,26 @@ export default function ProfileScreen({navigation}) {
           <Feather name="user" size={24} color="black" />
           <Text style={styles.optionText}>Regsitered as a {userType?.replace(/_/g, ' ' )}</Text>
         </View>
-        <TouchableOpacity style={styles.option}>
-          <Feather name="book-open" size={24} color="black" />
-          {userType === "customer" &&
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("MyBookings")}>My Bookings</Text>
-          }
-          {userType === "service_provider" &&
-          <Text style={styles.optionText} onPress={()=>navigation.navigate("Dashboard")}>View Dashboard</Text> 
-          }
-          <Feather name="chevron-right" size={24} color="black" />
-        </TouchableOpacity>
+       {userType==="service_provider" &&
+        <TouchableOpacity style={styles.option} onPress={()=>navigation.navigate("Dashboard")}>
+        <Feather name="book-open" size={24} color="black" />
+        <Text style={styles.optionText} >View Dashboard</Text> 
+        <Feather name="chevron-right" size={24} color="black" />
+      </TouchableOpacity> 
+       }
+        {userType==="customer" &&
+        <TouchableOpacity style={styles.option} onPress={()=>navigation.navigate("MyBookings")}>
+        <Feather name="book-open" size={24} color="black" />
+        <Text style={styles.optionText} >My Bookings</Text> 
+        <Feather name="chevron-right" size={24} color="black" />
+      </TouchableOpacity> 
+       }
         <TouchableOpacity style={styles.option} onPress={handleLogout}>
           <Feather name="log-out" size={24} color="black"  />
           <Text style={styles.optionText} >Logout</Text>
           <Feather name="chevron-right" size={24} color="black" />
         </TouchableOpacity>
+      </View>
       </View>
       </ScrollView>
     </SafeAreaView>
@@ -161,6 +187,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#B3CDE0',
+  },
+  itemsContainer:{
+   
   },
   mirroredIcon: {
     transform: [{ scaleX: -1 }],
@@ -174,7 +203,7 @@ const styles = StyleSheet.create({
   },
   profileSection: {
     alignItems: 'center',
-    marginTop: 20,
+    paddingTop:Platform.OS==="ios" ? SIZES.height*0.1: SIZES.height*0.01
   },
   profileImage: {
     width: 100,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView, StyleSheet, Image, Text, View, TextInput, ScrollView, Alert } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Image, Text, View, TextInput, ScrollView, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Button from '../../Components/Button';
 import { SIZES } from "../../Constants/Theme";
@@ -83,6 +83,7 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <ScrollView style={scrollContainer}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <SafeAreaView style={container}>
         {showSuccess ? (
           <SaveSuccess />
@@ -132,22 +133,23 @@ const EditProfile = ({ navigation }) => {
               </View>
             </View>
             <View style={btnsContainer}>
+              <Button title={'Cancel'}
+                buttonContainer={saveCancelBtn}
+                buttonText={cancelText}
+              />
               <Button title={'Save'}
                 buttonContainer={saveCancelBtn}
                 buttonText={buttonText}
                 press={handleProfileEdit}
                 // press={()=>navigation.navigate("Profile")}
               />
-              <Button title={'Cancel'}
-                buttonContainer={saveCancelBtn}
-                buttonText={cancelText}
-              />
             </View>
           </>
         )}
-        <Text style={styles.indicator}>
-          {loading && <LoadingModal modalVisible={true} />} 
-       </Text>
+        {/* <Text style={styles.indicator}>
+          {loading && <LoadingModal task='Saving Changes..' modalVisible={true} />} 
+       </Text> */}
+       {loading && <LoadingModal task='Saving Changes..' modalVisible={true} />}
       </SafeAreaView>
     </ScrollView>
   );
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
   },
   btnsContainer: {
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
   saveCancelBtn: {

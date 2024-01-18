@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, ActivityIndicator, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert,  Image, Text, View, TextInput, StatusBar, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons'
 import Button from '../../Components/Button';
@@ -82,6 +82,7 @@ const Register = ({navigation}) => {
 
   return (
     <SafeAreaView style={container}>
+      <StatusBar backgroundColor={'#B3CDE0'} barStyle={'dark-content'} />
       <ScrollView style={scrollContainer}> 
       <View style={imageContainer}>
         <Image source={require("../../../assets/logo.png")} style={image} />
@@ -103,7 +104,7 @@ const Register = ({navigation}) => {
           />
         </View>
         <View style={input}>
-          <Feather name={'lock'} 
+          <Feather name={'mail'} 
            size={20} color={'black'} 
            style={iconUser} />
           <TextInput 
@@ -114,7 +115,7 @@ const Register = ({navigation}) => {
            />
         </View>
         <View style={input}>
-          <Feather name={'mail'} 
+          <Feather name={'lock'} 
           size={20} color={'black'} 
           style={iconUser} />
           <TextInput 
@@ -131,9 +132,9 @@ const Register = ({navigation}) => {
        buttonText={buttonText}
        press={handleCreateAccount}
        />
-       <Text style={indicator}>
-          {loading && <LoadingModal modalVisible={true} />} 
-        </Text>
+       
+      {loading && <LoadingModal modalVisible={true} />} 
+
       <Button title={'Already have an account?'}
        buttonContainer={haveAccount}
        buttonText={haveAccountText}

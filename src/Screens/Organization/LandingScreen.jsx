@@ -11,7 +11,7 @@ import ListItem from '../../Components/ListItems';
 const LandingScreen = ({ navigation }) => {
 
   const[organizationss, setOrganizations] = useState([]);
-  const[horizontal, setHorizontal] = useState(true) 
+  const[horizontal, setHorizontal] = useState(4) 
 
   useEffect(() => {
     const getServices = async () => {
@@ -85,7 +85,7 @@ const LandingScreen = ({ navigation }) => {
           sections={organizationss}
           renderSectionHeader={({ section }) => (
             <>
-              <Text style={styles.sectionHeader}>Available Organizations</Text>
+              <Text style={styles.sectionHeader}>Available Organization</Text>
               {horizontal ? (
                 <FlatList
                  key={section.data.user_id}
@@ -101,7 +101,9 @@ const LandingScreen = ({ navigation }) => {
             if (horizontal) {
               return null;
             }
-            return <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')} />;
+            if(horizontal === 4){
+              return <ListItem item={item} nav={()=> navigation.navigate('SingleOrg')} />
+            };
           }}
         />
     </View>

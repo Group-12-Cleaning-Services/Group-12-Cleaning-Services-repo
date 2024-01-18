@@ -12,6 +12,7 @@ export default function OnBoarding({navigation}) {
   const buttonLabel = (label) => {
     return (
       <View style={styles.buttonContainer}>
+        <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
         <Text style={styles.buttonLabel}>
           {label}
         </Text>

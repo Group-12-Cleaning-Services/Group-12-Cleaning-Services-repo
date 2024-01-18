@@ -4,7 +4,8 @@ import {
   FlatList,
   StyleSheet,
   View,
-  Text
+  Text,
+  StatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
@@ -57,6 +58,7 @@ console.log(services)
 
   return (
     <SafeAreaView style={styles.container}>
+        <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
         <View style={styles.header}>
             <Text style={styles.headerText}>Pacific Cleaners</Text>
         </View>
