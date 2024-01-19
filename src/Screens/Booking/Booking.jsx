@@ -262,7 +262,7 @@ const Booking = ({ navigation }) => {
             <Pressable onPress={handleShowTimePicker}>
               <TextInput
                 style={inputField}
-                placeholder={Platform.OS === 'ios'? "11:07:39 GMT+000": "Choose a date"}
+                placeholder={Platform.OS === 'ios'? "11:07:39 GMT+000": "Choose a Time"}
                 onChangeText={(value) => handleChange("time", value)}
                 value={bookingTime}
                 editable={Platform.OS === 'ios'? true : false}
