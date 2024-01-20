@@ -53,7 +53,7 @@ def send_all_services_by_category(category: str):
     return serializer.data
 
 
-def book_service(service: Service, user: CleaningServiceUser, time: str) -> dict:
+def book_service(service: Service, user: CleaningServiceUser, time: str, address, date) -> dict:
     """Book a service
 
     Args:
@@ -61,9 +61,8 @@ def book_service(service: Service, user: CleaningServiceUser, time: str) -> dict
         user (CleaningServiceUser): CleaningServiceUser instance
         data (str): post data with required fields
     """
-    service = ScheduleService.objects.create(service=service, customer=user, time=time)
-    serializer = ScheduleServiceSerializer(service)
-    return serializer.data
+    service = ScheduleService.objects.create(service=service, customer=user, time=time, address=address, date=date)
+    return service
     
     
 def send_all_booked_service() -> dict:
@@ -114,3 +113,30 @@ def all_profiles():
     queryset = CleaningServiceUserProfile.objects.all()
     serializer = CleaningServiceUserProfileSerializer(queryset, many=True)
     return serializer.data
+
+def create_provider_balance(user: CleaningServiceUser, amount):
+    """ Create provider balance
+
+    Args:
+        user (CleaningServiceUser): CleaningServiceUser instance
+        amount (int): amount to be added to the balance
+
+    Returns:
+        Transaction: Transaction instance
+    """
+    transaction = Transaction.objects.create(user=user, balance=amount)
+    return transaction
+
+def update_provider_balance(transaction:Transaction, amount):
+    """ Update provider balance
+
+    Args:
+        Transaction (Transation): Transaction instance
+        amount (int): amount to be added to the balance
+
+    Returns:
+        Transaction: Transaction instance
+    """
+    transaction.balance += amount
+    transaction.save()
+    return transaction

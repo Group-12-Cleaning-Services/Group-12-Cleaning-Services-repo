@@ -1,13 +1,38 @@
 from core.models import CleaningServiceUser, VerificationToken, PasswordToken, CleaningServiceUserProfile
 from core.serializers import CleaningServiceSerializer, VerificationTokenSerializer, PasswordTokenSerializer
+from core.senders.profile import *
 
 
 def get_user_information(email):
     """Get user information"""
     user = get_user_by_email(email)
-    serializer = CleaningServiceSerializer(user)
-    return serializer.data
+    if user.profile:
+        profile = get_profile_by_user_id(user.user_id)
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "user_type": user.user_type,
+            "organization_name": user.organization_name if user.user_type == "service_provider" else "",
+            "organization_logo": str(user.organization_logo) if user.organization_logo and user.user_type == "service_provider" else None,
 
+            "verified": user.verified,
+            "profile": send_profile_information(user.profile)
+        }
+        return user_data
+    else:
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "user_type": user.user_type,
+            "verified": user.verified,
+            "profile": "",
+            "organization_name": user.organization_name if user.user_type == "service_provider" else "",
+            "organization_logo": str(user.organization_logo) if user.organization_logo and user.user_type == "service_provider" else None,
+
+        }
+        return user_data
+            
+            
 def get_user_by_email(email):
     """Get user by email"""
     try:
@@ -41,9 +66,12 @@ def get_profile_by_user_id(user_id):
     """Get profile by user id"""
     try:
         user = get_user_by_id(user_id)
-        print(f"user profile {user.email}")
-        return CleaningServiceUserProfile.objects.get(profile_id=user.profile.profile_id)
-    except CleaningServiceUser.DoesNotExist:
+        if user.profile:
+            profile_id = user.profile.profile_id
+            return CleaningServiceUserProfile.objects.get(profile_id=profile_id)
+        else:
+            return None
+    except:
         return None
 
 def get_verification_token(email):

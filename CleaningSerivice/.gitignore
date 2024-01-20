@@ -14,8 +14,6 @@ db*
 ./db*
 # Ignore static files directory (if using collectstatic)
 staticfiles/
-Pipfile.lock
-Pipfile
 
 # Ignore media files directory
 media/
@@ -32,6 +30,8 @@ media/
 *.sublime-project
 *.sublime-workspace
 *.pydevproject
+Pipefile
+Pipfile.lock
 
 # Ignore local development settings
 local_settings.py

@@ -8,8 +8,11 @@ from core.retrievers.services import *
 from core.models import Transaction
 import requests
 from core.utils import *
+from core.serializers import TransactionSerializer
 import json
 import os
+import threading
+import time
 
 
 class PaymentViewset(viewsets.ViewSet):
@@ -17,34 +20,14 @@ class PaymentViewset(viewsets.ViewSet):
     
     def initialize_transaction(self, request):
         
-        """
-            !/bin/sh
-            url="https://api.paystack.co/transaction/initialize"
-            authorization="Authorization: Bearer YOUR_SECRET_KEY"
-            content_type="Content-Type: application/json"
-            data='{ 
-            "email": "customer@email.com", 
-            "amount": "20000"
-            }'
-
-            curl "$url" -H "$authorization" -H #"$content_type" -d "$data" -X POST
-            
-            response = {
-            "status": true,
-            "message": "Authorization URL created",
-            "data": {
-                "authorization_url": "https://checkout.paystack.com/0peioxfhpn",
-                "access_code": "0peioxfhpn",
-                "reference": "7PVGX8MEk85tgeEpVDtD"
-            }
-            }
-        """
-        SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         service_id = request.data.get('service_id')
         user = get_user_from_jwttoken(request)
-        time = request.data.get('time')
+        # service_time = request.data.get('time')
 
         url="https://api.paystack.co/transaction/initialize"
+        print(user)
+        print(service_id)
         
         if user is None or service_id is None:
             context = {
@@ -66,125 +49,24 @@ class PaymentViewset(viewsets.ViewSet):
             response = requests.post(url, headers=headers, json=data)
             if response.status_code == 200:
                 data = response.json()
-                return Response(data, status=response.status_code)
+                verify_thread = threading.Thread(target=self.verify_transaction, args=[request, data["data"]["reference"]])
+                verify_thread.start()
+                return Response(data=data, status=status.HTTP_200_OK)
             else:
                 return Response(response.text, status=response.status_code)
         return Response({"error": "service not found"}, status=status.HTTP_404_NOT_FOUND)
             
     
-    def verify_transaction(self, request)-> Response:
-        """ endpoint to verify transaction
-
-        Args:
-            request (http request): http request object
-            Return (http response): http response object
-        """
+    def verify_transaction(self, request ,reference)-> Response:
         
-        """
-            {
-            "status": true,
-            "message": "Verification successful",
-            "data": {
-                "id": 2009945086,
-                "domain": "test",
-                "status": "success",
-                "reference": "rd0bz6z2wu",
-                "amount": 20000,
-                "message": null,
-                "gateway_response": "Successful",
-                "paid_at": "2022-08-09T14:21:32.000Z",
-                "created_at": "2022-08-09T14:20:57.000Z",
-                "channel": "card",
-                "currency": "NGN",
-                "ip_address": "100.64.11.35",
-                "metadata": "",
-                "log": {
-                "start_time": 1660054888,
-                "time_spent": 4,
-                "attempts": 1,
-                "errors": 0,
-                "success": true,
-                "mobile": false,
-                "input": [],
-                "history": [
-                    {
-                    "type": "action",
-                    "message": "Attempted to pay with card",
-                    "time": 3
-                    },
-                    {
-                    "type": "success",
-                    "message": "Successfully paid with card",
-                    "time": 4
-                    }
-                ]
-                },
-                "fees": 100,
-                "fees_split": null,
-                "authorization": {
-                "authorization_code": "AUTH_ahisucjkru",
-                "bin": "408408",
-                "last4": "4081",
-                "exp_month": "12",
-                "exp_year": "2030",
-                "channel": "card",
-                "card_type": "visa ",
-                "bank": "TEST BANK",
-                "country_code": "NG",
-                "brand": "visa",
-                "reusable": true,
-                "signature": "SIG_yEXu7dLBeqG0kU7g95Ke",
-                "account_name": null
-                },
-                "customer": {
-                "id": 89929267,
-                "first_name": null,
-                "last_name": null,
-                "email": "hello@email.com",
-                "customer_code": "CUS_i5yosncbl8h2kvc",
-                "phone": null,
-                "metadata": null,
-                "risk_action": "default",
-                "international_format_phone": null
-                },
-                "plan": null,
-                "split": {},
-                "order_id": null,
-                "paidAt": "2022-08-09T14:21:32.000Z",
-                "createdAt": "2022-08-09T14:20:57.000Z",
-                "requested_amount": 20000,
-                "pos_transaction_data": null,
-                "source": null,
-                "fees_breakdown": null,
-                "transaction_date": "2022-08-09T14:20:57.000Z",
-                "plan_object": {},
-                "subaccount": {}
-            }
-            }
-
-        """
-        SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
-        user = get_user_from_jwttoken(request)
+        time.sleep(120)
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         service_id = request.data.get('service_id')
-        time = request.data.get('time')
-        reference = request.data.get('reference')
+        service_time = request.data.get('time')
+        address = request.data.get('address')
+        date = request.data.get('date')[0:10]
+        user = get_user_from_jwttoken(request)
 
-
-        if not user or not service_id:
-            context = {
-                "error": "user and service id is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        if not user:
-            context = {
-                "error": "user is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        if not reference:
-            context = {
-                "error": "reference is required"
-            }
-            return Response(context, status=status.HTTP_400_BAD_REQUEST)
         url = f"https://api.paystack.co/transaction/verify/{reference}"
         
         headers = {
@@ -198,8 +80,14 @@ class PaymentViewset(viewsets.ViewSet):
             response = response.json()
             if response["data"]["status"] == "success":
                 service = get_service_by_id(service_id)
-                schedule_service = book_service(service=service, user=user, time=time)
-                Transaction.objects.create(user=user, amount=service.price)
+                schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
+                Transaction.objects.create(user=user, balance=service.price)
+                
+                try:
+                    service_transaction = Transaction.objects.get(user=service.user)
+                    update_provider_balance(service_transaction, service.price)
+                except:
+                    create_provider_balance(service.user, service.price)
                 context = {
                     "detail": "Service booked successfully",
                     "data": schedule_service
@@ -212,3 +100,54 @@ class PaymentViewset(viewsets.ViewSet):
                 return Response(context, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(response.text, status=response.status_code)
+        
+
+class Withdraw(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    
+    def initialize_transfer(self, request):
+        amount = request.data.get("amount")
+        user = get_user_from_jwttoken(request)
+        url = "https://api.paystack.co/transfer"
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
+        if user is None or amount is None:
+            context = {
+                "error": "user and amount is required"
+            }
+            return Response(context, status=status.HTTP_204_NO_CONTENT)
+        headers = {
+            "Authorization": f"Bearer {SECRET_KEY}",
+            "Content-Type": "application/json"
+        }
+        transaction = Transaction.objects.get(user=user)
+        if transaction:
+            print(transaction.balance)
+            if transaction.balance < int(amount):
+                context = {
+                    "detail": "Insufficient balance"
+                }
+                return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        context = {
+                "detail": "Withdrawal successful",
+            }
+        transaction.balance -= int(amount)
+        transaction.save()
+        return Response(context, status=status.HTTP_200_OK)
+        
+
+class Dashboard(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    
+    def get_transaction(self, request):
+        
+        user = get_user_from_jwttoken(request)
+        transaction = Transaction.objects.filter(user=user)
+        if transaction:
+            serializers = TransactionSerializer(transaction, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        else:
+            context = {
+                "detail": "No transaction found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        

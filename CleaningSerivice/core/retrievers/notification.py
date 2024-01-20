@@ -8,3 +8,11 @@ def get_notification_by_user(user):
         return serializer.data
     except:
         return None
+    
+def delele_notification_by_user(user):
+    try:
+        queryset = Notification.objects.filter(user=user)
+        queryset.delete()
+        return True
+    except:
+        return False

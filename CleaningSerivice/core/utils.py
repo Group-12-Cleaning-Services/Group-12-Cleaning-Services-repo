@@ -44,9 +44,7 @@ def email_verification(email: str, otp_length: int):
         if token:
             update_verification_token(token, pin)
         else:
-            print(f"receiver: {receiver}")
             pin_created = create_verification_token(receiver[0], pin)
-            print(f"pin created: {pin_created}")
         return True
     return False
 

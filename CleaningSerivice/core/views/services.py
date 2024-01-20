@@ -1,6 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from core.senders.services import *
+from core.senders.accounts import *
+from core.retrievers.accounts import *
 from core.retrievers.services import *
 from core.utils import get_user_from_jwttoken
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +13,17 @@ class ServiceViewset(viewsets.ViewSet):
     Args:
         viewsets (viewset): viewset class
     """
+    def list_service_providers(self, request):
+        """View for getting all service providers
+
+        Args:
+            request (http): get request
+        """
+        context = {
+            "detail": "All Service Providers",
+            "data": get_all_service_providers()
+        }
+        return Response(context, status=status.HTTP_200_OK)
     
     def list_service(self, request):
         """View for getting all service objects
@@ -20,12 +33,12 @@ class ServiceViewset(viewsets.ViewSet):
         """
         context = {
             "detail": "All Services",
-            "serices": send_all_services()
+            "services": send_all_services()
         }
         return Response(context, status=status.HTTP_200_OK)
     
     
-    def list_booked_service_by_customer(self, request, id):
+    def list_booked_service_of_customer(self, request):
         """View for getting all booked service by a customer
 
         Args:
@@ -37,13 +50,24 @@ class ServiceViewset(viewsets.ViewSet):
                 "detail": "You are not a customer"
             }
             return Response(context, status=status.HTTP_403_FORBIDDEN)
+        send_data = [{
+            "id": data["scheduleservice_id"],
+            "date": data["date"],
+            "time": data["time"],
+            "status": data["status"],
+            "organization_name": data["service"]["user"]["organization_name"],
+            "price":data["service"]["price"],
+            "title": data["service"]["title"],
+            "category": data["service"]["category"]
+        } for data in send_booked_service_by_customer(user)]
+
         context = {
             "detail": "All booked service by a customer",
-            "serices": send_booked_service_by_customer(user)
+            "services": send_data
         }
         return Response(context, status=status.HTTP_200_OK)
     
-    def list_booked_service_by_provider(self, request, id):
+    def list_booked_service_of_provider(self, request):
         """View for getting all booked service by a provider
 
         Args:
@@ -55,9 +79,20 @@ class ServiceViewset(viewsets.ViewSet):
                 "detail": "You are not a service provider"
             }
             return Response(context, status=status.HTTP_403_FORBIDDEN)
+        send_data = [{
+            "id": data["scheduleservice_id"],
+            "date": data["date"],
+            "time": data["time"],
+            "status": data["status"],
+            "customer": data["customer"]["email"],
+            "price":data["service"]["price"],
+            "title": data["service"]["title"],
+            "category": data["service"]["category"]
+        } for data in get_booked_service_by_provider(user)]
+
         context = {
             "detail": "All booked service by a provider",
-            "serices": send_booked_service_by_provider(user)
+            "services": send_data
         }
         return Response(context, status=status.HTTP_200_OK)
     
@@ -75,8 +110,68 @@ class ServiceViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
+    def get_service_provider_services(self, request, id):
+        """Get the services of a service provider
+
+        Args:
+            request (http): get request
+            id (uuid): service provider id
+        """
+        user = get_user_by_id(id)
+        if not user:
+            context = {
+                "detail": "User not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a service provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        
+        services = get_serivce_by_user(user)
+        if not services:
+            context = {
+                "detail": "Service provider not found"
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        context = {
+            "detail": "Service provider services",
+            "services": services
+        }
+        return Response(context, status=status.HTTP_200_OK)
     
     
+    def list_service_provider_services(self, request):
+        """Get the services of a service provider
+
+        Args:
+            request (http): get request
+            id (uuid): service provider id
+        """
+        user = get_user_from_jwttoken(request)
+        if not user:
+            context = {
+                "detail": "User not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a service provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        
+        services = get_serivce_by_user(user)
+        if not services:
+            context = {
+                "detail": "Service provider not found"
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        context = {
+            "detail": "Service provider services",
+            "services": services
+        }
+        return Response(context, status=status.HTTP_200_OK)
     
     def create_service(self, request):
         """Create Service
@@ -176,31 +271,31 @@ class ServiceViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_200_OK)
         
         
-    def book_service(self, request, id):
-        """Book Service
+    # def book_service(self, request, id):
+    #     """Book Service
 
-        Args:
-            request (http): post request
-            id (uuid): service id
-        """
-        user = get_user_from_jwttoken(request)
-        if user.user_type != "customer":
-            context = {
-                "detail": "You are not a customer"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        service = get_service_by_id(id)
-        if not service:
-            context = {
-                "detail": "Service not found"
-            }
-            return Response(context, status=status.HTTP_404_NOT_FOUND)
-        schedule_service = book_service(service, user, request.data)
-        context = {
-            "detail": "Service booked successfully",
-            "schedule_service": schedule_service
-        }
-        return Response(context, status=status.HTTP_200_OK)
+    #     Args:
+    #         request (http): post request
+    #         id (uuid): service id
+    #     """
+    #     user = get_user_from_jwttoken(request)
+    #     if user.user_type != "customer":
+    #         context = {
+    #             "detail": "You are not a customer"
+    #         }
+    #         return Response(context, status=status.HTTP_403_FORBIDDEN)
+    #     service = get_service_by_id(id)
+    #     if not service:
+    #         context = {
+    #             "detail": "Service not found"
+    #         }
+    #         return Response(context, status=status.HTTP_404_NOT_FOUND)
+    #     schedule_service = book_service(service, user, request.data)
+    #     context = {
+    #         "detail": "Service booked successfully",
+    #         "schedule_service": schedule_service
+    #     }
+    #     return Response(context, status=status.HTTP_200_OK)
     
     
     def cancel_booked_service(self, request, id):
@@ -211,11 +306,11 @@ class ServiceViewset(viewsets.ViewSet):
             id (uuid): service id
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "customer":
-            context = {
-                "detail": "You are not a customer"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        # if user:
+        #     context = {
+        #         "detail": "You are not a customer"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
         schedule_service = get_booked_service_by_id(id)
         if not schedule_service:
             context = {
@@ -271,3 +366,29 @@ class ServiceViewset(viewsets.ViewSet):
             permission_classes = []
         return [permission() for permission in permission_classes]
     
+
+    def update_booked_service(self, request, id):
+        """Update Booked Service
+
+        Args:
+            request (http): put request
+            id (uuid): service id
+        """
+        user = get_user_from_jwttoken(request)  
+        service_status = request.data.get("status")
+        if user.user_type != "service_provider":
+            context = {
+                "detail": "You are not a provider"
+            }
+            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        schedule_service = get_booked_service_by_id(id)
+        if not schedule_service:
+            context = {
+                "detail": "Schedule service not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        schedule_service = update_booked_service_status(schedule_service, status=service_status)
+        context = {
+            "detail": "Schedule service updated successfully",
+        }
+        return Response(context, status=status.HTTP_200_OK)

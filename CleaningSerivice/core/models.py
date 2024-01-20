@@ -22,7 +22,7 @@ USER_TYPE = [
 SCHEDULE_STATUS = [
     ("booked", "Booked"),
     ("completed", "Completed"),
-    ("deleted", "Deleted")
+    ("ongoing", "Ongoing"),
 ]
 
 class CleaningServiceUserProfile(models.Model):
@@ -31,7 +31,7 @@ class CleaningServiceUserProfile(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     contact = PhoneField(null=True, blank=True)
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='images/', blank=True, null=True)
     time_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     
     def __str__(self):
@@ -72,6 +72,8 @@ class CleaningServiceUser(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
+    organization_name = models.CharField(max_length=255, null=True, blank=True)
+    organization_logo = models.ImageField(upload_to='images', blank=True, null=True)
     USERNAME_FIELD = 'email'
     objects = CleaningServiceBaseUser()
     
@@ -107,23 +109,34 @@ class PasswordToken(models.Model):
     
 class Service(models.Model):
     service_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     category = models.CharField(max_length=50)
-    thumnail = models.ImageField(upload_to="thumnail_images", blank=True, null=True)
+    user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
+    thumnail = models.ImageField(upload_to="images", blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
-    
+    created_at = models.DateField(auto_now_add=True)
     def __str__(self):
         return f"{self.title} - {self.category} || {self.user.email} at {self.price}"
+    
+
+# class ServiceProvider(models.Model):
+#     serviceprovider_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     user = models.OneToOneField(CleaningServiceUser, on_delete=models.CASCADE, related_name='service_provider')
+#     thumnails = models.ImageField(upload_to="service_provider_thumnails", blank=True, null=True)
+#     service = models.ManyToManyField(Service, related_name='service')
+#     def __str__(self):
+#         return f"{self.user.email} - {self.service.count()}"
     
 
 class ScheduleService(models.Model):
     scheduleservice_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    time = models.DateTimeField()
+    date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    time = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     customer = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
     status = models.CharField(choices=SCHEDULE_STATUS, max_length=50, default="booked", null=True, blank=True)
+    address = models.CharField(max_length=50)
     
     def __str__(self):
         return f"{self.service.title} is booked by - {self.customer.email} at {self.time}"
@@ -151,7 +164,8 @@ class Notification(models.Model):
 
 class Transaction(models.Model):
     user = models.ForeignKey(CleaningServiceUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    transfer_receipient_code = models.CharField(max_length=50, null=True, blank=True)
     
     def __str__(self):
-        return f"{self.user.email} - {self.amount}"
+        return f"{self.user.email} - {self.balance}"

@@ -13,8 +13,28 @@ class NotificationViewset(viewsets.ViewSet):
             request (http): get request
         """
         user = get_user_from_jwttoken(request)
+
+        send_data = [
+            {
+                "message": data["message"]
+            } for data in get_notification_by_user(user)
+        ]
         context = {
             "detail": "All Notifications",
-            "notifications": get_notification_by_user(user)
+            "notifications": send_data,
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    
+    def delete(self, request):
+        """View for deleting all service objects
+
+        Args:
+            request (http): delete request
+        """
+        user = get_user_from_jwttoken(request)
+        delele_notification_by_user(user)
+        context = {
+            "detail": "All Notifications Deleted",
         }
         return Response(context, status=status.HTTP_200_OK)
