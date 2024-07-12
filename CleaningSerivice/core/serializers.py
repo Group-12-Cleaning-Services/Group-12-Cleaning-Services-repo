@@ -9,12 +9,11 @@ class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
         fields = ['profile_id', 'first_name', 'last_name', 'contact', 'profile_image', 'time_created']
 
 
-class CleaningServiceSerializer(serializers.ModelSerializer):
-    profile = CleaningServiceUserProfileSerializer()
+class AccountUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CleaningServiceUser
-        fields = ['user_id', 'email', 'user_type','organization_name', 'profile', 'organization_logo',]
-        # extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
+        model = AccountUser
+        fields = ['user_id', 'email', 'organization_name', 'password']
+        extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
         
         
         
@@ -29,42 +28,28 @@ class PasswordTokenSerializer(serializers.ModelSerializer):
         
 
 
-class ServiceSerializer(serializers.ModelSerializer):
-    
-    user = CleaningServiceSerializer(read_only=True)
+class MedicineSerializer(serializers.ModelSerializer):
+    """Medicine Serializer"""
+    docter = AccountUserSerializer()
     class Meta:
-        model = Service
-        fields = ['service_id', 'user', 'title', 'description', 'price', 'category', 'thumnail', 'created_at']
-        extra_kwargs = {'service_id': {'read_only': True}}
-        
-class ScheduleServiceSerializer(serializers.ModelSerializer):
-    """Schedule Service Serializer
+        model = Medicine
+        fields = ['medicine_id', 'name', 'category', 'price', 'quantity', 'description', 'time_created', 'time_updated', 'docter']
 
-    Args:
-        serializers (dict): model serializer for schedule service
-    """
-    service = ServiceSerializer(many=False, read_only=True)
-    customer = CleaningServiceSerializer(many=False, read_only=True)
+class CategorySerializer(serializers.ModelSerializer):
+    """Category Serializer"""
     class Meta:
-        model = ScheduleService
-        fields = ["scheduleservice_id", "service", "customer", 'date', "time", "status"]
-
-
-class ServiceFeedbackSerialiazer(serializers.ModelSerializer):
-    """Service Feedback Serializer"""
-
-    class Meta:
-        model = ServiceFeedback
+        model = Category
         fields = "__all__"
-        
-    
-class NotificationSerializer(serializers.ModelSerializer):
-    """Notification Serializer"""
 
+class OrderSerializer(serializers.ModelSerializer):
+    """Order Serializer"""
+    medicine = MedicineSerializer()
+    customer = AccountUserSerializer()
     class Meta:
-        model = Notification
-        fields =   "__all__"
-        
+        model = Order
+        fields = ['order_id', 'medicine', 'quantity', 'status', 'customer']
+
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     """Transaction Serializer"""
@@ -75,4 +60,15 @@ class TransactionSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'balance': {
             'min_value':0.00,
+        }}
+        
+class NotificationSerializer(serializers.ModelSerializer):
+    """Notification Serializer"""
+    user = AccountUserSerializer()
+    class Meta:
+        model = Notification
+        fields = "__all__"
+        extra_kwargs = {
+            'read': {
+            'default':False,
         }}

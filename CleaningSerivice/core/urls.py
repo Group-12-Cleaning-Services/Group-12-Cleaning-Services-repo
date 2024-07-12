@@ -1,7 +1,7 @@
 from django.urls import path
 from core.views.accounts import AccountViewset, SignIn
 from core.views.profile import ProfileViewset
-from core.views.services import ServiceViewset
+from core.views.medicine import MedicineViewset
 from core.views.notification import NotificationViewset
 from core.views.reset_password import PasswordResetViewset
 from core.views.transactions import PaymentViewset, Dashboard, Withdraw
@@ -29,21 +29,21 @@ urlpatterns = [
     path('accounts/password-reset/', PasswordResetViewset.as_view({'post': 'password_reset_request'})),
     path('accounts/password-reset-confirm/', PasswordResetViewset.as_view({'post': 'password_reset_confirm'})),
     #service
-    path('service/all/', ServiceViewset.as_view({'get': 'list_service'})),
-    path('service/providers/', ServiceViewset.as_view({'get': 'list_service_providers'})),
-    path('service/create/', ServiceViewset.as_view({'post': 'create_service'})),
-    path('service/update/<uuid:id>/', ServiceViewset.as_view({'post': 'update_service'})),
-    path('service/delete/<uuid:id>/', ServiceViewset.as_view({'delete': 'delete_service'})),
-    path('service/retrieve/<uuid:id>/', ServiceViewset.as_view({'get': 'retrieve'})),
-    path('service/book/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
+    path('medicine/all/', MedicineViewset.as_view({'get': 'list_service'})),
+    path('medicine/providers/', MedicineViewset.as_view({'get': 'list_service_providers'})),
+    path('medicine/create/', MedicineViewset.as_view({'post': 'create_service'})),
+    path('medicine/update/<uuid:id>/', MedicineViewset.as_view({'post': 'update_service'})),
+    path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_service'})),
+    path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve'})),
+    path('medicine/book/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
     path('service/verify-payment/', PaymentViewset.as_view({'post': 'verify_transaction'})),
-    path('service/user-booked-service/', ServiceViewset.as_view({'get': 'list_booked_service_of_customer'})),
-    path('service/service-feedback/<uuid:id>/', ServiceViewset.as_view({'post': 'service_feedback'})),
-    path('service/provider-services/<uuid:id>/', ServiceViewset.as_view({'get':'get_service_provider_services'})),
-    path('service/list-provider-services/', ServiceViewset.as_view({'get':'list_service_provider_services'})),
-    path('service/list-service-provider-booked-services/', ServiceViewset.as_view({'get':'list_booked_service_of_provider'})),
-    path('service/update-booked-service/<uuid:id>/', ServiceViewset.as_view({'post':'update_booked_service'})),
-    path('service/delete-booked-service/<uuid:id>/', ServiceViewset.as_view({'delete':'cancel_booked_service'})),
+    path('medicine/user-booked-service/', MedicineViewset.as_view({'get': 'list_booked_service_of_customer'})),
+    path('medicine/service-feedback/<uuid:id>/', MedicineViewset.as_view({'post': 'service_feedback'})),
+    path('medicine/provider-services/<uuid:id>/', MedicineViewset.as_view({'get':'get_service_provider_services'})),
+    path('medicine/list-provider-services/', MedicineViewset.as_view({'get':'list_service_provider_services'})),
+    path('medicine/list-service-provider-booked-services/', MedicineViewset.as_view({'get':'list_booked_service_of_provider'})),
+    path('medicine/update-booked-service/<uuid:id>/', MedicineViewset.as_view({'post':'update_booked_service'})),
+    path('service/delete-booked-service/<uuid:id>/', MedicineViewset.as_view({'delete':'cancel_booked_service'})),
     #Transaction
     path('transaction/all/', Dashboard.as_view({'get': 'get_transaction'})),
     path('transaction/transfer/', Withdraw.as_view({'post': 'initialize_transfer'})),

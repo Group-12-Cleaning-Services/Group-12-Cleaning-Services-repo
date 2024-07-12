@@ -1,7 +1,7 @@
-from core.models import CleaningServiceUser, VerificationToken, PasswordToken, Transaction
+from core.models import *
 from django.contrib.auth import get_user_model
 import random, string
-from core.serializers import CleaningServiceSerializer
+from core.serializers import *
 import requests
 import pytz
 from datetime import datetime, timedelta
@@ -11,7 +11,7 @@ UTC = pytz.UTC
 
 def create_user(email, password):
     """Create user"""
-    user = CleaningServiceUser.objects.create_user(email=email, password=password)
+    user = AccountUser.objects.create_user(email=email, password=password)
     return user
 
 # def create_user(data):
@@ -22,10 +22,10 @@ def create_user(email, password):
 #     else:
 #         return serializer.error
 
-def get_all_service_providers()-> CleaningServiceUser:
+def get_all_service_providers():
     """Get all service providers"""
-    query_set = CleaningServiceUser.objects.filter(user_type='service_provider')
-    serializer = CleaningServiceSerializer(query_set, many=True)
+    query_set = AccountUser.objects.filter(user_type='service_provider')
+    serializer = AccountUserSerializer(query_set, many=True)
     return serializer.data
 
     
@@ -96,7 +96,4 @@ def create_transfer_receipient(profile):
     
     response = requests.post(url, headers=headers, json=data)
     if response.status_code == 201:
-        print(f"response {response.text}")
         return response.json()
-    else:
-        print(f"response {response.text}")

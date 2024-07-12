@@ -35,3 +35,4 @@ Pipfile.lock
 
 # Ignore local development settings
 local_settings.py
+pharm

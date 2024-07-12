@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-#&^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -89,7 +89,7 @@ DATABASES = {
     }
 }
 
-DATABASES["default"] = dj_database_url.parse("postgres://lord:TMCshFutRZZ5ROSiw8pa5fzMXcFRmFkC@dpg-cmft38en7f5s73c98v7g-a.oregon-postgres.render.com/cleaning_u0bm")
+# DATABASES["default"] = dj_database_url.parse("postgres://lord:TMCshFutRZZ5ROSiw8pa5fzMXcFRmFkC@dpg-cmft38en7f5s73c98v7g-a.oregon-postgres.render.com/cleaning_u0bm")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -147,7 +147,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = "core.CleaningServiceUser"
+AUTH_USER_MODEL = "core.AccountUser"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.environ.get("EMAIL_HOST")

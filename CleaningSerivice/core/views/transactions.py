@@ -2,9 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from core.senders.accounts import *
-from core.senders.services import *
+from core.senders.medicine import *
 from core.retrievers.accounts import *
-from core.retrievers.services import *
+from core.retrievers.medicines import *
 from core.models import Transaction
 import requests
 from core.utils import *
@@ -35,7 +35,7 @@ class PaymentViewset(viewsets.ViewSet):
             }
             return Response(context, status=status.HTTP_400_BAD_REQUEST)
         email = user.email 
-        service = get_service_by_id(service_id)
+        service = get_medicine_by_id(service_id)
         if service:
             data = {
                 "email": email,

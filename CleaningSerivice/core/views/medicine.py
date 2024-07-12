@@ -1,13 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from core.senders.services import *
+from core.senders.medicine import *
 from core.senders.accounts import *
 from core.retrievers.accounts import *
-from core.retrievers.services import *
+from core.retrievers.medicines import *
 from core.utils import get_user_from_jwttoken
 from rest_framework.permissions import IsAuthenticated
 
-class ServiceViewset(viewsets.ViewSet):
+class MedicineViewset(viewsets.ViewSet):
     """View set for handling service related requests
 
     Args:
@@ -32,24 +32,24 @@ class ServiceViewset(viewsets.ViewSet):
             request (http): get request
         """
         context = {
-            "detail": "All Services",
-            "services": send_all_services()
+            "detail": "All Medicines",
+            "services": get_all_medicine()
         }
         return Response(context, status=status.HTTP_200_OK)
     
     
-    def list_booked_service_of_customer(self, request):
+    def list_ordered_medicine_of_customer(self, request):
         """View for getting all booked service by a customer
 
         Args:
             request (http): get request
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "customer":
-            context = {
-                "detail": "You are not a customer"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
+        # if user.user_type != "customer":
+        #     context = {
+        #         "detail": "You are not a customer"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
         send_data = [{
             "id": data["scheduleservice_id"],
             "date": data["date"],
@@ -59,40 +59,41 @@ class ServiceViewset(viewsets.ViewSet):
             "price":data["service"]["price"],
             "title": data["service"]["title"],
             "category": data["service"]["category"]
-        } for data in send_booked_service_by_customer(user)]
+        } for data in send_booked_medicine_by_customer(user)]
 
+        data = send_booked_medicine_by_customer(user)
         context = {
-            "detail": "All booked service by a customer",
-            "services": send_data
+            "detail": "All ordered medicine",
+            "services": data
         }
         return Response(context, status=status.HTTP_200_OK)
     
-    def list_booked_service_of_provider(self, request):
+    def list_ordered_service_of_doctor(self, request):
         """View for getting all booked service by a provider
 
         Args:
             request (http): get request
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "service_provider":
-            context = {
-                "detail": "You are not a service provider"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        send_data = [{
-            "id": data["scheduleservice_id"],
-            "date": data["date"],
-            "time": data["time"],
-            "status": data["status"],
-            "customer": data["customer"]["email"],
-            "price":data["service"]["price"],
-            "title": data["service"]["title"],
-            "category": data["service"]["category"]
-        } for data in get_booked_service_by_provider(user)]
-
+        # # if user.user_type != "service_provider":
+        #     context = {
+        #         "detail": "You are not a service provider"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
+        # send_data = [{
+        #     "id": data["scheduleservice_id"],
+        #     "date": data["date"],
+        #     "time": data["time"],
+        #     "status": data["status"],
+        #     "customer": data["customer"]["email"],
+        #     "price":data["service"]["price"],
+        #     "title": data["service"]["title"],
+        #     "category": data["service"]["category"]
+        # } for data in get_booked_service_by_provider(user)]
+        data = send_ordered_medicine_by_docter(user)
         context = {
-            "detail": "All booked service by a provider",
-            "services": send_data
+            "detail": "All ordered medicines for a doctor",
+            "data": data
         }
         return Response(context, status=status.HTTP_200_OK)
     

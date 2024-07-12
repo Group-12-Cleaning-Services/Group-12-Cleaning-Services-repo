@@ -1,4 +1,4 @@
-from core.models import CleaningServiceUser, PasswordToken
+from core.models import *
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from core.senders.accounts import *
