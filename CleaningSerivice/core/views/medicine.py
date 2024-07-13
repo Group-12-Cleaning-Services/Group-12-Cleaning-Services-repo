@@ -33,7 +33,7 @@ class MedicineViewset(viewsets.ViewSet):
         """
         context = {
             "detail": "All Medicines",
-            "services": get_all_medicine()
+            "medicines": get_all_medicine()
         }
         return Response(context, status=status.HTTP_200_OK)
     
@@ -50,16 +50,16 @@ class MedicineViewset(viewsets.ViewSet):
         #         "detail": "You are not a customer"
         #     }
         #     return Response(context, status=status.HTTP_403_FORBIDDEN)
-        send_data = [{
-            "id": data["scheduleservice_id"],
-            "date": data["date"],
-            "time": data["time"],
-            "status": data["status"],
-            "organization_name": data["service"]["user"]["organization_name"],
-            "price":data["service"]["price"],
-            "title": data["service"]["title"],
-            "category": data["service"]["category"]
-        } for data in send_booked_medicine_by_customer(user)]
+        # send_data = [{
+        #     "id": data["order_id"],
+        #     "date": data["date"],
+        #     "time": data["time"],
+        #     "status": data["status"],
+        #     "organization_name": data["service"]["user"]["organization_name"],
+        #     "price":data["service"]["price"],
+        #     "title": data["service"]["title"],
+        #     "category": data["service"]["category"]
+        # } for data in send_booked_medicine_by_customer(user)]
 
         data = send_booked_medicine_by_customer(user)
         context = {
@@ -186,15 +186,10 @@ class MedicineViewset(viewsets.ViewSet):
         price = request.data.get("price")
         thumnail = request.data.get("thumnail")
         user = get_user_from_jwttoken(request)
-        if user.user_type != "service_provider":
-            context = {
-                "detail": "You are not a service provider"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        service = create_service(user, request.data)
+        medicine = create_medicine(user, request.data)
         context = {
             "detail": "Service created successfully",
-            "service": service
+            "medicine": medicine
         }
         return Response(context, status=status.HTTP_201_CREATED)
     

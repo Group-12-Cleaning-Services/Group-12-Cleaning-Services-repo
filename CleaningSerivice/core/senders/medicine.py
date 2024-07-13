@@ -1,18 +1,17 @@
 from core.models import *
 from core.serializers import MedicineSerializer, OrderSerializer, CategorySerializer
 from core.retrievers.medicines import *
+from core.models import AccountUser  # Import the AccountUser type
+
 import json
 
-
-
-def create_medicine(user: AccountUser, data: str)-> dict:
+def create_medicine(user: AccountUser, data) -> dict:
     """create medicine"""
-    serializer = MedicineSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save(user=user)
-        return serializer.data
-    else:
-        return serializer.errors
+    # data = data.dict()
+    # data['doctor'] = {'user_id': user.user_id}
+    medicine = Medicine.objects.create(doctor=user, **data)
+    serializer = MedicineSerializer(medicine)
+    return serializer.data
     
 
 def update_medicine(medicine, data):
@@ -53,7 +52,8 @@ def send_all_medicines_by_category(category: str):
     return serializer.data
 
 
-def order_medicine(medicine, user, time, address, date):
+def order_medicine(user, medicine, **data):
+    print(data)
     """Book a medicine
 
     Args:
@@ -61,8 +61,9 @@ def order_medicine(medicine, user, time, address, date):
         user (AccountUser): AccountUser instance
         data (str): post data with required fields
     """
-    medicine = Order.objects.create(medicine=medicine, customer=user, address=address)
-    return medicine
+    medicine = Order.objects.create(medicine=medicine, customer=user , **data)
+    serializer = OrderSerializer(medicine).data
+    return serializer
     
     
 def send_all_booked_medicine() -> dict:
@@ -84,6 +85,7 @@ def send_booked_medicine_by_customer(customer: AccountUser) -> dict:
     """
     ordered_medicine_queryset = get_ordered_medicine_by_customer(customer)
     serializer = OrderSerializer(ordered_medicine_queryset, many=True)
+    print(serializer.data)
     return serializer.data
 
 
@@ -94,7 +96,7 @@ def send_ordered_medicine_by_docter(provider: AccountUser) -> dict:
         provider (CleaningServiceUser): CleaningServiceUser instance
         Return: All booked medicine by a provider
     """
-    ordered_medicine_queryset = get_booked_medicine_by_provider(provider)
+    ordered_medicine_queryset = get_ordered_medicine_by_doctor(provider)
     serializer = OrderSerializer(ordered_medicine_queryset, many=True)
     return serializer.data
 

@@ -57,49 +57,49 @@ class PaymentViewset(viewsets.ViewSet):
         return Response({"error": "service not found"}, status=status.HTTP_404_NOT_FOUND)
             
     
-    def verify_transaction(self, request ,reference)-> Response:
+    def verify_transaction(self, request)-> Response:
         
-        time.sleep(120)
-        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
-        service_id = request.data.get('service_id')
-        service_time = request.data.get('time')
-        address = request.data.get('address')
-        date = request.data.get('date')[0:10]
+        # SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
+        medicine_id = request.data.get('medicine_id')
         user = get_user_from_jwttoken(request)
 
-        url = f"https://api.paystack.co/transaction/verify/{reference}"
+        # url = f"https://api.paystack.co/transaction/verify/{reference}"
         
-        headers = {
-            "Authorization": f"Bearer {SECRET_KEY}",
-            "Content-Type": "application/json"
-            }
+        # headers = {
+        #     "Authorization": f"Bearer {SECRET_KEY}",
+        #     "Content-Type": "application/json"
+        #     }
         
-        response = requests.get(url, headers=headers)
+        # response = requests.get(url, headers=headers)
         
-        if response.status_code == 200:
-            response = response.json()
-            if response["data"]["status"] == "success":
-                service = get_service_by_id(service_id)
-                schedule_service = book_service(service=service, user=user, time=service_time, address=address, date=date)
-                Transaction.objects.create(user=user, balance=service.price)
+        # if response.status_code == 200:
+        #     response = response.json()
+        #     if response["data"]["status"] == "success":
+        medicine = get_medicine_by_id(medicine_id)
+        medicine.quantity -= 1
+        medicine.save()
+        data = request.data.dict()
+        data.pop('medicine_id')
+        ordered_medicine = order_medicine(medicine=medicine, user=user, **data)
+                # Transaction.objects.create(user=user, balance=service.price)
                 
-                try:
-                    service_transaction = Transaction.objects.get(user=service.user)
-                    update_provider_balance(service_transaction, service.price)
-                except:
-                    create_provider_balance(service.user, service.price)
-                context = {
-                    "detail": "Service booked successfully",
-                    "data": schedule_service
-                }
-                return Response(context, status=status.HTTP_200_OK)
-            else:
-                context = {
-                    "detail": "Transaction failed"
-                }
-                return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(response.text, status=response.status_code)
+                # try:
+                #     service_transaction = Transaction.objects.get(user=service.user)
+                #     update_provider_balance(service_transaction, service.price)
+                # except:
+                #     create_provider_balance(service.user, service.price)
+        context = {
+            "detail": "Medicine orderered successfully",
+            "data": ordered_medicine
+        }
+        return Response(context, status=status.HTTP_200_OK)
+        #     else:
+        #         context = {
+        #             "detail": "Transaction failed"
+        #         }
+        #         return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(response.text, status=response.status_code)
         
 
 class Withdraw(viewsets.ViewSet):

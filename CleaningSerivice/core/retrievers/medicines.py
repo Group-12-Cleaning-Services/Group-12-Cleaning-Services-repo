@@ -59,7 +59,7 @@ def get_medicine_by_category(category: str) -> Medicine:
         return None
     
 
-def get_booked_medicine_by_customer(customer: AccountUser) -> Medicine:
+def get_ordered_medicine_by_customer(customer: AccountUser) -> Medicine:
     """Get all booked medicine by a customer
 
     Args:
@@ -69,7 +69,7 @@ def get_booked_medicine_by_customer(customer: AccountUser) -> Medicine:
     try:
         query_set = Order.objects.filter(customer=customer)
         return query_set
-    except ScheduleMedicine.DoesNotExist:
+    except Order.DoesNotExist:
         return None
     
 
