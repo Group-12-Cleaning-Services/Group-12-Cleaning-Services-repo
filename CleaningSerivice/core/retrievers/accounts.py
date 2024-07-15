@@ -24,7 +24,10 @@ def get_user_information(email):
         "user_id": user.user_id,
         "email": user.email,
         "verified": user.verified,
-        "profile": "",
+        "is_admin": user.is_superuser,
+        "role": user.role,
+        "user_image": str(user.user_image.url()) if user.user_image else None,
+        'full_name': user.full_name,
     }
     return user_data
             
