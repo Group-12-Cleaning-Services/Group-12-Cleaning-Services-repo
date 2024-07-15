@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "core",
     "rest_framework",
     "rest_framework_simplejwt",
+    "corsheaders",
     "phone_field",
 ]
 
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -158,7 +160,12 @@ EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 
 # CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_ORIGINS = [
+#     'http://localhost:3000',
+# ]
 CORS_ALLOW_ALL_ORIGINS = True
+
+
 CSRF_TRUSTED_ORIGINS = [
     'https://01c8-102-176-65-85.ngrok-free.app',
     'http://localhost:3000',
