@@ -14,10 +14,10 @@ from phone_field import PhoneField
 #     ("home", "Home Cleaning")
 # ]
 
-# USER_TYPE = [
-#     ("customer", "Customer"),
-#     ("service_provider", "Service Provider")
-# ]
+USER_TYPE = [
+    ("customer", "Customer"),
+    ("sales_person", "Sales")
+]
 
 # SCHEDULE_STATUS = [
 #     ("booked", "Booked"),
@@ -40,13 +40,15 @@ class CleaningServiceUserProfile(models.Model):
 
 class AccountBaseUser(BaseUserManager):
     """Cleaning Service Base User Model"""
-    def create_user(self, email, password=None, **extra_fields):
+    def create(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Email is required')
         user = self.model(
             email = self.normalize_email(email),
         )
         user.set_password(password)
+        for field, value in extra_fields.items():
+            setattr(user, field, value)
         user.save(using=self._db)
         return user
 
@@ -56,7 +58,7 @@ class AccountBaseUser(BaseUserManager):
         user = self.model(
             email = self.normalize_email(email),
         )
-        user = self.create_user(email, password, **extra_fields)
+        user = self.create(email, password, **extra_fields)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)   
@@ -66,13 +68,14 @@ class AccountBaseUser(BaseUserManager):
 class AccountUser(AbstractBaseUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
-    # user_type = models.CharField(choices=USER_TYPE, max_length=50, default=None, null=True, blank=True)
+    role = models.CharField(choices=USER_TYPE, max_length=50, default=None, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
-    organization_name = models.CharField(max_length=255, null=True, blank=True)
-    organization_logo = models.ImageField(upload_to='images', blank=True, null=True)
+    phone =  PhoneField(null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    user_image = models.ImageField(upload_to='images', blank=True, null=True, default=None)
     USERNAME_FIELD = 'email'
     objects = AccountBaseUser()
     

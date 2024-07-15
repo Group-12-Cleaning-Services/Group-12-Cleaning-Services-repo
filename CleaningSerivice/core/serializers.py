@@ -1,18 +1,30 @@
 from core.models import *
 from rest_framework import serializers
+import bleach
 
 
 
+class BleachSerializer(serializers.ModelSerializer):
+    """Serializer that applies bleach.clean to string fields"""
+
+    def to_internal_value(self, data):
+        cleaned_data = super().to_internal_value(data)
+
+        for field_name, field_value in cleaned_data.items():
+            if isinstance(field_value, str):
+                cleaned_data[field_name] = bleach.clean(field_value, strip=True)
+
+        return cleaned_data
 class CleaningServiceUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CleaningServiceUserProfile
         fields = ['profile_id', 'first_name', 'last_name', 'contact', 'profile_image', 'time_created']
 
 
-class AccountUserSerializer(serializers.ModelSerializer):
+class AccountUserSerializer(BleachSerializer):
     class Meta:
         model = AccountUser
-        fields = ['user_id', 'email', 'organization_name', 'password']
+        fields = ['user_id', 'email', 'role', 'full_name', 'phone', 'user_image']
         extra_kwargs = {'password': {'write_only': True}, 'is_active': {'read_only': True}, 'is_staff': {'read_only': True}, 'is_superuser': {'read_only': True},}
         
         

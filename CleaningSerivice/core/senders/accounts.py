@@ -7,12 +7,16 @@ import pytz
 from datetime import datetime, timedelta
 import os
 
+
 UTC = pytz.UTC
 
-def create_user(email, password):
+def create_user(data):
     """Create user"""
-    user = AccountUser.objects.create_user(email=email, password=password)
-    return user
+    user = AccountUserSerializer(data=data)
+    if user.is_valid():
+        user.save()
+        return user.data
+    return user.error
 
 # def create_user(data):
 #     serializer = CleaningServiceSerializer(data=data)

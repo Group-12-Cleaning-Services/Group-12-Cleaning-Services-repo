@@ -25,7 +25,7 @@ class AccountViewset(viewsets.ViewSet):
                 'detail': 'User already exists'
             }
             return Response(context, status=status.HTTP_208_ALREADY_REPORTED)
-        user = create_user(email, request.data.get('password'))
+        user = create_user(request.data)
         context = {"detail": "User created successfully"}
         # thread = threading.Thread(target=email_verification, args=[email, 4])
         # thread.start()
