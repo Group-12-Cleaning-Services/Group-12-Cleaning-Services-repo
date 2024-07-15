@@ -114,14 +114,13 @@ class Medicine(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     category = models.CharField(max_length=50)
-    doctor = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     manufacturer = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=True)
     quantity = models.DecimalField(decimal_places=2, max_digits=10)
     def __str__(self):
-        return f"{self.name} - {self.category} || {self.doctor.email} at {self.price}"
+        return f"{self.name} - {self.category} at {self.price}"
     
 class Category(models.Model):
     Name = models.CharField(max_length=50)

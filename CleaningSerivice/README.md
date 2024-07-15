@@ -27,7 +27,7 @@ This document provides an overview of the API for the Cleaning Services applicat
 ### Login User
 #### Request
 - Method: POST
-- URL: `/api/accounts/login`
+- URL: `/api/login/`
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -58,7 +58,7 @@ This document provides an overview of the API for the Cleaning Services applicat
 ### Get all medicines
 #### Request
 - Method: GET
-- URL: `/api/medicines/all`
+- URL: `/api/medicine/all`
 #### Response
 - Status: 200 OK
 - Body:
@@ -73,10 +73,8 @@ This document provides an overview of the API for the Cleaning Services applicat
             "price": "12.00",
             "quantity": 10,
             "description": "This is para",
-            "doctor": {
-                "user_id": "f385e9b6-2c59-459a-b15f-21854a75df56",
-                "email": "yrnlehjend+12@gmail.com",
-            }
+            "manufacturer": "Ernest Chemist"
+
         },
         {
             "medicine_id": "4999c8e1f1bd68",
@@ -85,10 +83,8 @@ This document provides an overview of the API for the Cleaning Services applicat
             "price": "10.00",
             "quantity": 20,
             "description": "This is Gebedol",
-            "doctor": {
-                "user_id": "4d86abed5501",
-                "email": "yrn@gmail.com",
-            }
+            "manufacturer": "Ernest Chemist"
+
         }
     ]
     }
@@ -111,12 +107,9 @@ This document provides an overview of the API for the Cleaning Services applicat
         "price": "10.00",
         "quantity": 12,
         "description": "I dont work for free",
-        "doctor": {
-            "user_id": "f385e9b6-2c59-459a-b15f-21854a75df56",
-            "email": "yrn@gmail.com",
-            "organization_name": null
-        }
-    }
+        "manufacturer": "Ernest Chemist"
+,
+     }
     }
     ```
 

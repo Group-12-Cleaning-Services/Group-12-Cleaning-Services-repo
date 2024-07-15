@@ -42,35 +42,10 @@ class PasswordTokenSerializer(serializers.ModelSerializer):
 
 class MedicineSerializer(serializers.ModelSerializer):
     """Medicine Serializer"""
-    doctor = AccountUserSerializer()
     class Meta:
         model = Medicine
-        fields = ['medicine_id', 'name', 'category', 'price', 'quantity', 'description', 'doctor']
+        fields = ['medicine_id', 'name', 'category', 'price', 'quantity', 'description', 'manufacturer']
         
-    def create(self, validated_data):
-        doctor_data = validated_data.pop('doctor')
-        doctor = AccountUser.objects.create(**doctor_data)
-        medicine = Medicine.objects.create(doctor=doctor, **validated_data)
-        return medicine
-
-    def update(self, instance, validated_data):
-        doctor_data = validated_data.pop('doctor')
-        doctor = instance.doctor
-
-        instance.medicine_id = validated_data.get('medicine_id', instance.medicine_id)
-        instance.name = validated_data.get('name', instance.name)
-        instance.category = validated_data.get('category', instance.category)
-        instance.price = validated_data.get('price', instance.price)
-        instance.quantity = validated_data.get('quantity', instance.quantity)
-        instance.description = validated_data.get('description', instance.description)
-        instance.save()
-
-        doctor.username = doctor_data.get('username', doctor.username)
-        doctor.email = doctor_data.get('email', doctor.email)
-        doctor.save()
-
-        return instance
-
 
 class CategorySerializer(serializers.ModelSerializer):
     """Category Serializer"""
