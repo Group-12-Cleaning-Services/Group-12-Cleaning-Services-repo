@@ -468,3 +468,22 @@ class CategoryViewset(viewsets.ViewSet):
             "detail": "Category updated successfully",
         }
         return Response(context, status=status.HTTP_200_OK)
+    
+    def delete(self, request, id):
+        """Delete Category
+
+        Args:
+            request (http): delete request
+            id (uuid): category id
+        """
+        category = get_category_by_id(id)
+        if not category:
+            context = {
+                "detail": "Category not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        category.delete()
+        context = {
+            "detail": "Category deleted successfully",
+        }
+        return Response(context, status=status.HTTP_200_OK)

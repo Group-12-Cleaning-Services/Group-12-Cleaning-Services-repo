@@ -54,7 +54,7 @@ urlpatterns = [
     path('category/all/', CategoryViewset.as_view({'get': 'list'})),
     path('category/create/', CategoryViewset.as_view({'post': 'create'})),
     path('category/update/<int:id>/', CategoryViewset.as_view({'post': 'update'})),
-    path('category/delete/<uuid:id>/', CategoryViewset.as_view({'delete': 'delete'})),
+    path('category/delete/<int:id>/', CategoryViewset.as_view({'delete': 'delete'})),
     path('category/retrieve/<int:id>/', CategoryViewset.as_view({'get': 'retrieve'})),
     
 
