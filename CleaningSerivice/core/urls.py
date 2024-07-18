@@ -31,7 +31,7 @@ urlpatterns = [
     #service
     path('medicine/all/', MedicineViewset.as_view({'get': 'list_service'})),
     path('medicine/providers/', MedicineViewset.as_view({'get': 'list_service_providers'})),
-    path('medicine/create/', MedicineViewset.as_view({'post': 'create_service'})),
+    path('medicine/create/', MedicineViewset.as_view({'post': 'create'})),
     path('medicine/update/<uuid:id>/', MedicineViewset.as_view({'post': 'update_medicine'})),
     path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_medicine'})),
     path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_medicine'})),

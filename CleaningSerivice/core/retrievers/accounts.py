@@ -26,7 +26,7 @@ def get_user_information(email):
         "verified": user.verified,
         "is_admin": user.is_superuser,
         "role": user.role,
-        "user_image": str(user.user_image.url()) if user.user_image else None,
+        "user_image": str(user.user_image) if user.user_image else None,
         'full_name': user.full_name,
     }
     return user_data

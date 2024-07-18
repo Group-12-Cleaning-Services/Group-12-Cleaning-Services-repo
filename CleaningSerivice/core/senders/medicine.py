@@ -5,11 +5,11 @@ from core.models import AccountUser  # Import the AccountUser type
 
 import json
 
-def create_medicine(user: AccountUser, data) -> dict:
+def create_medicine(data) -> dict:
     """create medicine"""
     # data = data.dict()
     # data['doctor'] = {'user_id': user.user_id}
-    medicine = Medicine.objects.create(doctor=user, **data)
+    medicine = Medicine.objects.create(**data)
     serializer = MedicineSerializer(medicine)
     return serializer.data
     

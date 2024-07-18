@@ -113,7 +113,7 @@ class Medicine(models.Model):
     medicine_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     manufacturer = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True)

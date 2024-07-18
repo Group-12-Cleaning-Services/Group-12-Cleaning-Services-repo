@@ -174,7 +174,7 @@ class MedicineViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
-    def create_service(self, request):
+    def create(self, request):
         """Create Service
 
         Args:
@@ -186,7 +186,7 @@ class MedicineViewset(viewsets.ViewSet):
         price = request.data.get("price")
         thumnail = request.data.get("thumnail")
         user = get_user_from_jwttoken(request)
-        medicine = create_medicine(user, request.data)
+        medicine = create_medicine(request.data)
         context = {
             "detail": "Service created successfully",
             "medicine": medicine

@@ -40,6 +40,12 @@ class PasswordTokenSerializer(serializers.ModelSerializer):
         
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    """Category Serializer"""
+    class Meta:
+        model = Category
+        fields = "__all__"
+
 class MedicineSerializer(serializers.ModelSerializer):
     """Medicine Serializer"""
     class Meta:
@@ -47,11 +53,6 @@ class MedicineSerializer(serializers.ModelSerializer):
         fields = ['medicine_id', 'name', 'category', 'price', 'quantity', 'description', 'manufacturer']
         
 
-class CategorySerializer(serializers.ModelSerializer):
-    """Category Serializer"""
-    class Meta:
-        model = Category
-        fields = "__all__"
 
 class OrderSerializer(serializers.ModelSerializer):
     """Order Serializer"""
