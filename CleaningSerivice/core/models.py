@@ -40,7 +40,7 @@ class CleaningServiceUserProfile(models.Model):
 
 class AccountBaseUser(BaseUserManager):
     """Cleaning Service Base User Model"""
-    def create(self, email, password=None, **extra_fields):
+    def create(self, email, password='1234', **extra_fields):
         if not email:
             raise ValueError('Email is required')
         user = self.model(
@@ -123,11 +123,11 @@ class Medicine(models.Model):
         return f"{self.name} - {self.category} at {self.price}"
     
 class Category(models.Model):
-    Name = models.CharField(max_length=50)
-    Description = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 
 class Order(models.Model):

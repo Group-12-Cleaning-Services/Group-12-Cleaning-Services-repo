@@ -88,7 +88,7 @@ This document provides an overview of the API for the Cleaning Services applicat
         }
     ]
     }
-```
+  ```
 ### Create a medicine
 #### Request
 - Method: POST
@@ -98,7 +98,7 @@ This document provides an overview of the API for the Cleaning Services applicat
   - Authorization: Bearer <token>
 - Body:
   ```json
-  {
+    {
     "detail": "Service created successfully",
     "medicine": {
         "medicine_id": "d4e39f2d3ac3c",
@@ -107,11 +107,61 @@ This document provides an overview of the API for the Cleaning Services applicat
         "price": "10.00",
         "quantity": 12,
         "description": "I dont work for free",
-        "manufacturer": "Ernest Chemist"
-,
-     }
+        "manufacturer": "Ernest Chemist",
+        }
     }
-    ```
+  ```
+### Update Medicine 
+#### Request
+- Method: POST
+- URL: `/api/medicine/update/id/`
+- Headers:
+  - Content-Type: application/json
+  - Authorization: Bearer <token>
+- Body:
+  ```json
+    {
+    "detail": "Service created successfully",
+    }
+  ```
+### Retrive Medicine
+#### Request
+- Method: POST
+- URL: `/api/medicine/retrieve/id/`
+- Headers:
+  - Content-Type: application/json
+  - Authorization: Bearer <token>
+- Body:
+  ```json
+    {
+    "detail": "Medicine retrieved successfully",
+    "medicine": {
+        "medicine_id": "d4e39f2d3ac3c",
+        "name": "Another Services",
+        "category": "laundary",
+        "price": "10.00",
+        "quantity": 12,
+        "description": "I dont work for free",
+        "manufacturer": "Ernest Chemist",
+        }
+    }
+  ```
+
+### Delete Medicne
+#### Request
+- Method POST
+- URL `api/medicine/delete/id`
+- Headers:
+  - Content-Type: application/json
+  - Authorization
+#### Response
+- Status: 200 OK
+- Body:
+  ```json
+  {
+    "detail": "Medicine deleted successfully"
+  }
+  ```
 
 ### Order a medicine
 #### Request
@@ -189,3 +239,94 @@ This document provides an overview of the API for the Cleaning Services applicat
     ]
 }
 ```
+
+## Category
+### Get all categories
+#### Request
+- Method: GET
+- URL: `/api/category/all`
+#### Response
+- Status: 200 OK
+- Body:
+  ```json
+  {
+    "detail": "All Categories",
+    "categories": [
+        {
+            "id": "2886bb6d-deed-40b2-93f6-68d3f8e59d7b",
+            "name": "Pain Killer",
+            "description": "This is a pain killer category"
+        },
+        {
+            "id": "4999c8e1f1bd68",
+            "name": "Antibiotics",
+            "description": "This is an antibiotics category"
+        }
+    ]
+    }
+```
+### Create a category
+#### Request
+- Method: POST
+- URL: `/api/category/create/`
+- Headers:
+  - Content-Type: application/json
+  - Authorization
+- Body:
+  ```json
+        {
+        "name": "",
+        "description": "str"
+        }
+  ```
+#### Response
+- Status: 201 Created
+- Body:
+  ```json
+    {
+        "detail": "Category created successfully",
+    }
+  ```
+
+### Category update
+#### Request
+- Method: POST
+- URL: `/api/category/update/1/`
+- Headers:
+  - Content-Type: application/json
+  - Authorization
+- Body:
+  ```json
+        {
+        "name": "",
+        "description": "str"
+        }
+  ```
+#### Response
+- Status: 201 Created
+- Body:
+  ```json
+    {
+        "detail": "Category updated successfully",
+    }
+  ```
+
+### Retrieve Category
+- Method: GET
+- URL: `/api/category/retreive/1/`
+- Headers:
+  - Content-Type: application/json
+#### Response
+- Status: 201 Created
+- Body:
+  ```json
+    {
+    "detail": "Category retrieved successfully",
+    "category": {
+        "id": 1,
+        "name": "para",
+        "description": "new pain killer"
+    }
+    }
+  ```
+

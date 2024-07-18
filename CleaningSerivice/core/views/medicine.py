@@ -194,7 +194,7 @@ class MedicineViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_201_CREATED)
     
     
-    def update_service(self, request, id):
+    def update_medicine(self, request, id):
         """Update Service
 
         Args:
@@ -202,46 +202,47 @@ class MedicineViewset(viewsets.ViewSet):
             id (uuid): service id
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "service_provider":
+        # if user.user_type != "service_provider":
+        #     context = {
+        #         "detail": "You are not a service provider"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
+        medicine = get_medicine_by_id(id)
+        if not medicine:
             context = {
-                "detail": "You are not a service provider"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        service = get_service_by_id(id)
-        if not service:
-            context = {
-                "detail": "Service not found"
+                "detail": "medicine not found"
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
-        service = update_service(service, request.data)
+        medicine = update_medicine(medicine, request.data)
         context = {
-            "detail": "Service updated successfully",
-            "service": service
+            "detail": "medicine updated successfully",
+            "medicine": medicine
         }
         return Response(context, status=status.HTTP_200_OK)
     
     
-    def retrieve_service(self, request, id):
+    def retrieve_medicine(self, request, id):
         """Retrieve Service
 
         Args:
             request (http): get request
             id (uuid): service id
         """
-        service = get_service_by_id(id)
-        if not service:
+        medicine = get_medicine_by_id(id)
+        if not medicine:
             context = {
-                "detail": "Service not found"
+                "detail": "Medicine not found"
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
+        
         context = {
-            "detail": "Service retrieved successfully",
-            "service": service
+            "detail": "Medicine retrieved successfully",
+            "medicine": MedicineSerializer(medicine).data
         }
         return Response(context, status=status.HTTP_200_OK)
     
     
-    def delete_service(self, request, id):
+    def delete_medicine(self, request, id):
         """Delete Service
 
         Args:
@@ -249,20 +250,20 @@ class MedicineViewset(viewsets.ViewSet):
             id (uuid): service id
         """
         user = get_user_from_jwttoken(request)
-        if user.user_type != "service_provider":
+        # if user.user_type != "service_provider":
+        #     context = {
+        #         "detail": "You are not a service provider"
+        #     }
+        #     return Response(context, status=status.HTTP_403_FORBIDDEN)
+        medicine = get_medicine_by_id(id)
+        if not medicine:
             context = {
-                "detail": "You are not a service provider"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        service = get_service_by_id(id)
-        if not service:
-            context = {
-                "detail": "Service not found"
+                "detail": "Medicine not found"
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
-        service.delete()
+        medicine.delete()
         context = {
-            "detail": "Service deleted successfully"
+            "detail": "Medicine deleted successfully"
         }
         return Response(context, status=status.HTTP_200_OK)
         
@@ -361,7 +362,8 @@ class MedicineViewset(viewsets.ViewSet):
         else:
             permission_classes = []
         return [permission() for permission in permission_classes]
-    
+
+
 
     def update_booked_service(self, request, id):
         """Update Booked Service
@@ -386,5 +388,83 @@ class MedicineViewset(viewsets.ViewSet):
         schedule_service = update_booked_service_status(schedule_service, status=service_status)
         context = {
             "detail": "Schedule service updated successfully",
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+
+
+class CategoryViewset(viewsets.ViewSet):
+    """View set for handling category related requests
+
+    Args:
+        viewsets (viewset): viewset class
+    """
+    def create (self, request):
+        """Create Category
+
+        Args:
+            request (http): post request
+        """
+        category = create_category(request.data)
+        if category:
+            context = {
+                "detail": "Category created successfully",
+            }
+            return Response(context, status=status.HTTP_201_CREATED)
+        context = {
+            "detail": "Category not created",
+        }
+        return Response(context, status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request):
+        """List all categories
+
+        Args:
+            request (http): get request
+        """
+        serializer = CategorySerializer(get_all_categories(), many=True)
+        context = {
+            "detail": "All Categories",
+            "categories": serializer.data
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, id):
+        """Retrieve Category
+
+        Args:
+            request (http): get request
+            id (uuid): category id
+        """
+        category = get_category_by_id(id)
+        if not category:
+            context = {
+                "detail": "Category not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        serializer = CategorySerializer(category)
+        context = {
+            "detail": "Category retrieved successfully",
+            "category": serializer.data
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    def update (self, request, id):
+        """Update Category
+
+        Args:
+            request (http): put request
+            id (uuid): category id
+        """
+        name = request.data.get("name")
+        category = get_category_by_id(id)
+        if not category:
+            context = {
+                "detail": "Category not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        category = update_category(category, request.data)
+        context = {
+            "detail": "Category updated successfully",
         }
         return Response(context, status=status.HTTP_200_OK)

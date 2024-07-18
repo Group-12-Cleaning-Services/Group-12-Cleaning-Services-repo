@@ -162,3 +162,22 @@ def create_provider_balance(user, amount):
     transaction.balance += amount
     transaction.save()
     return transaction
+
+
+def create_category(data) -> dict:
+    serializer = CategorySerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return serializer.data
+    else:
+        return None
+
+
+def update_category(category: Category, data) -> dict:
+    serializer = CategorySerializer(instance=category, data=data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return serializer.data
+    else:
+        return None
+    

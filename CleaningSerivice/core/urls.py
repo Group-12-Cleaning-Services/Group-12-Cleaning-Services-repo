@@ -1,7 +1,7 @@
 from django.urls import path
 from core.views.accounts import AccountViewset, SignIn
 from core.views.profile import ProfileViewset
-from core.views.medicine import MedicineViewset
+from core.views.medicine import MedicineViewset, CategoryViewset
 from core.views.notification import NotificationViewset
 from core.views.reset_password import PasswordResetViewset
 from core.views.transactions import PaymentViewset, Dashboard, Withdraw
@@ -32,9 +32,9 @@ urlpatterns = [
     path('medicine/all/', MedicineViewset.as_view({'get': 'list_service'})),
     path('medicine/providers/', MedicineViewset.as_view({'get': 'list_service_providers'})),
     path('medicine/create/', MedicineViewset.as_view({'post': 'create_service'})),
-    path('medicine/update/<uuid:id>/', MedicineViewset.as_view({'post': 'update_service'})),
-    path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_service'})),
-    path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve'})),
+    path('medicine/update/<uuid:id>/', MedicineViewset.as_view({'post': 'update_medicine'})),
+    path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_medicine'})),
+    path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_medicine'})),
     # path('medicine/order/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
     path('medicine/order/', PaymentViewset.as_view({'post': 'verify_transaction'})),
     path('medicine/user-order/', MedicineViewset.as_view({'get': 'list_ordered_medicine_of_customer'})),
@@ -50,5 +50,12 @@ urlpatterns = [
     ##Notification
     path('notification/all/', NotificationViewset.as_view({'get': 'list'})),
     path('notification/delete/', NotificationViewset.as_view({'delete': 'delete'})),
+    ##Category
+    path('category/all/', CategoryViewset.as_view({'get': 'list'})),
+    path('category/create/', CategoryViewset.as_view({'post': 'create'})),
+    path('category/update/<int:id>/', CategoryViewset.as_view({'post': 'update'})),
+    path('category/delete/<uuid:id>/', CategoryViewset.as_view({'delete': 'delete'})),
+    path('category/retrieve/<int:id>/', CategoryViewset.as_view({'get': 'retrieve'})),
+    
 
 ]

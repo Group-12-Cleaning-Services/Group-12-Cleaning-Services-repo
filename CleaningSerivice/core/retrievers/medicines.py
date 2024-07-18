@@ -158,3 +158,37 @@ def get_ordered_medicine_by_id(id: uuid) -> Order:
 get_all_categories = lambda: Category.objects.all()
 get_category_by_id = lambda id: Category.objects.get(id=id)
 get_category_by_name = lambda name: Category.objects.get(Name=name)
+
+
+def get_category_by_id(id: uuid) -> Category:
+    """Get category by id
+
+    Args:
+        id (uuid): provide a valid uuid to get a category
+        Return: A category is it exists else it return none
+    """
+    try:
+        query = Category.objects.get(id=id)
+        return query
+    except Category.DoesNotExist:
+        return None
+
+def get_category_by_name(name: str) -> Category:
+    """Get category by name
+
+    Args:
+        name (str): provide a valid name to get a category
+        Return: A category is it exists else it return none
+    """
+    try:
+        query = Category.objects.get(name=name)
+        return query
+    except Category.DoesNotExist:
+        return None
+
+def get_all_categories() -> Category:
+    """Get all categories
+        Return all categories in the db
+    """
+    query_set = Category.objects.all()
+    return query_set
