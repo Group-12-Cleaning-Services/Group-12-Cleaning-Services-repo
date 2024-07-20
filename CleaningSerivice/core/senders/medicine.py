@@ -55,18 +55,18 @@ def send_all_medicines_by_category(category: str):
     return serializer.data
 
 
-def order_medicine(user, medicine, data) -> dict:
+def order_medicine(user, medicine, quantity, address) -> dict:
     """Book a medicine
 
     Args:
         medicine (Service): Service instance
         user (AccountUser): AccountUser instance
         data (str): post data with required fields
-    """            
-    medicine = Order.objects.create(medicine=medicine, customer=user)
-    for kwarg in data:
-        if hasattr(medicine, kwarg):
-            setattr(medicine, kwarg, data[kwarg])
+    """  
+    medicine = Order.objects.create(medicine=medicine, customer=user, quantity=quantity, address=address)
+    # for kwarg in data:
+    #     if hasattr(medicine, kwarg):
+    #         setattr(medicine, kwarg, data[kwarg])
     medicine.paid = True
     medicine.save()
     serializer = OrderSerializer(medicine).data

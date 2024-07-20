@@ -85,8 +85,8 @@ class PaymentViewset(viewsets.ViewSet):
                 medicine = get_medicine_by_id(medicine_id)
                 medicine.quantity -= quantity
                 medicine.save()
-                data = request.data.dict()
-                ordered_medicine = order_medicine(medicine=medicine, user=user, data=data)
+                data = request.data
+                ordered_medicine = order_medicine(medicine=medicine, user=user, quantity=quantity, address=request.data.get("address"))
                 # Transaction.objects.create(user=user, balance=service.price)
                 
                 # try:
