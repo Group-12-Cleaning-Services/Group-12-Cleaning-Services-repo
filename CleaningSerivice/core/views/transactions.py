@@ -21,25 +21,26 @@ class PaymentViewset(viewsets.ViewSet):
     def initialize_transaction(self, request):
         
         SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
-        service_id = request.data.get('service_id')
+        medicine_id = request.data.get('medicine_id')
         user = get_user_from_jwttoken(request)
+        quantity = int(request.data.get('quantity'))
         # service_time = request.data.get('time')
 
         url="https://api.paystack.co/transaction/initialize"
-        print(user)
-        print(service_id)
+        # print(user)
+        # print(service_id)
         
-        if user is None or service_id is None:
+        if user is None or medicine_id is None:
             context = {
                 "error": "user and service id is required"
             }
             return Response(context, status=status.HTTP_400_BAD_REQUEST)
         email = user.email 
-        service = get_medicine_by_id(service_id)
-        if service:
+        medicine = get_medicine_by_id(medicine_id)
+        if medicine:
             data = {
                 "email": email,
-                "amount": str(service.price * 100),
+                "amount": str(medicine.price * quantity * 100),
                 "currency": 'GHS'
             }
             headers = {
@@ -57,30 +58,35 @@ class PaymentViewset(viewsets.ViewSet):
         return Response({"error": "service not found"}, status=status.HTTP_404_NOT_FOUND)
             
     
-    def verify_transaction(self, request)-> Response:
+    def verify_transaction(self, request, reference)-> Response:
+        time.sleep(45)
         
-        # SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
+        SECRET_KEY = os.environ.get("PAYSTACK_SECRET_KEY")
         medicine_id = request.data.get('medicine_id')
         user = get_user_from_jwttoken(request)
+        quantity = int(request.data.get('quantity'))
+        data = request.data.copy()
+        data.pop("medicine_id")
+        data['quantity'] = int(data.get("quantity"))
+        
 
-        # url = f"https://api.paystack.co/transaction/verify/{reference}"
+        url = f"https://api.paystack.co/transaction/verify/{reference}"
         
-        # headers = {
-        #     "Authorization": f"Bearer {SECRET_KEY}",
-        #     "Content-Type": "application/json"
-        #     }
+        headers = {
+            "Authorization": f"Bearer {SECRET_KEY}",
+            "Content-Type": "application/json"
+            }
         
-        # response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers)
         
-        # if response.status_code == 200:
-        #     response = response.json()
-        #     if response["data"]["status"] == "success":
-        medicine = get_medicine_by_id(medicine_id)
-        medicine.quantity -= 1
-        medicine.save()
-        data = request.data.dict()
-        data.pop('medicine_id')
-        ordered_medicine = order_medicine(medicine=medicine, user=user, **data)
+        if response.status_code == 200:
+            response = response.json()
+            if response["data"]["status"] == "success":
+                medicine = get_medicine_by_id(medicine_id)
+                medicine.quantity -= quantity
+                medicine.save()
+                data = request.data.dict()
+                ordered_medicine = order_medicine(medicine=medicine, user=user, data=data)
                 # Transaction.objects.create(user=user, balance=service.price)
                 
                 # try:
@@ -88,18 +94,18 @@ class PaymentViewset(viewsets.ViewSet):
                 #     update_provider_balance(service_transaction, service.price)
                 # except:
                 #     create_provider_balance(service.user, service.price)
-        context = {
-            "detail": "Medicine orderered successfully",
-            "data": ordered_medicine
-        }
-        return Response(context, status=status.HTTP_200_OK)
-        #     else:
-        #         context = {
-        #             "detail": "Transaction failed"
-        #         }
-        #         return Response(context, status=status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     return Response(response.text, status=response.status_code)
+                context = {
+                    "detail": "Medicine orderered successfully",
+                    "data": ordered_medicine
+                }
+                return Response(context, status=status.HTTP_200_OK)
+            else:
+                context = {
+                    "detail": "Transaction failed"
+                }
+                return Response(context, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(response.text, status=response.status_code)
         
 
 class Withdraw(viewsets.ViewSet):

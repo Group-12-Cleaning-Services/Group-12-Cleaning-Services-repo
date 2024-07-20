@@ -50,8 +50,7 @@ def get_user_by_id(user_id):
 def get_all_users():
     """Get all users"""
     queryset = AccountUser.objects.all()
-    serializer = CleaningServiceSerializer(queryset, many=True)
-    return serializer.data
+    return queryset
 
 def get_profile_by_user(email):
     """Get profile by user"""

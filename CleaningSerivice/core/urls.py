@@ -15,6 +15,10 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('accounts/create/', AccountViewset.as_view({'post': 'create'})),
+    path('accounts/all/', AccountViewset.as_view({'get': 'list'})),
+    path('accounts/retrieve/<uuid:user_id>/', AccountViewset.as_view({'get': 'retrieve'})),
+    path('accounts/update/<uuid:user_id>/', AccountViewset.as_view({'post': 'update'})),
+    path('accounts/delete/<uuid:user_id>/', AccountViewset.as_view({'delete': 'delete'})),
     path('accounts/verify-account/', AccountViewset.as_view({'post': 'verify_email'})),
     path('accounts/resend-verification-pin/', AccountViewset.as_view({'post': 'send_verification_email'})),
     #profile
@@ -36,7 +40,8 @@ urlpatterns = [
     path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_medicine'})),
     path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_medicine'})),
     # path('medicine/order/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
-    path('medicine/order/', PaymentViewset.as_view({'post': 'verify_transaction'})),
+    path('medicine/order/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
+    path('medicine/retrieve-order/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_order'})),
     path('medicine/user-order/', MedicineViewset.as_view({'get': 'list_ordered_medicine_of_customer'})),
     path('medicine/service-feedback/<uuid:id>/', MedicineViewset.as_view({'post': 'service_feedback'})),
     path('medicine/provider-services/<uuid:id>/', MedicineViewset.as_view({'get':'get_service_provider_services'})),

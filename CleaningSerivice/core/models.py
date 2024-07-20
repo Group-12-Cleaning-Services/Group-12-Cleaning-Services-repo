@@ -117,8 +117,8 @@ class Medicine(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=10)
     manufacturer = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True)
-    status = models.BooleanField(default=True)
     quantity = models.DecimalField(decimal_places=2, max_digits=10)
+    thumbnail = models.ImageField(upload_to='medicine_thumbanils/', blank=True, null=True)
     def __str__(self):
         return f"{self.name} - {self.category} at {self.price}"
     
@@ -134,9 +134,10 @@ class Order(models.Model):
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
-    quantity = models.DecimalField(decimal_places=2, max_digits=10)
+    quantity = models.DecimalField(decimal_places=2, max_digits=10, default=0.00, blank=True, null=True)
     total_price = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
     status = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     def __str__(self):
         return f"{self.customer.email} - {self.medicine.name} || {self.quantity} at {self.total_price}"

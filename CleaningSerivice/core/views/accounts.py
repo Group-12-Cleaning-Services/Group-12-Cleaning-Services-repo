@@ -1,7 +1,7 @@
 from core.models import AccountUser, VerificationToken, PasswordToken
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from core.senders.accounts import create_user, create_verification_token
+from core.senders.accounts import create_user, create_verification_token, update_user
 from core.retrievers.accounts import *
 import threading
 from core.utils import email_verification, verification_confirmation_email
@@ -15,6 +15,11 @@ from django.http import JsonResponse
 
 class AccountViewset(viewsets.ViewSet):
     """Accounts viewset"""
+    def list(self, request):
+        """List all users"""
+        users = get_all_users()
+        serializer = AccountUserSerializer(users, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         """Create user"""
@@ -31,7 +36,38 @@ class AccountViewset(viewsets.ViewSet):
         # thread.start()
         return Response(context, status=status.HTTP_201_CREATED)
 
-
+    def retrieve(self, request, user_id):
+        """Retrieve user"""
+        user = get_user_by_id(user_id)
+        if not user:
+            context = {"detail": "User not found"}
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        serializer = AccountUserSerializer(user)
+        return Response(serializer.data)
+    
+    def update(self, request, user_id):
+        """Update user"""
+        user = get_user_by_id(user_id)
+        if not user:
+            context = {
+                'detail': 'User not found'
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        user = update_user(user, request.data)
+        context = {"detail": "User updated successfully"}
+        return Response(context, status=status.HTTP_200_OK)
+    
+    def delete(self, request, user_id):
+        """Delete user"""
+        user = get_user_by_id(user_id)
+        if not user:
+            context = {
+                'detail': 'User not found'
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        user.delete()
+        context = {"detail": "User deleted successfully"}
+        return Response(context, status=status.HTTP_200_OK)
     def send_verification_email(self, request):
         """
         Resends a verification pin to the email used in account creation

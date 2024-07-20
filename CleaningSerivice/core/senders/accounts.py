@@ -32,6 +32,14 @@ def get_all_service_providers():
     serializer = AccountUserSerializer(query_set, many=True)
     return serializer.data
 
+def update_user(user, data):
+    """Update user"""
+    serializer = AccountUserSerializer(instance=user, data=data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return serializer.data
+    return serializer.error
+
     
     
 def generate_token(otp_length):

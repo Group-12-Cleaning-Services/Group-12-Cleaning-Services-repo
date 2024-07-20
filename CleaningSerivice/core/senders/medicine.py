@@ -5,13 +5,16 @@ from core.models import AccountUser  # Import the AccountUser type
 
 import json
 
-def create_medicine(data) -> dict:
+def create_medicine(data, files) -> dict:
     """create medicine"""
     # data = data.dict()
     # data['doctor'] = {'user_id': user.user_id}
-    medicine = Medicine.objects.create(**data)
-    serializer = MedicineSerializer(medicine)
-    return serializer.data
+    # medicine = Medicine.objects.create(**data)
+    serializer = MedicineSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return serializer.data
+    return serializer.errors
     
 
 def update_medicine(medicine, data):
@@ -52,18 +55,34 @@ def send_all_medicines_by_category(category: str):
     return serializer.data
 
 
-def order_medicine(user, medicine, **data):
-    print(data)
+def order_medicine(user, medicine, data) -> dict:
     """Book a medicine
 
     Args:
         medicine (Service): Service instance
         user (AccountUser): AccountUser instance
         data (str): post data with required fields
-    """
-    medicine = Order.objects.create(medicine=medicine, customer=user , **data)
+    """            
+    medicine = Order.objects.create(medicine=medicine, customer=user)
+    for kwarg in data:
+        if hasattr(medicine, kwarg):
+            setattr(medicine, kwarg, data[kwarg])
+    medicine.paid = True
+    medicine.save()
     serializer = OrderSerializer(medicine).data
     return serializer
+
+def get_order_by_id(order_id):
+    """Get order by id
+
+    Args:
+        order_id (str): order id
+    """
+    try:
+        order = Order.objects.get(order_id=order_id)
+    except Order.DoesNotExist:
+        return None
+    return order
     
     
 def send_all_booked_medicine() -> dict:

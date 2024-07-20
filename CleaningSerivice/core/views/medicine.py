@@ -186,9 +186,9 @@ class MedicineViewset(viewsets.ViewSet):
         price = request.data.get("price")
         thumnail = request.data.get("thumnail")
         user = get_user_from_jwttoken(request)
-        medicine = create_medicine(request.data)
+        medicine = create_medicine(request.data, request.FILES)
         context = {
-            "detail": "Service created successfully",
+            "detail": "Medicine created successfully",
             "medicine": medicine
         }
         return Response(context, status=status.HTTP_201_CREATED)
@@ -363,6 +363,25 @@ class MedicineViewset(viewsets.ViewSet):
             permission_classes = []
         return [permission() for permission in permission_classes]
 
+    def retrieve_order(self, request, id):
+        """Retrieve Order
+
+        Args:
+            request (http): get request
+            id (uuid): order id
+        """
+        order = get_order_by_id(id)
+        if not order:
+            context = {
+                "detail": "Order not found"
+            }
+            return Response(context, status=status.HTTP_404_NOT_FOUND)
+        serializer = OrderSerializer(order)
+        context = {
+            "detail": "Order retrieved successfully",
+            "order": serializer.data
+        }
+        return Response(context, status=status.HTTP_200_OK)
 
 
     def update_booked_service(self, request, id):
@@ -391,8 +410,6 @@ class MedicineViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
     
-
-
 class CategoryViewset(viewsets.ViewSet):
     """View set for handling category related requests
 
