@@ -139,6 +139,8 @@ class Order(models.Model):
     status = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    
     def __str__(self):
         return f"{self.customer.email} - {self.medicine.name} || {self.quantity} at {self.total_price}"
     
