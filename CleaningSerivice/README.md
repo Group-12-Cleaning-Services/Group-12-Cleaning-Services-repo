@@ -24,6 +24,83 @@ This document provides an overview of the API for the Cleaning Services applicat
         "detail": "User created successfully"
     }
     ```
+### List all users
+#### Request
+- Method: GET
+- URL: `/api/accounts/all`
+#### Response
+- Status: 200 OK
+- Body:
+  ```json
+  [
+    {
+        "user_id": "0dd9151e-a71c-4abd-8eb6-ae3f86d19cc2",
+        "email": "lord@lord.com",
+        "role": null,
+        "full_name": null,
+        "phone": null,
+        "user_image": null
+    },
+    {
+        "user_id": "a089538c-f233-4d3c-a098-afd93d0638a9",
+        "email": "yrnlehj@gmail.com",
+        "role": "sales_person",
+        "full_name": "alert('Hacked')",
+        "phone": "+233502276474",
+        "user_image": "/media/images/profile_NAiThoN.jpg"
+    }
+  ]
+  ```
+### Retrieve User
+#### Request
+- Method: GET
+- URL: `/api/accounts/retrieve/1/`
+#### Response
+- Status: 200 OK
+- Body:
+  ```json
+  {
+    "user_id": "a089538c-f233-4d3c-a098-afd93d0638a9",
+    "email": "yrnleh@gmail.com",
+    "role": "sales_person",
+    "full_name": "alert('Hacked')",
+    "phone": "+233502276474",
+    "user_image": "/media/images/profile_NAiThoN.jpg"
+  }
+```
+### Update User
+#### Request
+- Method: POST
+- URL: `/api/accounts/update/1/`
+- Headers:
+  - Content-Type: application/json
+- Body:
+  ```json
+    {
+        "email
+        "role": "sales_person",
+        "full_name": "alert('Hacked')",
+        "phone": "+233502276474",
+    }
+  ```
+#### Response
+- Status: 201 Created
+- Body:
+  ```json
+    {
+        "detail": "User updated successfully"
+    }
+  ```
+### Delete User 
+- Method: DELETE
+- URL: `/api/accounts/delete/1/`
+### Response
+- Status: 200 0K
+```json
+{
+  "delete": "User deleted successfully"
+}
+```
 ### Login User
 #### Request
 - Method: POST
@@ -179,28 +256,46 @@ This document provides an overview of the API for the Cleaning Services applicat
 - Body:
   ```json 
   {
-    "detail": "Medicine orderered successfully",
-    "data": {
-        "order_id": "482eb3b4-00fa-47eb-bdbb-febc52326d31",
+      "status": true,
+      "message": "Authorization URL created",
+      "data": {
+          "authorization_url": "https://checkout.paystack.com/2bsv97y66glcuhh",
+          "access_code": "2bsv97y66glcuhh",
+          "reference": "7rwajs083y"
+      }
+  }
+```
+
+###Retrieve Order
+#### Request
+- Method: GET
+- URL: `/api/medicine/retrieve-order/1/`
+#### Response
+- Status: 200 OK
+- Body:
+  ```json
+  {
+    "detail": "Order retrieved successfully",
+    "order": {
+        "order_id": "3919ed46-1d95-49ed-8a99-b9db7cb93421",
         "medicine": {
-            "medicine_id": "4999c893-e26e-4332-bb31-50a8e1f1bd68",
+            "medicine_id": "48ddec16-2a53-4f8a-8e87-53cd25f3347e",
             "name": "Gebedol",
-            "category": "Pain Killer",
-            "price": "10.00",
-            "quantity": "20.00",
-            "description": "This is Gebedol",
-            "doctor": {
-                "user_id": "4d86abe8-36e2-4d4f-87f6-16502d0d5501",
-                "email": "yrn@gmail.com",
-                "organization_name": null
-            }
+            "category": "pain killer",
+            "price": "20.00",
+            "quantity": "-25.00",
+            "description": "this is just para",
+            "manufacturer": "Tobinco"
         },
         "quantity": "5.00",
         "status": false,
         "customer": {
-            "user_id": "f385e9b6-2c59-459a-b15f-21854a75df56",
-            "email": "yrnle@gmail.com",
-            "organization_name": null
+            "user_id": "a06b38ea-33c0-4793-85a9-f9cf81be54e0",
+            "email": "yrnleh@gmail.com",
+            "role": "sales_person",
+            "full_name": "alert('Hacked')",
+            "phone": "+233502276474",
+            "user_image": "/media/images/profile_nmpixsm.jpg"
         }
     }
 }
