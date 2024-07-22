@@ -92,3 +92,8 @@ def get_profile_by_id(id):
         return AccountUserProfile.objects.get(profile_id=id)
     except AccountUserProfile.DoesNotExist:
         return None
+    
+def get_all_sales_person():
+    """Get all sales person"""
+    queryset = AccountUser.objects.filter(role='sales_person')
+    return queryset

@@ -139,6 +139,11 @@ class AccountViewset(viewsets.ViewSet):
                    }
         return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
+    def list_sales_person(self, request):
+        """Retrieve all sales persons"""
+        users = get_all_sales_person()
+        serializer = AccountUserSerializer(users, many=True)
+        return Response(serializer.data)
 
 class SignIn(viewsets.ViewSet):
     
