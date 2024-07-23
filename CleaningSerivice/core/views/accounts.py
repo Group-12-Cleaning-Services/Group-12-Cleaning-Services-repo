@@ -54,7 +54,7 @@ class AccountViewset(viewsets.ViewSet):
                 'detail': 'User not found'
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
-        user = update_user(user, request.data)
+        updated_user = update_user(user, request.data)
         if password:
             user.set_password(password)
             user.save()
