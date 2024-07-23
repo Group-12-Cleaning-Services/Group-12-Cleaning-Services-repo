@@ -303,33 +303,85 @@ This document provides an overview of the API for the Cleaning Services applicat
 
 ### Get all user orders
 #### Request
-- Method POST
+- URL: `/api/medicine/order/all/`
+- Method GET
 - Authentication Request
 #### Response
 ```json
 {
-    "detail": "All ordered medicine",
-    "services": [
+    "detail": "All Orders",
+    "orders": [
         {
-            "order_id": "482eb3b426d31",
+            "order_id": "3919ed46-1d95-49ed-8a99-b9db7cb93421",
             "medicine": {
-                "medicine_id": "4999c893e1f1bd68",
+                "medicine_id": "48ddec16-2a53-4f8a-8e87-53cd25f3347e",
                 "name": "Gebedol",
-                "category": "Pain Killer",
-                "price": "10.00",
-                "quantity": "20.00",
-                "description": "This is Gebedol",
-                "doctor": {
-                    "user_id": "4d86a02d0d5501",
-                    "email": "yrn@gmail.com",
-                }
+                "category": "pain killer",
+                "price": "20.00",
+                "quantity": "-60.00",
+                "description": "this is just para",
+                "manufacturer": "Tobinco",
+                "thumbnail": null
             },
             "quantity": "5.00",
             "status": false,
             "customer": {
-                "user_id": "f385e9b6-2c59-459a-b15f-21854a75df56",
-                "email": "yrn@gmail.com",
-            }
+                "user_id": "a06b38ea-33c0-4793-85a9-f9cf81be54e0",
+                "email": "yrnleh@gmail.com",
+                "role": "sales_person",
+                "full_name": "alert('Hacked')",
+                "phone": "+233502276474",
+                "user_image": "/media/images/profile_nmpixsm.jpg"
+            },
+            "address": null
+        },
+        {
+            "order_id": "14486795-6fad-41c1-928a-70f322b39d77",
+            "medicine": {
+                "medicine_id": "48ddec16-2a53-4f8a-8e87-53cd25f3347e",
+                "name": "Gebedol",
+                "category": "pain killer",
+                "price": "20.00",
+                "quantity": "-60.00",
+                "description": "this is just para",
+                "manufacturer": "Tobinco",
+                "thumbnail": null
+            },
+            "quantity": "0.00",
+            "status": false,
+            "customer": {
+                "user_id": "a06b38ea-33c0-4793-85a9-f9cf81be54e0",
+                "email": "yrnleh@gmail.com",
+                "role": "sales_person",
+                "full_name": "alert('Hacked')",
+                "phone": "+233502276474",
+                "user_image": "/media/images/profile_nmpixsm.jpg"
+            },
+            "address": null
+        },
+        {
+            "order_id": "40affbf1-4041-4451-85ba-5a111cd1546b",
+            "medicine": {
+                "medicine_id": "48ddec16-2a53-4f8a-8e87-53cd25f3347e",
+                "name": "Gebedol",
+                "category": "pain killer",
+                "price": "20.00",
+                "quantity": "-60.00",
+                "description": "this is just para",
+                "manufacturer": "Tobinco",
+                "thumbnail": null
+            },
+            "quantity": "5.00",
+            "status": false,
+            "customer": {
+                "user_id": "a06b38ea-33c0-4793-85a9-f9cf81be54e0",
+                "email": "yrnleh@gmail.com",
+                "role": "sales_person",
+                "full_name": "alert('Hacked')",
+                "phone": "+233502276474",
+                "user_image": "/media/images/profile_nmpixsm.jpg"
+            },
+            "address": "Achimota"
         }
     ]
 }

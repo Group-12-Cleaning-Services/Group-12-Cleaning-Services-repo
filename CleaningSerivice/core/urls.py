@@ -22,6 +22,7 @@ urlpatterns = [
     path('accounts/verify-account/', AccountViewset.as_view({'post': 'verify_email'})),
     path('accounts/resend-verification-pin/', AccountViewset.as_view({'post': 'send_verification_email'})),
     path('accounts/sales-person/', AccountViewset.as_view({'get': 'list_sales_person'})),
+    path('medicine/order/all/', MedicineViewset.as_view({'get': 'list_orders'})),
     #profile
     path('profile/', ProfileViewset.as_view({'get': 'list'})),
     path('profile/create/', ProfileViewset.as_view({'post': 'create'})),

@@ -267,7 +267,20 @@ class MedicineViewset(viewsets.ViewSet):
         }
         return Response(context, status=status.HTTP_200_OK)
         
-        
+    
+    def list_orders(self, request):
+        """List all orders
+
+        Args:
+            request (http): get request
+        """
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        context = {
+            "detail": "All Orders",
+            "orders": serializer.data
+        }
+        return Response(context, status=status.HTTP_200_OK)
     # def book_service(self, request, id):
     #     """Book Service
 
