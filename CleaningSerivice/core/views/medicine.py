@@ -397,29 +397,22 @@ class MedicineViewset(viewsets.ViewSet):
         return Response(context, status=status.HTTP_200_OK)
 
 
-    def update_booked_service(self, request, id):
-        """Update Booked Service
+    def update_order_medicine(self, request, id):
+        """Update Ordered
 
         Args:
             request (http): put request
-            id (uuid): service id
         """
-        user = get_user_from_jwttoken(request)  
-        service_status = request.data.get("status")
-        if user.user_type != "service_provider":
+        order_status = request.data.get("status")
+        order = get_order_by_id(id)
+        if not order:
             context = {
-                "detail": "You are not a provider"
-            }
-            return Response(context, status=status.HTTP_403_FORBIDDEN)
-        schedule_service = get_booked_service_by_id(id)
-        if not schedule_service:
-            context = {
-                "detail": "Schedule service not found"
+                "detail": "Order not found"
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
-        schedule_service = update_booked_service_status(schedule_service, status=service_status)
+        order = update_ordered_medicine_status(order, status=order_status)
         context = {
-            "detail": "Schedule service updated successfully",
+            "detail": "Order updated successfully",
         }
         return Response(context, status=status.HTTP_200_OK)
     

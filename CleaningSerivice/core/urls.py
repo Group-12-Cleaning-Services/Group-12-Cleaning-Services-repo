@@ -41,6 +41,7 @@ urlpatterns = [
     path('medicine/update/<uuid:id>/', MedicineViewset.as_view({'post': 'update_medicine'})),
     path('medicine/delete/<uuid:id>/', MedicineViewset.as_view({'delete': 'delete_medicine'})),
     path('medicine/retrieve/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_medicine'})),
+    path('medicine/order/update/<uuid:id>/', MedicineViewset.as_view({'put': 'update_order_medicine'})),
     # path('medicine/order/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
     path('medicine/order/', PaymentViewset.as_view({'post': 'initialize_transaction'})),
     path('medicine/retrieve-order/<uuid:id>/', MedicineViewset.as_view({'get': 'retrieve_order'})),

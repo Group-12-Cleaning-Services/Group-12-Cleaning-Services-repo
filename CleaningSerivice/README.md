@@ -386,6 +386,18 @@ This document provides an overview of the API for the Cleaning Services applicat
     ]
 }
 ```
+### Update Order
+#### Request
+- Method: GET
+- URL: `/api/medicine/order/update/1233/
+####
+- Status: 200 OK
+- Body: 
+  ```json
+  {
+    "detail": "Order updated successfully"
+  }
+  ```
 
 ## Category
 ### Get all categories
