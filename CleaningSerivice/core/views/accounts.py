@@ -48,12 +48,16 @@ class AccountViewset(viewsets.ViewSet):
     def update(self, request, user_id):
         """Update user"""
         user = get_user_by_id(user_id)
+        password = request.data.get('password')
         if not user:
             context = {
                 'detail': 'User not found'
             }
             return Response(context, status=status.HTTP_404_NOT_FOUND)
         user = update_user(user, request.data)
+        if password:
+            user.set_password(password)
+            user.save()
         context = {"detail": "User updated successfully"}
         return Response(context, status=status.HTTP_200_OK)
     
