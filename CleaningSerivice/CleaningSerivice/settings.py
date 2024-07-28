@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+
 import dj_database_url
 
 from pathlib import Path
@@ -27,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#&^'
+SECRET_KEY = "django-insecure-#&^"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,7 +95,9 @@ DATABASES = {
     }
 }
 
-# DATABASES["default"] = dj_database_url.parse("postgres://lord:TMCshFutRZZ5ROSiw8pa5fzMXcFRmFkC@dpg-cmft38en7f5s73c98v7g-a.oregon-postgres.render.com/cleaning_u0bm")
+DATABASES["default"] = dj_database_url.parse(
+    "postgresql://pharmasys_db_user:sLjOvzLeSggUy2RTCDxFOeYmoeBtMnaY@dpg-cqicsiuehbks73brngu0-a.oregon-postgres.render.com/pharmasys_db"
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,11 +121,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.MultiPartParser',
-    ]
-
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.MultiPartParser",
+    ],
 }
 
 
@@ -147,11 +149,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_URL = "static/"
-MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_URL = "static/"
+# MEDIA_URL = "media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -167,6 +169,26 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 
+STATIC_ROOT = "static/"
+MEDIA_ROOT = "media/"
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "fypbucket"
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+AWS_LOCATION = "static/"
+AWS_LOCATION_MEDIA = "media/"
+
+AWS_DEFAULT_ACL = "public-read"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "core.storages.MediaStorage"
+STATIC_URL = "{}/{}".format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+MEDIA_URL = "{}/{}".format(AWS_S3_ENDPOINT_URL, AWS_LOCATION_MEDIA)
+
+
 # CORS_ALLOW_CREDENTIALS = True
 # CORS_ALLOW_ORIGINS = [
 #     'http://localhost:3000',
@@ -175,8 +197,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://01c8-102-176-65-85.ngrok-free.app',
-    'http://localhost:3000',
-    'http://localhost:8000',
-    'https://cleaningservice.onrender.com',
+    "https://01c8-102-176-65-85.ngrok-free.app",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "https://cleaningservice.onrender.com",
 ]
